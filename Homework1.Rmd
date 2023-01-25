@@ -20,6 +20,12 @@ This homework assignment is worth a total of **40 points**.
 Read Chapter 2 of Introduction to Statistical Learning, Second Edition. Based on your reading, answer the following questions.
 
 1. What is the difference between an *input variable* and an *output variable* in a model? Provide synonyms for each term.
+
+Answer: An input variable is typically our X, or predictors, there can be multiple, 
+whereas the output variable is denoted as Y and is the response variable. The 
+reading uses the idea of sales being Y, our output, and variables such as tv and radio 
+budget being X, or input variables. 
+
 2. What is the difference between *reducible error* and *irreducible error*? Give an example (other than those given in the book) of a situation in which the irreducible error is greater than zero.
 3. Generally, what types of questions are answered using *inference* and what types are answered using *prediction*? Is it possible to use the same model for both inference and prediction?
 4. Generally, what types of prediction questions are answered using *regression* methods and what types are answered using *classification* methods?
