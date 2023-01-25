@@ -101,7 +101,63 @@ y = c(1, 4, 3)
 ```
 
 ```{r}
+length(x)
+length(y)
+x + y
+```
 
+```{r}
+ls()
+rm(x, y)
+ls()
+```
+
+```{r}
+rm(list = ls())
+```
+
+```{r}
+?matrix
+```
+
+```{r}
+x <- matrix(data = c(1, 2, 3, 4), nrow = 2, ncol = 2)
+x
+```
+
+```{r}
+ x <- matrix(c(1, 2, 3, 4), 2, 2)
+```
+
+```{r}
+matrix(c(1, 2, 3, 4), 2, 2, byrow = TRUE)
+```
+
+```{r}
+sqrt(x)
+```
+
+```{r}
+x <- rnorm(50)
+y <- x + rnorm(50, mean = 50, sd = .1)
+cor(x, y)
+```
+
+```{r}
+set.seed(1303)
+rnorm(50)
+```
+
+```{r}
+set.seed(3)
+y <- rnorm(100)
+mean(y)
+
+var(y)
+
+sqrt(var(y))
+
+sd(y)
 ```
 
 
@@ -114,6 +170,36 @@ Explain in your own words the purpose of the `set.seed()` function. What happens
 ## Part a (Code: 1 pt)
 
 Work through ISLR Lab 2.3.3. Copy each chunk in the lab to its own chunk in this file.
+```{r}
+A <- matrix(1:16, 4, 4)
+A
+```
+
+```{r}
+A[2, 3]
+```
+
+```{r}
+A[c(1, 3), c(2,4)]
+```
+
+```{r}
+A[,1:2]
+```
+
+
+```{r}
+A[1, ]
+```
+
+```{r}
+A[-c(1, 3),]
+```
+
+```{r}
+dim(A)
+```
+
 
 ## Part b (Code: 0.5 pts)
 
