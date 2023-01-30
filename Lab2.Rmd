@@ -202,6 +202,8 @@ We will need to include the `formula`, `data`, and `var.equal`
 
 Although R returns an `htest` object when the `t.test` function is called, the `htest` object is basically just a `list` with some extra functionality attached. When we run our permutation test function, what should be included in our list of things to output?
 
+The only values we absolutely need include the values `statistic` and `p.value`
+
 ## Part c (Explanation: 3 pts)
 
 Now let's write some *pseudocode*. Pseudocode is basically a step-by-step algorithmic description explaining how we're going to accomplish turning our input arguments into the output arguments. We don't actually write any code; the idea is to first informally define our plan before formally implementing it in the chosen programming language. I've started the algorithm below. Based on your understanding of permutation tests from lecture, finish Steps 4 and 5.
@@ -214,11 +216,11 @@ Step 3: Set a seed for reproducibility of the resampling
 
 Step 4: For i in 1 to number of permutation resamples:
 
-  Step 4a:
+  Step 4a: run a t-test on the permutation samples
   
-  Step 4b:
+  Step 4b: store the test statistics into the vector created in step 2
   
-Step 5:
+Step 5: Obtain the p-value
 
 Step 6: Create a list containing all the components of the output and then output it
 
