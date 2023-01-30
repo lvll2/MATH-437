@@ -192,7 +192,11 @@ t.test(formula = , data = , alternative = , var.equal = TRUE)
 
 Explain what each of the four arguments (`formula`, `data`, `alternative`, `var.equal`) contributes towards telling R what to do in the pre-built `t.test` function. 
 
+The `formula` tells R what to do with the inputs to obtain the desired output generally in the format f(x) ~ x. The `data` argument tells R what data to use in the test. The `alternative` argument tells R what the alternative hypothesis is and needs to be input as text. The `var.equal` argument tells R if the variance is constant between samples.
+
 Which arguments (if any) will we need to include when creating our custom permutation test function? What additional arguments (if any) will need to be included because we are using resampling-based methods instead of theory-based methods?
+
+We will need to include the `formula`, `data`, and `var.equal`
 
 ## Part b (Explanation: 1 pt)
 
