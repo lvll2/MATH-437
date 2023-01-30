@@ -250,15 +250,16 @@ alternative <- "t"
                   alternative = , var.equal = TRUE)$stat
 
 # Step 2: Create a vector to store the simulated t-statistics in
-  t_perm <- 
+  t_perm <- numeric(10000)
   
 # Step 3: Set a seed for reproducibility of the resampling
+set.seed(23)  
   
 # Step 4: For i in 1 to number of permutation resamples:
-for (i in ){ # Complete the syntax
+for (i in 1:10000){ # Complete the syntax
   
   # Step 4a
-  permutation_df[[1]] <-
+  permutation_df[[1]] <-sample(data$y, size = length(data$y), replace = FALSE)
   # Use the course notes as a template for doing this step
   # Note: Once we get to Part e and put this script inside a function environment,
   # using the actual name of the response variable requires much more advanced R.
@@ -266,13 +267,14 @@ for (i in ){ # Complete the syntax
   # and we set up permutation_df so that the first column is the response variable.
     
   # Step 4b
-  t_perm[i] <- 
+  t_perm[i] <- test_statistic(permutation_df)
 }
 
 # Step 5    
   # Use the course notes as a template for getting p_left and p_right
-  p_left <- 
-  p_right <- 
+T_all <- c(t_obs, t_perm)
+  p_left <- sum(T_all <= t_obs)/(t_perm+1)
+  p_right <- sum(T_all >= t_obs)/(t_perm + 1)
   
   # Use the switch function to compute the correct p-value
   p_value <- dplyr::case_when(alternative == "g" ~ p_right,
