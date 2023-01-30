@@ -30,17 +30,17 @@ This problem is adapted from ISLR Chapter 4, Exercise 15.
 In the chunk below, write a single line of R code that prints the result of raising the number 2 to the 3rd power. 
 
 ```{r two to the third}
-
+print(2^3)
 ```
 
 ## Part b (Code: 0.5 pts, Testing: 0.5 pts)
 
 Complete the R chunk below to create and test a function that prints the result of raising *any* number to the 3rd power. Make sure to delete the "eval = FALSE" in the chunk options after you get a chunk that works the way you expect!
 
-```{r cube function, eval = FALSE}
+```{r cube function}
 ## Cube function
 Cube <- function(x){
-  # Copy your code from part a here, but replace 2 with x
+  print(x^3)
 }
 ```
 
@@ -48,13 +48,13 @@ It is always a good idea to test any function you write to make sure that it wor
 
 What do you expect to get when you call the `Cube` function on a single number? Confirm that your function works as expected. Remember to remove `eval = FALSE` after you get the chunk to run the way it's supposed to.
 
-```{r test cube-1, eval = FALSE}
+```{r test cube-1}
 Cube(2)
 ```
 
 What happens when you input a vector instead of a single number? Make a guess, then run the chunk below to see whether your guess was correct. If you get an output, remove `eval = FALSE`; if you get an error, keep `eval = FALSE` so that you can still knit without running the code.
 
-```{r test cube-2, eval = FALSE}
+```{r test cube-2}
 Cube(c(2, 5, 10))
 ```
 
@@ -63,6 +63,7 @@ What happens when you input a character string instead of a number? Make a guess
 ```{r test cube-3, eval = FALSE}
 Cube("Math 437")
 ```
+Error shows that you need to be using numeric values.
 
 ## Part c (Code: 0.5 pts, Testing: 0.5 pts)
 
@@ -74,20 +75,19 @@ It is good form to document all arguments to your function, either before the fu
 Power <- function(x, a){
   # x: the base of the power
   # a: the exponent
-  
-  # Copy your code from part b here, but replace 3 with a
-}
+  print(x^a)
+  }
 ```
 
 What do you expect to get when you run this line of code? Did you get what you expected? If you get an output, remove `eval = FALSE`; if you get an error, keep `eval = FALSE` so that you can still knit without running the code.
 
-```{r test power-1, eval = FALSE}
+```{r test power-1}
 Power(2, 3)
 ```
 
 What happens when you use a vector instead of a number for the first argument? What about for the second argument? What about for both arguments? Make a guess, then run the chunk below to see whether your guess was correct. If you get an output, remove `eval = FALSE`; if you get an error, keep `eval = FALSE` so that you can still knit without running the code.
 
-```{r test power-2, eval = FALSE}
+```{r test power-2}
 Power(c(2, 5, 10), 3)
 Power(2, c(2, 3, 4))
 Power(c(2, 5, 10), c(1, 2, 3))
@@ -103,45 +103,48 @@ Power(2) # What does this do?
 
 Usually we want to *return* the result of the function rather than *print* it, so that we can store the output in an R object.
 
-```{r power return, eval = FALSE}
+```{r power return}
 Power_return <- function(x, a){
   # x: the base of the power
   # a: the exponent
-  
+  return(x^a)
   # Copy your code from part c here, but replace "print" with "return"
 }
 ```
 
 Let's confirm that we still get $2^3 = 8$ out when we run this line of code. Remember to remove `eval = FALSE` after you get the chunk to run the way it's supposed to.
 
-```{r test power-return 1, eval = FALSE}
+```{r test power-return 1}
 Power_return(2, 3) # Does this still output 2^3 = 8?
 ```
 
 Explain the difference between these two lines of code. (Remember to remove `eval = FALSE` after you get the chunk to run the way it's supposed to.) Where did the 8 go when you ran the second line?
 
-```{r test power-return 2, eval = FALSE}
+```{r test power-return 2}
 result1 <- Power(2, 3)
 result2 <- Power_return(2, 3)
 ```
+The difference between the two lines of code is that result1 prints the output 
+into the console whereas result2 stores the output into the R enviorment.
+
 
 ## Part e (Code: 0.5 pts; Testing: 0.5 pts)
 
 What if we *usually* want to cube a number, but we also want to give the user the flexibility to include a different exponent if necessary? We can use a *default* argument:
 
-```{r power default, eval = FALSE}
+```{r power default}
 Power_default <- function(x, a = 3){
   # x: the base of the power
   # a (= 3): the exponent
   
-  # Copy your code from part d here
+  return(x^a)
   
 }
 ```
 
 Let's confirm that we still get $2^3 = 8$ out when we run this line of code.
 
-```{r power-default test-1, eval = FALSE}
+```{r power-default test-1}
 Power_default(2, 3)
 ```
 
@@ -157,19 +160,19 @@ By convention, arguments without a default value go at the beginning of the list
 
 We rarely write one-line functions. Usually we want to store the intermediate and final results in objects within the function, then use `return` to output the final result.
 
-```{r power final, eval = FALSE}
+```{r power final}
 Power_result <- function(x, a = 3){
   # x: the base of the power
   # a (= 3): the exponent
   
-  result <- # finish this line
+  result <- x^a
   return(result)
 }
 ```
 
 Let's just do our usual test to make sure we keep getting $2^3 = 8$ out. Remember to remove `eval = FALSE` after you get the chunk to run the way it's supposed to.
 
-```{r power final test, eval = FALSE}
+```{r power final test}
 Power_result(2, 3)
 ```
 
