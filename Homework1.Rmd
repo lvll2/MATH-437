@@ -28,7 +28,7 @@ budget being X, or input variables.
 
 2. What is the difference between *reducible error* and *irreducible error*? Give an example (other than those given in the book) of a situation in which the irreducible error is greater than zero.
 
-Answer: 
+Answer: Reducible error comes from inaccuracy in the estimate that can be reduced by using the appropriate statistical technique and irreducible error comes during the data collection process because of influential but unmeasured variables and variability in the collected data. Irreducible error cannot be eliminated. An example would be in a study about teenager growth patterns in America, their nutrition may not be recorded exactly which would be a variable influencing their growth and therefore would introduce irreducible error.
 
 3. Generally, what types of questions are answered using *inference* and what types are answered using *prediction*? Is it possible to use the same model for both inference and prediction?
 
