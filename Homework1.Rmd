@@ -40,7 +40,7 @@ Answer: The types of predicton questions
 
 5. What are the major advantages of using a *nonparametric* method over a *parametric* method? What are the disadvantages?
 
-Answer: 
+Answer: The major advantages of nonparametric methods is the fact that the problem is reduced to simply finding the parameters instead of the function itself, this is great when we are able to assume the function has a form we can understand such as a linear form but when the form of the data is more complex, our linear model could become a super complicated 13th Taylor polynomial that breaks when one more piece of data is added(over fitting). When the form of the data is complex a nonparametric approach is generally better to use.
 
 6. In prediction, we typically aim to minimize a *loss function* that more-or-less represents the total error in our predictions. Give one example each for regression and classification problems of a measure of model (in)accuracy.
 
