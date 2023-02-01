@@ -286,7 +286,8 @@ T_all <- c(t_obs, t_perm)
 # Step 6: Create a list containing all the components of the output and then output it
 # I've started the list, but you may need to finish it
   results <- list(obs = t_obs,
-                  sim = t_perm)
+                  sim = t_perm,
+                  p_val = p_value)
 
 ```
 
