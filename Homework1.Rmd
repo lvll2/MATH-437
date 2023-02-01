@@ -32,11 +32,11 @@ Answer:
 
 3. Generally, what types of questions are answered using *inference* and what types are answered using *prediction*? Is it possible to use the same model for both inference and prediction?
 
-Answer: 
+Answer: In general, questions that would be answered in inference would include trying to understand the deeper relationship between our predictors, x, and our response, y, whereas in prediction we are less concerned with the relationship but instead how the predictors, x, lead to the outcome, y. The reading uses the example as inference asks the relationship between x and y and prediction asks what values of x leads to y. Also, it is possible to use the same model for both inference and prediction, just depending on how one interprets as well as the complexity of the model used.
 
 4. Generally, what types of prediction questions are answered using *regression* methods and what types are answered using *classification* methods?
 
-Answer: 
+Answer: The types of predicton questions 
 
 5. What are the major advantages of using a *nonparametric* method over a *parametric* method? What are the disadvantages?
 
