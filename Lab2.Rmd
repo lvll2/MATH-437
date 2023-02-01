@@ -247,7 +247,7 @@ alternative <- "t"
 
 # We only care about the t-statistic, but we need to store it in a variable
   t_obs <- t.test(formula = formula, data = permutation_df, 
-                  alternative = , var.equal = TRUE)$stat
+                  alternative = alternative, var.equal = TRUE)$stat
 
 # Step 2: Create a vector to store the simulated t-statistics in
   t_perm <- numeric(10000)
