@@ -259,7 +259,7 @@ set.seed(23)
 for (i in 1:10000){ # Complete the syntax
   
   # Step 4a
-  permutation_df[[1]] <-sample(data$y, size = length(data$y), replace = FALSE)
+  permutation_df[[1]] <-sample(permutation_df[[1]])
   # Use the course notes as a template for doing this step
   # Note: Once we get to Part e and put this script inside a function environment,
   # using the actual name of the response variable requires much more advanced R.
@@ -267,7 +267,7 @@ for (i in 1:10000){ # Complete the syntax
   # and we set up permutation_df so that the first column is the response variable.
     
   # Step 4b
-  t_perm[i] <- test_statistic(permutation_df)
+  t_perm[i] <- t.test(formula, permutation_df, var.equal = TRUE)$statistic
 }
 
 # Step 5    
