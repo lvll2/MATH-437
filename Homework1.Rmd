@@ -48,7 +48,7 @@ Answer:
 
 7. Why do we only fit the model on a *training set*? What do we do with the rest of the data?
 
-Answer:
+Answer: We only fit the model of a training set as it has the majority of the data. This allows us to test the rest of the data into the model to determine how well the model is doing using real collected data.
 
 8. Generally, as a model becomes more complex, what happens to the *bias* of the model and why? What happens to the *variance* of the model and why?
 
