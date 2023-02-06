@@ -71,7 +71,7 @@ Now, we will write another function that prints the result of raising *any* numb
 
 It is good form to document all arguments to your function, either before the function or in the first few lines.
 
-```{r power function, eval = FALSE}
+```{r power function}
 Power <- function(x, a){
   # x: the base of the power
   # a: the exponent
@@ -150,7 +150,7 @@ Power_default(2, 3)
 
 What happens if you only give one argument? Make a guess, then run the chunk below to see whether your guess was correct. If you get an output, remove `eval = FALSE`; if you get an error, keep `eval = FALSE` so that you can still knit without running the code.
 
-```{r power-default test-2, eval = FALSE}
+```{r power-default test-2}
 Power_default(2)
 ```
 
