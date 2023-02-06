@@ -270,8 +270,8 @@ for (i in 1:10000){ # Complete the syntax
 }
 # Step 5 
 T_all <- c(t_obs, t_perm)
-  p_left <- sum(T_all <= t_obs)/(t_perm + 1)
-  p_right <- sum(T_all >= t_obs)/(t_perm + 1)
+  p_left <- sum(T_all <= t_obs)/(length(t_perm) + 1)
+  p_right <- sum(T_all >= t_obs)/(length(t_perm) + 1)
   
   # Use the switch function to compute the correct p-value
   p_value <- dplyr::case_when(alternative == "g" ~ p_right,
