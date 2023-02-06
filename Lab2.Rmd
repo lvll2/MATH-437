@@ -216,9 +216,9 @@ Step 3: Set a seed for reproducibility of the resampling
 
 Step 4: For i in 1 to number of permutation resamples:
 
-  Step 4a: run a t-test on the permutation samples
+  Step 4a: Randomly reorder the response variable
   
-  Step 4b: store the test statistics into the vector created in step 2
+  Step 4b: Run a t-test on the new data
   
 Step 5: Obtain the p-value
 
