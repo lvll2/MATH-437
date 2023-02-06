@@ -247,7 +247,7 @@ alternative <- "t"
 
 # We only care about the t-statistic, but we need to store it in a variable
  t_obs <- t.test(formula = formula, data = permutation_df, 
-                  alternative = alternative, var.equal = TRUE)$stat
+                  alternative = , var.equal = TRUE)$stat
 # Step 2: Create a vector to store the simulated t-statistics in
   t_perm <- numeric(10000)
 
@@ -270,8 +270,8 @@ for (i in 1:10000){ # Complete the syntax
 }
 # Step 5 
 T_all <- c(t_obs, t_perm)
-  p_left <- sum(T_all <= t_obs)/(t_perm + 1)
-  p_right <- sum(T_all >= t_obs)/(t_perm + 1)
+  p_left <- sum(T_all <= t_obs)/(length(t_perm) + 1)
+  p_right <- sum(T_all >= t_obs)/(length(t_perm) + 1)
   
   # Use the switch function to compute the correct p-value
   p_value <- dplyr::case_when(alternative == "g" ~ p_right,
@@ -321,6 +321,11 @@ test_output <- permutation_t_test(formula = value ~ group,
 ```
 
 Produce a histogram of the simulated t-statistics and add a vertical line at the observed t-statistic value (it is easiest to use the regular `hist` and `abline` functions). Using the histogram, confirm that the reported p-value seems reasonable.
+```{r}
+hist(t_perm) +
+  abline(v=t_obs)
+```
+
 
 # Problem 3: Doing a Permutation t-Test
 
