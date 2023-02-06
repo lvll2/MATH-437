@@ -247,7 +247,7 @@ alternative <- "t"
 
 # We only care about the t-statistic, but we need to store it in a variable
   t_obs <- t.test(formula = formula, data = permutation_df, 
-                  alternative = alternative, var.equal = TRUE)$stat
+                  alternative = , var.equal = TRUE)$stat
 
 # Step 2: Create a vector to store the simulated t-statistics in
   t_perm <- numeric(10000)
@@ -259,7 +259,7 @@ set.seed(23)
 for (i in 1:10000){ # Complete the syntax
   
   # Step 4a
-  permutation_df[[1]] <-sample(permutation_df[[1]])
+  permutation_df[[1]] <-sample(data$y, size = length(data$y), replace = FALSE)
   # Use the course notes as a template for doing this step
   # Note: Once we get to Part e and put this script inside a function environment,
   # using the actual name of the response variable requires much more advanced R.
@@ -267,7 +267,7 @@ for (i in 1:10000){ # Complete the syntax
   # and we set up permutation_df so that the first column is the response variable.
     
   # Step 4b
-  t_perm[i] <- t.test(formula, permutation_df, var.equal = TRUE)$statistic
+  t_perm[i] <- t.test(permutation_df$y ~permutation_df$group, alternative = "t")$statistic
 }
 
 # Step 5    
@@ -286,8 +286,7 @@ T_all <- c(t_obs, t_perm)
 # Step 6: Create a list containing all the components of the output and then output it
 # I've started the list, but you may need to finish it
   results <- list(obs = t_obs,
-                  sim = t_perm,
-                  p_val = p_value)
+                  sim = t_perm)
 
 ```
 

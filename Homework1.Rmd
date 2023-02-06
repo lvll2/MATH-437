@@ -88,6 +88,8 @@ From the Parametrics vs. Nonparametric Tests: Multi-Sample Tests activity, copy 
 
 Write a couple of paragraphs explaining the difference between parametric and nonparametric methods and explain why classic nonparametric methods (Mann-Whitney and Kruskal-Wallis) are a better choice than the corresponding parametric methods (two-sample t-test and one-way ANOVA) when the assumptions of the parametric method are clearly violated.
 
+Answer: The primary reason why we would use a non-parametric model is when we violate our assumptions. 
+
 # Applied Problems
 
 ## Applied Problem 1 (Code: 6 pts; Explanation: 3 pts)
