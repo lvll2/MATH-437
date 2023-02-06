@@ -118,7 +118,17 @@ Now consider the researcher testing for significance after collecting 20 observa
 Randomly generate 40 values from $Y \sim N(0, 1)$ and randomly assign 20 of them to the Low condition and 20 of them to the High condition. Perform a two-sample t-test with $H_a: \mu_L \neq mu_H$ and report the p-value. If the p-value is not significant at 5%, generate another 20 values from $Y$ and randomly assign 10 of them to each condition, (It may be easiest to use either `rbind` or `bind_rows` to combine the data.) then perform another two-sample t-test with the same $H_a$ and report the new p-value.
 
 ```{r Simulation B - one time}
-
+# Step 1: Generate 40 numbers from N(0,1)
+Y_val <- rnorm(40, mean = 0, sd = 1)
+# Step 2: Randomly assign to low or high
+sim2_values <- data.frame(
+    condition = rep(c("Low", "High"), each = 20),
+    Y1 = yvalues[,1])
+# Step 3: Run a t-test and remove p-value
+p_value1 <- t.test(Y1 ~ condition, data = sim2_values)$p.value
+# Step 4: Check if p-value is less than or equal to 0.05
+p_value1 <= 0.05
+# Step 5: Generate 20 more numbers, randomly assign to low/high, re-do t-test
 ```
 
 
