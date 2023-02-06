@@ -237,6 +237,7 @@ data <- data.frame(group = rep(c("Group 1", "Group 2"), 50),
                    y = rnorm(100)) # simulated data
 formula <- y ~ group
 alternative <- "t"
+# add something to tell R to stop
 # Initialize and assign values to any other arguments you identified in Part a
 
 # Step 1: Run the t-test on the original dataset and obtain the observed t-statistic value
@@ -298,11 +299,46 @@ Finally, we define our function, include the variables we defined in Step 0 as t
 
 ```{r script to function}
 permutation_t_test <- function(formula, data, alternative = "t"){
-  # remember to include any other arguments you initialized in Step 0
-  # I recommend giving those arguments default values = what you set in Step 0
+ set.seed(9034)
   
-  # Copy your complete script of Steps 1-6 in Part d
+ data <- data.frame(group = rep(c("Group 1", "Group 2"), 50),
+                   y = rnorm(100))
+
+ formula <- y ~ group
+
+ alternative <- "t"
+
+ permutation_df <- model.frame(formula = formula, data = data)
+
+ t_obs <- t.test(formula = formula, data = permutation_df, 
+                  alternative = alternative, var.equal = TRUE)$stat
+ 
+ t_perm <- numeric(10000)
+ 
+ set.seed(23)
+
+ for (i in 1:10000){
+
+  permutation_df[[1]] <-sample(permutation_df[[1]])
+ 
   
+  t_perm[i] <- t.test(formula, permutation_df, var.equal = TRUE)$statistic}
+
+ T_all <- c(t_obs, t_perm)
+
+  p_left <- sum(T_all <= t_obs)/(length(t_perm) + 1)
+  
+  p_right <- sum(T_all >= t_obs)/(length(t_perm) + 1)
+ 
+  p_value <- dplyr::case_when(alternative == "g" ~ p_right,
+                              alternative == "l" ~ p_left,
+                              alternative == "t" ~ 2*min(p_left, p_right),
+                              TRUE ~ NaN )
+
+  results <- list(obs = t_obs,
+                  sim = t_perm,
+                  p_val = p_value)
+
   return(results) # Last line of the function returns our output
 }
 ```
@@ -315,8 +351,7 @@ df_new <- data.frame(group = rep(c("Group A", "Group B"), 50),
                    value = rnorm(100))
 test_output <- permutation_t_test(formula = value ~ group,
                    data = df_new,
-                   alternative = "g",
-                   ...)
+                   alternative = "g")
 # if you did not include default values for your new arguments, make sure to give them values in your function call!
 ```
 
