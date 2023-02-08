@@ -236,6 +236,9 @@ Now we take our pseudocode and write a script. I've taken care of most of the tr
 set.seed(9034)
 data <- data.frame(group = rep(c("Group 1", "Group 2"), 50),
                    y = rnorm(100)) # simulated data
+
+#data <- College %>% select(y = Outstate, group = Private) 
+  
 formula <- y ~ group
 alternative <- "t"
 # add something to tell R to stop
@@ -300,19 +303,19 @@ str(results)
 Finally, we define our function, include the variables we defined in Step 0 as the input arguments, use a `return()` statement at the end to return our output, and copy the remainder of the script into the function.
 
 ```{r script to function}
-permutation_t_test <- function(formula, data, alternative){
- set.seed(9034)
+permutation_t_test <- function(formula, data, alternative, 
+                               seed, permutations){
+ set.seed(seed)
 
  permutation_df <- model.frame(formula = formula, data = data)
  
  t_obs <- t.test(formula = formula, data = data, 
                   alternative = alternative, var.equal = TRUE)$stat
  
- t_perm <- numeric(10000)
+ t_perm <- permutations
  
- set.seed(23)
 
- for (i in 1:10000){
+ for (i in 1:length(t_perm)){
 
   permutation_df[[1]] <-sample(permutation_df[[1]])
  
@@ -351,9 +354,11 @@ test_output <- permutation_t_test(formula = value ~ group,
 ```
 
 Produce a histogram of the simulated t-statistics and add a vertical line at the observed t-statistic value (it is easiest to use the regular `hist` and `abline` functions). Using the histogram, confirm that the reported p-value seems reasonable.
+
 ```{r}
-hist(test_output$sim)
-  abline(v = test_output$obs)
+hist(test_output$sim) 
+
+abline(v = test_output$obs)
 ```
 
 
@@ -387,9 +392,9 @@ of the bins in the histogram. Facet wrap creates multiple graphs separated by th
 Complete the code chunk below to find the mean and standard deviation of Intake in each group. Remember to remove `eval = FALSE` after you get the chunk to run the way it's supposed to.
 
 ```{r summarize intake, eval = FALSE}
-alcohol %>% group_by() %>% # what do we group by?
-  summarize(mean_intake = , # how do we compute the mean of Intake
-            sd_intake = ) # how do we compute the sd of Intake?
+alcohol %>% group_by(Group) %>% # what do we group by?
+  summarize(mean_intake = mean(Intake), # how do we compute the mean of Intake
+            sd_intake = sd(Intake)) # how do we compute the sd of Intake?
 ```
 
 ## Part c (Code: 1 pt, Explanation: 1 pt)
@@ -399,7 +404,7 @@ Using the function you wrote in Problem 2, perform a permutation test of the nul
 Store the output of your function in the variable `alcohol_t_test`, that is, run `alcohol_t_test <- permutation_t_test(...)` and replace the `...` with what you need to run the test. Perform the following sanity checks to make sure your code worked as intended:
 
 ```{r}
-alcohol_t_test <- permutation_t_test(Intake ~ Group, alcohol, "t")
+alcohol_t_test <- permutation_t_test(Intake ~ Group, alcohol, "t", 9035, 10000)
 ```
 
 
@@ -422,8 +427,25 @@ Based on the permutation test, using a 5% significance level, what should we con
 
 Using the `College` dataset from the ISLR2 package, and the `permutation_t_test` function you created in Problem 2, perform a permutation t-test to determine if public schools (`Private = No`) charge *less* in out-of-state tuition (`Outstate`) than private schools (`Private = Yes`). Use 999 permutation resamples and seed 12345.
 
+
 Store the output of your function in the variable `tuition_t_test`, that is, run `tuition_t_test <- permutation_t_test(...)` and replace the `...` with what you need to run the test.
 
+```{r}
+#View(College) 
+tuition_t_test <- permutation_t_test(Outstate ~ Private, data = College, 
+                                     seed = 12345, permutations = 999)
+
+```
+
 Report the observed value of the t-statistic and the p-value. Additionally, create a histogram of the simulated t-statistic values and add a vertical line at the observed t-statistic value, like you did in Problem 2e. You may have to change the x-axis limits (e.g., `xlim` argument to the base `plot` function) to get the line to show up.
+
+```{r}
+t.test(Outstate ~ Private, data = College, alternative = "t" )
+tuition_t_test$obs
+tuition_t_test$p_val
+hist(tuition_t_test$sim)
+abline(v = tuition_t_test$obs)
+```
+
 
 Based on the permutation test, using a 5% significance level, what should we conclude about the difference in average out-of-state tuition between public and private colleges? Why?
