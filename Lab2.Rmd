@@ -1,8 +1,10 @@
 ---
 title: 'Lab Assignment #2'
-author: "Math 437 - Modern Data Analysis"
+author: "Nicholas Noel, Liz Villa"
 date: "Due February 3, 2023"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 # Instructions
@@ -234,7 +236,7 @@ This is actually more detail than is necessary; in real life you'd probably only
 
 Now we take our pseudocode and write a script. I've taken care of most of the tricky code, but you need to finish the script. Only Step 1 is fully complete. Once you've completed the other steps and your script runs, remember to delete `eval = FALSE`.
 
-```{r pseudocode to script, eval = FALSE}
+```{r pseudocode to script}
 # Step 0: Initialize the arguments to your function
 set.seed(9034)
 data <- data.frame(group = rep(c("Group 1", "Group 2"), 50),
@@ -428,9 +430,9 @@ length(alcohol_t_test$sim) # replace statistic.simulated with the name of the va
 Based on the permutation test, using a 5% significance level, what should we conclude about the effectiveness of the SST program at reducing alcohol intake? Why?
 
 ```{r}
-alcohol_t_test$p_val
+bruh = alcohol_t_test$p_val
 ```
-Since our p-value is `alcohol_t_test$p_val` , using a 5% significance level we can conclude that we should reject the null hypothesis that there is no difference between the groups which implies that our alternative hypothesis is correct and the SST program is effective at reducing alcohol intake.
+Since our p-value is `r bruh` , using a 5% significance level we can conclude that we should reject the null hypothesis that there is no difference between the groups which implies that our alternative hypothesis is correct and the SST program is effective at reducing alcohol intake.
 
 ## Part d (Code: 1 pt; Explanation: 1 pt)
 
