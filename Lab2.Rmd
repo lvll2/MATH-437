@@ -452,7 +452,7 @@ Report the observed value of the t-statistic and the p-value. Additionally, crea
 t.test(Outstate ~ Private, data = College, alternative = "t" )
 tuition_t_test$obs
 tuition_t_test$p_val
-hist(tuition_t_test$sim)
+hist(tuition_t_test$sim, xlim = range(-25,10))
 abline(v = tuition_t_test$obs)
 ```
 
