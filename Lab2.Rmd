@@ -198,7 +198,9 @@ or "l" for less. The `var.equal` argument tells R if the variance is constant be
 Which arguments (if any) will we need to include when creating our custom permutation test function? What additional arguments (if any) will need to be included because we are using resampling-based methods instead of theory-based methods?
 
 We will need to include the `formula`, `data`, and `var.equal`. Since we are
-using a resamp
+using a resampling-based method, we will also need to include additional
+arguments to set the seed for reproducibility and to set the number of 
+permutations for the resampling.
 
 ## Part b (Explanation: 1 pt)
 
