@@ -459,4 +459,4 @@ abline(v = tuition_t_test$obs)
 
 Based on the permutation test, using a 5% significance level, what should we conclude about the difference in average out-of-state tuition between public and private colleges? Why?
 
-At a significance level of 5% we should conclude that the average difference in average out of state tuition between public and private colleges is very significant with a test statistic of -23.249. In particular, out of state tuition of private colleges is significantly higher than those of public colleges.
+At a significance level of 5% we can reject the null hypothesis and should conclude that the average difference in average out of state tuition between public and private colleges is very significant with a test statistic of -23.249. In particular, out of state tuition of private colleges is significantly higher than those of public colleges.
