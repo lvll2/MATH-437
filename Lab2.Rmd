@@ -192,7 +192,8 @@ t.test(formula = , data = , alternative = , var.equal = TRUE)
 
 Explain what each of the four arguments (`formula`, `data`, `alternative`, `var.equal`) contributes towards telling R what to do in the pre-built `t.test` function. 
 
-The `formula` tells R what to do with the inputs to obtain the desired output generally in the format f(x) ~ x. The `data` argument tells R what data to use in the test. The `alternative` argument tells R what the alternative hypothesis is and needs to be input as text. The `var.equal` argument tells R if the variance is constant between samples.
+The `formula` tells R what to do with the inputs to obtain the desired output generally in the format f(x) ~ x. The `data` argument tells R what data to use in the test. The `alternative` argument tells R what the alternative hypothesis is and needs to be input as text, either "t" for two-sided tests, "g" for greater, 
+or "l" for less. The `var.equal` argument tells R if the variance is constant between samples.
 
 Which arguments (if any) will we need to include when creating our custom permutation test function? What additional arguments (if any) will need to be included because we are using resampling-based methods instead of theory-based methods?
 
@@ -238,6 +239,7 @@ data <- data.frame(group = rep(c("Group 1", "Group 2"), 50),
 formula <- y ~ group
 alternative <- "t"
 # add something to tell R to stop
+
 # Initialize and assign values to any other arguments you identified in Part a
 
 # Step 1: Run the t-test on the original dataset and obtain the observed t-statistic value
@@ -298,19 +300,12 @@ str(results)
 Finally, we define our function, include the variables we defined in Step 0 as the input arguments, use a `return()` statement at the end to return our output, and copy the remainder of the script into the function.
 
 ```{r script to function}
-permutation_t_test <- function(formula, data, alternative = "t"){
+permutation_t_test <- function(formula, data, alternative){
  set.seed(9034)
-  
- data <- data.frame(group = rep(c("Group 1", "Group 2"), 50),
-                   y = rnorm(100))
-
- formula <- y ~ group
-
- alternative <- "t"
 
  permutation_df <- model.frame(formula = formula, data = data)
-
- t_obs <- t.test(formula = formula, data = permutation_df, 
+ 
+ t_obs <- t.test(formula = formula, data = data, 
                   alternative = alternative, var.equal = TRUE)$stat
  
  t_perm <- numeric(10000)
@@ -357,8 +352,8 @@ test_output <- permutation_t_test(formula = value ~ group,
 
 Produce a histogram of the simulated t-statistics and add a vertical line at the observed t-statistic value (it is easiest to use the regular `hist` and `abline` functions). Using the histogram, confirm that the reported p-value seems reasonable.
 ```{r}
-hist(test_output$sim) +
-  abline(v = test_output$obs))
+hist(test_output$sim)
+  abline(v = test_output$obs)
 ```
 
 
@@ -384,6 +379,9 @@ ggplot(data = alcohol, mapping = aes(x = Intake)) +
 
 What do the `center` and `binwidth` arguments do? What does `facet_wrap` do?
 
+Center tells R what to make the midpoint of the x-axis. binwidth sets the size
+of the bins in the histogram. Facet wrap creates multiple graphs separated by the groups in a specified categorical variable.
+
 ## Part b (Code: 0.5 pts)
 
 Complete the code chunk below to find the mean and standard deviation of Intake in each group. Remember to remove `eval = FALSE` after you get the chunk to run the way it's supposed to.
@@ -400,10 +398,15 @@ Using the function you wrote in Problem 2, perform a permutation test of the nul
 
 Store the output of your function in the variable `alcohol_t_test`, that is, run `alcohol_t_test <- permutation_t_test(...)` and replace the `...` with what you need to run the test. Perform the following sanity checks to make sure your code worked as intended:
 
+```{r}
+alcohol_t_test <- permutation_t_test(Intake ~ Group, alcohol, "t")
+```
+
+
 ```{r sanity check-1, eval = FALSE}
 # Check to make sure you computed the t-statistic correctly
-t.test()$statistic # remember to fill in the t.test arguments!
-alcohol_t_test$statistic.observed # replace statistic.observed with the name of the variable in the output you stored the observed t-statistic in
+t.test(Intake ~ Group, data = alcohol)$statistic # remember to fill in the t.test arguments!
+alcohol_t_test$obs # replace statistic.observed with the name of the variable in the output you stored the observed t-statistic in
 ```
 
 ```{r sanity check-2, eval = FALSE}
