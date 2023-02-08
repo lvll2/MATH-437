@@ -306,16 +306,16 @@ str(results)
 Finally, we define our function, include the variables we defined in Step 0 as the input arguments, use a `return()` statement at the end to return our output, and copy the remainder of the script into the function.
 
 ```{r script to function}
-permutation_t_test <- function(formula, data, alternative, 
-                               seed, permutations){
+permutation_t_test <- function(formula, data, alternative = "t",
+                               permutations = 10000, seed = 9034){
  set.seed(seed)
-
+  
  permutation_df <- model.frame(formula = formula, data = data)
  
  t_obs <- t.test(formula = formula, data = data, 
                   alternative = alternative, var.equal = TRUE)$stat
  
- t_perm <- permutations
+ t_perm <- numeric(permutations)
  
 
  for (i in 1:length(t_perm)){
@@ -352,7 +352,7 @@ df_new <- data.frame(group = rep(c("Group A", "Group B"), 50),
                    value = rnorm(100))
 test_output <- permutation_t_test(formula = value ~ group,
                    data = df_new,
-                   alternative = "g")
+                   alternative = "g", seed = 9035)
 # if you did not include default values for your new arguments, make sure to give them values in your function call!
 ```
 
@@ -407,7 +407,8 @@ Using the function you wrote in Problem 2, perform a permutation test of the nul
 Store the output of your function in the variable `alcohol_t_test`, that is, run `alcohol_t_test <- permutation_t_test(...)` and replace the `...` with what you need to run the test. Perform the following sanity checks to make sure your code worked as intended:
 
 ```{r}
-alcohol_t_test <- permutation_t_test(Intake ~ Group, alcohol, "t", 9035, 10000)
+alcohol_t_test <- permutation_t_test(Intake ~ Group, alcohol, 
+                                     permutations = 10000)
 ```
 
 
@@ -420,11 +421,16 @@ alcohol_t_test$obs # replace statistic.observed with the name of the variable in
 ```{r sanity check-2, eval = FALSE}
 # Check to make sure you have the correct number of resamples
 # Is this equal to the number of times you told R to do the permutation resampling?
-length(alcohol_t_test$statistic.simulated) # replace statistic.simulated with the name of the variable in the output you stored the simulated t-statistics in
+length(alcohol_t_test$sim) # replace statistic.simulated with the name of the variable in the output you stored the simulated t-statistics in
 
 ```
 
 Based on the permutation test, using a 5% significance level, what should we conclude about the effectiveness of the SST program at reducing alcohol intake? Why?
+
+```{r}
+alcohol_t_test$p_val
+```
+Since our p-value is `alcohol_t_test$p_val` , using a 5% significance level we can conclude that we should reject the null hypothesis that there is no difference between the groups which implies that our alternative hypothesis is correct and the SST program is effective at reducing alcohol intake.
 
 ## Part d (Code: 1 pt; Explanation: 1 pt)
 
