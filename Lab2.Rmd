@@ -357,8 +357,8 @@ test_output <- permutation_t_test(formula = value ~ group,
 
 Produce a histogram of the simulated t-statistics and add a vertical line at the observed t-statistic value (it is easiest to use the regular `hist` and `abline` functions). Using the histogram, confirm that the reported p-value seems reasonable.
 ```{r}
-hist(t_perm) +
-  abline(v=t_obs)
+hist(test_output$sim) +
+  abline(v = test_output$obs))
 ```
 
 
