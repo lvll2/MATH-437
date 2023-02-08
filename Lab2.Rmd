@@ -197,7 +197,8 @@ or "l" for less. The `var.equal` argument tells R if the variance is constant be
 
 Which arguments (if any) will we need to include when creating our custom permutation test function? What additional arguments (if any) will need to be included because we are using resampling-based methods instead of theory-based methods?
 
-We will need to include the `formula`, `data`, and `var.equal`
+We will need to include the `formula`, `data`, and `var.equal`. Since we are
+using a resamp
 
 ## Part b (Explanation: 1 pt)
 
@@ -410,7 +411,7 @@ alcohol_t_test <- permutation_t_test(Intake ~ Group, alcohol, "t", 9035, 10000)
 
 ```{r sanity check-1, eval = FALSE}
 # Check to make sure you computed the t-statistic correctly
-t.test(Intake ~ Group, data = alcohol)$statistic # remember to fill in the t.test arguments!
+t.test(Intake ~ Group, data = alcohol, var.equal = TRUE)$statistic # remember to fill in the t.test arguments!
 alcohol_t_test$obs # replace statistic.observed with the name of the variable in the output you stored the observed t-statistic in
 ```
 
