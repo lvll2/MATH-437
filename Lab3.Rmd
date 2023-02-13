@@ -33,6 +33,8 @@ Using the output of Lab 13.6.1, estimate the power of this test to detect each o
 
 What does the `p.adjust` function do exactly when `method = bonferroni`? What about when `method = holm`? Why does it make more sense for R to adjust the p-values rather than the significance level when controlling the FWER?
 
+`p.adjust` will adjust the p-values using Bonferroni correction where raw p-values are multiplied by the number of comparisons (the total number of hypotheses). When the Holm method is used, ascending raw p-values are multiplied by the total number of hypotheses decreased by one for each subsequent p-value. It makes more sense for R to adjust the p-values rather than the significance level when controlling the FWER in order to avoid having to set a very low significance level and therefore making more Type II errors.
+
 ## Part c (Explanation: 1 pt)
 
 Consider the second-to-last chunk in ISLR Lab 13.6.2 (the one using `TukeyHSD`). Is it appropriate to do a one-way ANOVA with this data? Explain why or why not. (You may want to produce some graphs and/or numerical summaries to support your answer.)
