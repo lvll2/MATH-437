@@ -36,7 +36,7 @@ bootstrap_resample <- function(data_vector, B, summary_fn = mean,
   # We need to add some code here!
   set.seed(seed)
   for (i in 1:B) {
-     bootsamples[,i] <- sample(data_vector, size = n, replace = TRUE)
+     boot_samples[,i] <- sample(data_vector, size = n, replace = TRUE)
     
   }
 
@@ -133,11 +133,21 @@ ci_perc_df %>% mutate(covered = lower <= pop_mean1 & upper >= pop_mean1) %>%
 Copy and modify the chunk above for the basic and normal-theory intervals.
 
 ```{r boot basic CI 1}
+ci_basic <- apply(sim_data1, 1, bootstrap_ci, method = "basic", B = 1000, summary_fn = mean, na.rm = TRUE)
 
+ci_basic_df <- as.data.frame(t(ci_basic))
+names(ci_basic_df) <- c("lower", "upper")
+ci_basic_df %>% mutate(covered = lower <= pop_mean1 & upper >= pop_mean1) %>%
+  summarize(coverage_probability = mean(covered))
 ```
 
 ```{r boot normal CI 1}
+ci_normal <- apply(sim_data1, 1, bootstrap_ci, method = "normal", B = 1000, summary_fn = mean, na.rm = TRUE)
 
+ci_normal_df <- as.data.frame(t(ci_normal))
+names(ci_basic_df) <- c("lower", "upper")
+ci_normal_df %>% mutate(covered = lower <= pop_mean1 & upper >= pop_mean1) %>%
+  summarize(coverage_probability = mean(covered))
 ```
 
 
