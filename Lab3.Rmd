@@ -1,7 +1,7 @@
 ---
 title: 'Lab Assignment #3'
 author: "Math 437 - Modern Data Analysis"
-date: "Due February 8, 2023"
+date: "Due February 15, 2023"
 output: pdf_document
 ---
 
@@ -11,7 +11,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-There are two purposes to this lab. First, you will get comfortable with the family-wise error rate and false discovery rate. Then, we will get more practice with coding a nonparametric bootstrap.
+There are two purposes to this lab. First, you will get comfortable with the family-wise error rate and false discovery rate. Then, we will get more practice with coding a nonparametric bootstrap estimate of standard error.
 
 ```{r libraries and data, message = FALSE, warning = FALSE}
 library(ISLR2)
@@ -19,50 +19,27 @@ library(ggplot2)
 library(dplyr)
 ```
 
-This lab assignment is worth a total of **20 points**.
+This lab assignment is worth a total of **15 points**.
 
 # Problem 1: Family-Wise Error Rate
 
-## Part a (Code: 1 pt)
+## Part a (Code: 1 pt; Computation and Explanation: 0.5 pts)
 
-Run the code in ISLR Lab 13.6.1, with two exceptions. First, everywhere you see these three lines of code:
+Run the code in ISLR Labs 13.6.1 and 13.6.2. Put each chunk from the textbook in its own chunk.
 
-```{r decision DON'T RUN, eval = FALSE}
-> decision <- rep("Do not reject H0", 100)
-> decision[p.values <= .05] <- "Reject H0"
-> table(decision ,
-c(rep("H0 is False", 50), rep("H0 is True", 50))
-)
-```
+Using the output of Lab 13.6.1, estimate the power of this test to detect each of the two alternative hypotheses $\mu = 0.5$ and $\mu = 1$.
 
-replace the code with the `tidyverse` equivalent by copying the chunk below (where appropriate) and completing the arguments to `if_else`.
-
-```{r decision DO RUN, eval = FALSE}
-decision_df <- tibble(p_value = p.values,
-                          truth = c(rep("H0 is False", 50), rep("H0 is True", 50))
-) %>% mutate(
-  decision = if_else()
-)
-xtabs( ~ decision + truth, data = decision_df) # if we have a count variable it goes on the left side of the ~
-```
-
-Second, instead of creating an entirely new `x` in the last chunk, simply add 0.5 to the first 50 rows of the already-existing `x` again.
-
-## Part b (Code: 1 pt)
-
-Run the code in ISLR Lab 13.6.2. Put each chunk from the textbook in its own chunk.
-
-## Part c (Explanation: 1 pt)
+## Part b (Explanation: 1 pt)
 
 What does the `p.adjust` function do exactly when `method = bonferroni`? What about when `method = holm`? Why does it make more sense for R to adjust the p-values rather than the significance level when controlling the FWER?
 
-## Part d (Explanation: 1 pt)
+## Part c (Explanation: 1 pt)
 
 Consider the second-to-last chunk in ISLR Lab 13.6.2 (the one using `TukeyHSD`). Is it appropriate to do a one-way ANOVA with this data? Explain why or why not. (You may want to produce some graphs and/or numerical summaries to support your answer.)
 
 # Problem 2: False Discovery Rate
 
-## Part a (Code: 1 pt)
+## Part a (Code: 0.5 pts)
 
 Run the code in ISLR Lab 13.6.3. Put each chunk from the textbook in its own chunk.
 
@@ -151,8 +128,6 @@ Obtain the adjusted p-values using the Benjamini-Hochberg procedure. How many nu
 
 ```
 
-Compare your results from the three procedures.
-
 ## Part c (Code: 1 pt)
 
 Create a new matrix, `X2`, that is exactly the same as X, except that the first 25 fund managers do actually have a slight long-term return of $+1\%$ (i.e., in rows 1-25 $\mu = 1$ not 0.01). Conduct your 100 t-tests and plot a histogram of the new p-values.
@@ -195,7 +170,7 @@ Compare your results from the three procedures. Why is it important to consider 
 
 # Problem 4: Bootstrap Estimation of Standard Error
 
-## Part a (Code: 1 pt)
+## Part a (Code: 0.5 pts)
 
 Run the code in the first half of ISLR Lab 5.3.4, "Estimating the Accuracy of a Statistic of Interest." Put each chunk from the textbook in its own chunk.
 
@@ -207,8 +182,6 @@ According to the instructions for Lab 5.3.4, "We can implement a bootstrap analy
 
 Write a code chunk that performs all of those steps and prints out the standard deviation. Use 1000 bootstrap samples. 
 
-Hint: Use the Jackknife and Bootstrap class activity as a template, but resample the *row numbers* (i.e. 1:n) to pass in as the `index` argument in `alpha.fn` rather than resampling a from a vector of data.
-
 ## Part c (Code: 1 pt)
 
 Replicate the center panel of textbook Figure 5.10: a histogram of  the bootstrap estimates of $\alpha$ (from Part b) with a solid pink (or red) line at the true value of $\alpha = 0.6$. You may use either base R plotting commands (which uses `abline` to add the vertical line) or the `ggplot2` package (which adds a `geom_vline` to the plot). 
@@ -216,44 +189,3 @@ Replicate the center panel of textbook Figure 5.10: a histogram of  the bootstra
 ## Part d (Explanation: 1 pt)
 
 Note that the distribution you graphed in Part c is a sampling distribution of $\hat{\alpha}$. Explain why it would be appropriate to use this sampling distribution to construct a confidence interval for $\alpha$, but not to obtain a p-value for a hypothesis test of $H_0: \alpha = 0.6$ against $H_a: \alpha \neq 0.6$.
-
-# Problem 5: Bootstrap Confidence Intervals
-
-## Part a (Code: 1 pt)
-
-Run the code in the second half of ISLR Lab 5.3.4, "Estimating the Accuracy of a Linear Regression Model." Put each chunk from the textbook in its own chunk.
-
-## Part b (Code: 1 pt)
-
-According to the lab, "there is a non-linear relationship in the data, and so the residuals from a linear fit will be inflated, and so will $\hat{\sigma}^2$." To verify the nonlinear relationship, reproduce the scatterplot, orange line, and blue curve in Figure 3.8 from the textbook. 
-
-Hint 1: Call the `coef()` function to obtain the coefficients of the model, as shown in the very last chunk of Part a. This will make fitting the lines much easier.
-
-Hint 2: Use the `seq()` function to create a sequence of evenly spaced horsepower values. If you created your scatterplot with Base R, you can add the orange and blue lines using the `lines()` function. If you are plotting using the `ggplot2` package, create a data frame with the horsepower values, the $\hat{mpg}$ values from the linear model, and the $\hat{mpg}$ values from the quadratic model, then add two `geom_line` objects to your scatterplot.
-
-## Part c (Code: 1 pt)
-
-Similarly to Problem 4b, write your own code chunk that fits the quadratic model on a bootstrap sample from the `Auto` dataset, records all the coefficient estimates, and computes the resulting standard deviation of all three coefficient estimates.
-
-Hint: In Problem 5a you already defined `boot.fn` to return the coefficient vector. Store that vector you get from `boot.fn` in the $i^th$ row of `boot_estimates` defined in the chunk below; then as shown in the chunk, use the `apply` function to get all three standard errors with one line of code.
-
-```{r Problem 5c standard error, eval = FALSE}
-boot_estimates <- matrix(0, nrow = 1000, ncol = 3)
-colnames(boot_estimates) <- c("B0", "B1", "B2")
-# 1000 bootstrap estimates of B0, B1, B2
-
-#### Your code goes here
-
-
-#### Your code goes here
-
-boot_se <- apply(boot_estimates, 2, sd)
-# computes the standard deviation of each column of boot_estimates
-
-print(boot_se)
-```
-
-## Part d (Code: 0.5 pts)
-
-Use a quick-and-dirty confidence interval method ($\text{statistic} \pm 2 \times SE_{boot}$) to obtain an estimated 95% confidence interval for each parameter in the model.
-
