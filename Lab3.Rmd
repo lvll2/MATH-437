@@ -139,6 +139,8 @@ What does the `p.adjust` function do exactly when `method = bonferroni`? What ab
 
 Consider the second-to-last chunk in ISLR Lab 13.6.2 (the one using `TukeyHSD`). Is it appropriate to do a one-way ANOVA with this data? Explain why or why not. (You may want to produce some graphs and/or numerical summaries to support your answer.)
 
+It is not appropriate to do a one-way ANOVA test with this data because our data is made up of repeated measures (the monthly excess returns) for each variable (the managers) therefore the samples are not independent.
+
 # Problem 2: False Discovery Rate
 
 ## Part a (Code: 0.5 pts)
