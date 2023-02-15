@@ -166,7 +166,7 @@ Simulate 1000 sets of 100 random numbers from a $Exp(1)$ distribution and store 
 ```{r sim3}
 set.seed(437)
 # need to do the simulation now!
-sim_data3 <- matrix(rexp(1000*100), nrow = 1000, ncol = 100)
+sim_data3 <- matrix(rexp(1000*100), nrow = 1000, ncol = 10)
 ```
 
 Copy and modify your code chunks from Simulation Part 1 to produce 95% confidence intervals using `sim_data3`. What proportion of "95% confidence intervals" actually contained the true parameter value? Did any methods perform noticeably better/worse?
@@ -221,7 +221,7 @@ Simulate 1000 sets of 10 random numbers from a $Exp(1)$ distribution and store t
 ```{r sim4}
 set.seed(437)
 # need to do the simulation now!
-sim_data4 <- matrix(rexp(1000*10), nrow = 1000, ncol = 100)
+sim_data4 <- matrix(rexp(1000*10), nrow = 1000, ncol = 10)
 ```
 
 Copy and modify your code chunks from Simulation Part 1 to produce 95% confidence intervals using `sim_data4`. What proportion of "95% confidence intervals" actually contained the true parameter value? Did any methods perform noticeably better/worse?
