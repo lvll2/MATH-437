@@ -145,7 +145,7 @@ ci_basic_df %>% mutate(covered = lower <= pop_mean1 & upper >= pop_mean1) %>%
 ci_normal <- apply(sim_data1, 1, bootstrap_ci, method = "normal", B = 1000, summary_fn = mean, na.rm = TRUE)
 
 ci_normal_df <- as.data.frame(t(ci_normal))
-names(ci_basic_df) <- c("lower", "upper")
+names(ci_normal_df) <- c("lower", "upper")
 ci_normal_df %>% mutate(covered = lower <= pop_mean1 & upper >= pop_mean1) %>%
   summarize(coverage_probability = mean(covered))
 ```
@@ -163,7 +163,55 @@ Copy and modify your code chunks from Simulation Part 1 to produce 95% confidenc
 
 Simulate 1000 sets of 100 random numbers from a $Exp(1)$ distribution and store them in a 1000 x 100 matrix `sim_data3`. Note that `sim_data3` represents 1000 samples of size 100 under conditions where we *know* the assumptions of a t confidence interval are not met but we are hoping that the Central Limit Theorem can cover us.
 
+```{r sim3}
+set.seed(437)
+# need to do the simulation now!
+sim_data3 <- matrix(rexp(1000*100), nrow = 1000, ncol = 100)
+```
+
 Copy and modify your code chunks from Simulation Part 1 to produce 95% confidence intervals using `sim_data3`. What proportion of "95% confidence intervals" actually contained the true parameter value? Did any methods perform noticeably better/worse?
+
+```{r t-CI3}
+# You should be able to just run this code chunk without any fixes
+pop_mean3 <- 1
+ci_t3 <- apply(sim_data3, 1, function(x) t.test(x)$conf.int)
+ci_t_df3 <- as.data.frame(t(ci_t3))
+names(ci_t_df3) <- c("lower", "upper")
+ci_t_df3 %>% mutate(covered = lower <= pop_mean3 & upper >= pop_mean3) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+```{r boot percentile CI 3}
+# You should be able to just run this code chunk without any fixes
+ci_perc3 <- apply(sim_data3, 1, bootstrap_ci, method = "percentile", B = 1000, summary_fn = mean, na.rm = TRUE)
+# don't need any ... arguments here, but illustrating the idea of the ...
+# notice that bootstrap_ci has default seed = 100 and C = 0.95 arguments
+ci_perc_df3 <- as.data.frame(t(ci_perc3))
+names(ci_perc_df3) <- c("lower", "upper")
+ci_perc_df3 %>% mutate(covered = lower <= pop_mean3 & upper >= pop_mean3) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+Copy and modify the chunk above for the basic and normal-theory intervals.
+
+```{r boot basic CI 3}
+ci_basic3 <- apply(sim_data3, 1, bootstrap_ci, method = "basic", B = 1000, summary_fn = mean, na.rm = TRUE)
+
+ci_basic_df3 <- as.data.frame(t(ci_basic3))
+names(ci_basic_df3) <- c("lower", "upper")
+ci_basic_df3 %>% mutate(covered = lower <= pop_mean3 & upper >= pop_mean3) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+```{r boot normal CI 3}
+ci_normal3 <- apply(sim_data3, 1, bootstrap_ci, method = "normal", B = 1000, summary_fn = mean, na.rm = TRUE)
+
+ci_normal_df3 <- as.data.frame(t(ci_normal3))
+names(ci_normal_df3) <- c("lower", "upper")
+ci_normal_df3 %>% mutate(covered = lower <= pop_mean3 & upper >= pop_mean3) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
 
 ## Simulation Part 4 - Assumptions Not Met, Small Samples
 
