@@ -145,6 +145,27 @@ Consider the second-to-last chunk in ISLR Lab 13.6.2 (the one using `TukeyHSD`).
 
 Run the code in ISLR Lab 13.6.3. Put each chunk from the textbook in its own chunk.
 
+```{r}
+fund.pvalues <- rep (0, 2000)
+for (i in 1:2000){
+  fund.pvalues[i] <- t.test(Fund[, i], mu = 0)$p.value
+  }
+```
+
+```{r}
+q.values.BH <- p.adjust (fund.pvalues , method = "BH")
+q.values.BH[1:10]
+```
+
+```{r}
+sum(q.values.BH <= .1)
+```
+
+```{r}
+sum(fund.pvalues <= (0.1 / 2000))
+```
+
+
 ## Part b (Code: 1 pt)
 
 Finish writing the `FDR_plot` function in the code chunk below. This function should take two arguments: `p.values`, a vector of p-values, and `q`, the desired False Discovery Rate, and produce a graph like those in Figure 13.6. (Assume that on the graphs, $q$ and $\alpha$ are set to the same value.)
