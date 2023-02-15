@@ -217,7 +217,50 @@ ci_normal_df3 %>% mutate(covered = lower <= pop_mean3 & upper >= pop_mean3) %>%
 
 Simulate 1000 sets of 10 random numbers from a $Exp(1)$ distribution and store them in a 1000 x 100 matrix `sim_data4`. Note that `sim_data4` represents 1000 samples of size 10 under conditions where we *know* the assumptions of a t confidence interval are not met and Central Limit Theorem is almost certainly *not* going to cover us.
 
+
+```{r sim4}
+set.seed(437)
+# need to do the simulation now!
+sim_data4 <- matrix(rexp(1000*10), nrow = 1000, ncol = 100)
+```
+
 Copy and modify your code chunks from Simulation Part 1 to produce 95% confidence intervals using `sim_data4`. What proportion of "95% confidence intervals" actually contained the true parameter value? Did any methods perform noticeably better/worse?
+
+```{r t-CI4}
+pop_mean4 <- 1
+ci_t4 <- apply(sim_data4, 1, function(x) t.test(x)$conf.int)
+ci_t_df4 <- as.data.frame(t(ci_t4))
+names(ci_t_df4) <- c("lower", "upper")
+ci_t_df4 %>% mutate(covered = lower <= pop_mean4 & upper >= pop_mean4) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+```{r boot percentile CI 4}
+ci_perc4 <- apply(sim_data4, 1, bootstrap_ci, method = "percentile", B = 1000, summary_fn = mean, na.rm = TRUE)
+ci_perc_df4 <- as.data.frame(t(ci_perc4))
+names(ci_perc_df4) <- c("lower", "upper")
+ci_perc_df4 %>% mutate(covered = lower <= pop_mean4 & upper >= pop_mean4) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+
+```{r boot basic CI 4}
+ci_basic4 <- apply(sim_data4, 1, bootstrap_ci, method = "basic", B = 1000, summary_fn = mean, na.rm = TRUE)
+
+ci_basic_df4 <- as.data.frame(t(ci_basic4))
+names(ci_basic_df4) <- c("lower", "upper")
+ci_basic_df4 %>% mutate(covered = lower <= pop_mean4 & upper >= pop_mean4) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+```{r boot normal CI 4}
+ci_normal4 <- apply(sim_data4, 1, bootstrap_ci, method = "normal", B = 1000, summary_fn = mean, na.rm = TRUE)
+
+ci_normal_df4 <- as.data.frame(t(ci_normal4))
+names(ci_normal_df4) <- c("lower", "upper")
+ci_normal_df4 %>% mutate(covered = lower <= pop_mean4 & upper >= pop_mean4) %>%
+  summarize(coverage_probability = mean(covered))
+```
 
 ## Simulation Part 5 - Range Preservation
 
