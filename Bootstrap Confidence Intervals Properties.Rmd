@@ -159,6 +159,59 @@ Simulate 1000 sets of 10 random numbers from a standard normal distribution and 
 
 Copy and modify your code chunks from Simulation Part 1 to produce 95% confidence intervals using `sim_data2`. What proportion of "95% confidence intervals" actually contained the true parameter value? Did any methods perform noticeably better/worse?
 
+________________________________________________________________________________________
+
+```{r sim2}
+set.seed(437)
+# need to do the simulation now!
+sim_data2 <- matrix(rnorm(1000*10), nrow = 1000, ncol = 10)
+```
+
+```{r t-CI2}
+# You should be able to just run this code chunk without any fixes
+pop_mean2 <- 0
+ci_t2 <- apply(sim_data2, 1, function(x) t.test(x)$conf.int)
+ci_t_df2 <- as.data.frame(t(ci_t2))
+names(ci_t_df2) <- c("lower", "upper")
+ci_t_df2 %>% mutate(covered = lower <= pop_mean1 & upper >= pop_mean2) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+Now, let's see how our bootstrap CI functions compare.
+
+```{r boot percentile CI 2}
+# You should be able to just run this code chunk without any fixes
+ci_perc2 <- apply(sim_data2, 1, bootstrap_ci, method = "percentile", B = 1000, summary_fn = mean, na.rm = TRUE)
+# don't need any ... arguments here, but illustrating the idea of the ...
+# notice that bootstrap_ci has default seed = 100 and C = 0.95 arguments
+ci_perc_df2 <- as.data.frame(t(ci_perc2))
+names(ci_perc_df2) <- c("lower", "upper")
+ci_perc_df2 %>% mutate(covered = lower <= pop_mean1 & upper >= pop_mean2) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+Copy and modify the chunk above for the basic and normal-theory intervals.
+
+```{r boot basic CI 2}
+ci_basic2 <- apply(sim_data2, 1, bootstrap_ci, method = "basic", B = 1000, summary_fn = mean, na.rm = TRUE)
+
+ci_basic_df2 <- as.data.frame(t(ci_basic2))
+names(ci_basic_df2) <- c("lower", "upper")
+ci_basic_df2 %>% mutate(covered = lower <= pop_mean1 & upper >= pop_mean2) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+```{r boot normal CI 2}
+ci_normal2 <- apply(sim_data2, 1, bootstrap_ci, method = "normal", B = 1000, summary_fn = mean, na.rm = TRUE)
+
+ci_normal_df2 <- as.data.frame(t(ci_normal2))
+names(ci_normal_df2) <- c("lower", "upper")
+ci_normal_df2 %>% mutate(covered = lower <= pop_mean1 & upper >= pop_mean2) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+________________________________________________________________________________________
+
 ## Simulation Part 3 - Assumptions Not Met, Large Samples
 
 Simulate 1000 sets of 100 random numbers from a $Exp(1)$ distribution and store them in a 1000 x 100 matrix `sim_data3`. Note that `sim_data3` represents 1000 samples of size 100 under conditions where we *know* the assumptions of a t confidence interval are not met but we are hoping that the Central Limit Theorem can cover us.
@@ -222,3 +275,12 @@ Copy and modify your code chunks from Simulation Part 1 to produce 95% confidenc
 ## Simulation Part 5 - Range Preservation
 
 Produce a histogram of the lower bound of the CIs you obtained using each of the four methods in Simulation Part 4. Which methods appear to be range-preserving (that is, cannot give implausible values for the parameter) even under this "worst-case scenario"? 
+
+```{r}
+par(mfrow= c(2,2))
+hist(ci_normal_df4$lower)
+hist(ci_basic_df4$lower)
+hist(ci_perc_df4$lower)
+hist(ci_t_df4$lower)
+```
+
