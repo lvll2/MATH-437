@@ -159,6 +159,8 @@ Simulate 1000 sets of 10 random numbers from a standard normal distribution and 
 
 Copy and modify your code chunks from Simulation Part 1 to produce 95% confidence intervals using `sim_data2`. What proportion of "95% confidence intervals" actually contained the true parameter value? Did any methods perform noticeably better/worse?
 
+The proportion of parameters were all in the areas of 90-95% with none of the performing noticably worse in the sense that they were all in that 90-95% area.
+
 ________________________________________________________________________________________
 
 ```{r sim2}
@@ -278,6 +280,8 @@ sim_data4 <- matrix(rexp(1000*10), nrow = 1000, ncol = 10)
 ```
 
 Copy and modify your code chunks from Simulation Part 1 to produce 95% confidence intervals using `sim_data4`. What proportion of "95% confidence intervals" actually contained the true parameter value? Did any methods perform noticeably better/worse?
+
+All of the methods performed worse as breaking the central limit theorem was still an issue even though bootstrapping tends to ignore it. The range of values was around 84-86% with the t test being noticeably better at 90%.
 
 ```{r t-CI4}
 pop_mean4 <- 1
