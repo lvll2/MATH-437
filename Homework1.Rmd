@@ -74,6 +74,24 @@ The P-values and Power in class activity clarified a few topics. The primary tak
 
 Textbook Exercise 2.4.4 
 
+4. You will now think of some real-life applications for statistical learning.
+
+(a) Describe three real-life applications in which classification might
+be useful. Describe the response, as well as the predictors. Is the
+goal of each application inference or prediction? Explain your
+answer.
+Answer:
+
+(b) Describe three real-life applications in which regression might
+be useful. Describe the response, as well as the predictors. Is the
+goal of each application inference or prediction? Explain your
+answer.
+Answer: 
+
+(c) Describe three real-life applications in which cluster analysis
+might be useful.
+Answer: 
+
 ## Conceptual Problem 3 (3 pts) 
 
 Textbook Exercise 13.7.2
@@ -84,7 +102,82 @@ Textbook Exercise 13.7.2
 
 From the Parametric vs. Nonparametric Tests: Two-Sample Tests activity, copy to this homework your simulation code/results from the *Assumptions Violated, Ha True* section of each test as well as the results tables for all simulations (in the Class Results section). 
 
+_______________________________________________________________________________
+t.test section:
+```{r p-values2 example, eval = FALSE}
+nG <- 10
+d <- 0.8
+for (i in 1:length(pvalues)){
+  set.seed(i)  # notice that the seed changes every time inside the for loop
+  # you could also set a single seed outside the for loop
+  
+  # Create the vectors x and y
+  x <- c(rnorm(nG*0.9, mean = 0, sd = sqrt(0.19)),
+         rnorm(nG*0.1, mean = 3, sd = sqrt(0.19))
+)
+  y <- c(rnorm(nG*0.9, mean = d, sd = sqrt(0.19)),
+         rnorm(nG*0.1, mean = 3 + d, sd = sqrt(0.19))
+)
+
+  # Perform the t-test and get the p-value
+  pvalues[i] <- t.test(x, y, alternative = "t")$p.value
+    
+}
+```
+
+```{r p-values 3 example, eval = FALSE}
+# histogram of the p-values under H0
+hist(pvalues)
+
+plot(ecdf(pvalues),
+     xlab = "p-value",
+     ylab = "F(p-value)",
+     main = "Empirical CDF of the P-Value Under H0")
+
+mean(pvalues <= 0.05)
+
+```
+Mann-Whitney Section: 
+```{r p-values2 example, eval = FALSE}
+nG <- 10
+d <- 0.8
+for (i in 1:length(pvalues)){
+  set.seed(i)  # notice that the seed changes every time inside the for loop
+  # you could also set a single seed outside the for loop
+  
+  # Create the vectors x and y
+  x <- c(rnorm(nG*0.9, mean = 0, sd = sqrt(0.19)),
+         rnorm(nG*0.1, mean = 3, sd = sqrt(0.19))
+)
+  y <- c(rnorm(nG*0.9, mean = d, sd = sqrt(0.19)),
+         rnorm(nG*0.1, mean = 3 + d, sd = sqrt(0.19))
+)
+
+  # Perform the t-test and get the p-value
+  pvalues[i] <- wilcox.test(x, y, alternative = "t")$p.value
+    
+}
+```
+
+```{r p-values 3 example, eval = FALSE}
+# histogram of the p-values under H0
+hist(pvalues)
+
+plot(ecdf(pvalues),
+     xlab = "p-value",
+     ylab = "F(p-value)",
+     main = "Empirical CDF of the P-Value Under H0")
+
+mean(pvalues <= 0.05)
+
+```
+_______________________________________________________________________________
+
 From the Parametrics vs. Nonparametric Tests: Multi-Sample Tests activity, copy to this homework your simulation code/results from the *Both Assumptions Violated* section of each test as well as the results tables for all simulations (in the Class Results section).
+
+_______________________________________________________________________________
+
+_______________________________________________________________________________
 
 Write a couple of paragraphs explaining the difference between parametric and nonparametric methods and explain why classic nonparametric methods (Mann-Whitney and Kruskal-Wallis) are a better choice than the corresponding parametric methods (two-sample t-test and one-way ANOVA) when the assumptions of the parametric method are clearly violated.
 
@@ -109,8 +202,7 @@ Textbook Exercise 2.4.8 with the following changes:
 
 college %>% mutate(Elite = case_when(Top10perc > 50 ~"Yes",Top10perc<= 50 ~ "No"))
 
-par(mfrow = c(2,2))
-hist(college$Elite)
+
 
 
 ```
@@ -121,6 +213,30 @@ hist(college$Elite)
 Molitor (1989) hypothesized that children who watched violent film and television were more tolerant of violent "real-life" behavior. A sample of 42 children were randomly assigned to watch footage from either the 1984 Summer Olympics (non-violent) or the movie \emph{The Karate Kid} (violent). They were then told to watch (by video monitor) two younger children in the next room and get the research assistant if they "got into trouble" (the monitor actually showed a pre-recorded video of the children getting progressively more violent).
 
 The file \emph{violence.csv} contains the time (in seconds) that each child stayed in the room. Longer stays are assumed to indicate more tolerance of violent behavior. Produce an appropriate graph showing the sample data and, based on your graph, explain why a two-sample t-test might not be the best idea.
+
+```{r}
+violent_data <- read.csv("violence.csv")
+
+ggplot(data = violent_data ,aes(x = Video, y= Time)) +
+  geom_boxplot()+
+  geom_point()
+
+ggplot(data = violent_data,
+       mapping = aes(x = Time)) +
+  geom_histogram() +
+  facet_wrap(~Video)
+
+violent_data %>% 
+  filter(Video == "Olympics") %>% 
+  summary()
+violent_data %>% 
+  filter(Video == "Karate Kid") %>% 
+  summary()
+
+```
+
+
+
 
 ## Applied Problem 3 (Code: 1 pt; Explanation: 2 pts)
 
