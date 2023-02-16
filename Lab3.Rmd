@@ -139,6 +139,8 @@ What does the `p.adjust` function do exactly when `method = bonferroni`? What ab
 
 Consider the second-to-last chunk in ISLR Lab 13.6.2 (the one using `TukeyHSD`). Is it appropriate to do a one-way ANOVA with this data? Explain why or why not. (You may want to produce some graphs and/or numerical summaries to support your answer.)
 
+It is not appropriate to do a one-way ANOVA test with this data because our data is made up of repeated measures (the monthly excess returns) for each manager in the same month and therefore the samples are not independent.
+
 # Problem 2: False Discovery Rate
 
 ## Part a (Code: 0.5 pts)
@@ -165,6 +167,33 @@ sum(q.values.BH <= .1)
 sum(fund.pvalues <= (0.1 / 2000))
 ```
 
+```{r}
+ps <- sort(fund.pvalues)
+
+m <-  length(fund.pvalues)
+
+q <-  0.1
+
+wh.ps <-  which(ps < q * (1:m) / m)
+
+if(length(wh.ps) > 0) {
+  wh <-  1:max(wh.ps)
+} else {
+  wh <- numeric(0)
+}
+```
+
+```{r}
+plot(ps, log = "xy", ylim = c(4e-6, 1), ylab = "P-Value",
+     xlab = "Index", main = "")
+
+points(wh, ps[wh], col = 4)
+
+abline(a = 0, b = (q / m), col = 2, untf = TRUE)
+
+abline(h = 0.1 / 2000, col = 3)
+```
+
 
 ## Part b (Code: 1 pt)
 
@@ -172,8 +201,26 @@ Finish writing the `FDR_plot` function in the code chunk below. This function sh
 
 ```{r FDR plot, eval = FALSE}
 FDR_plot <- function(p.values, q){
+  ps <- sort(p.values)
+
+  m <-  length(p.values)
   
-  # Copy code from the last two chunks of ISLR Lab 13.6.3, but replace variable names and hard-coded values as necessary
+  wh.ps <-  which(ps < q * (1:m) / m)
+  
+  if(length(wh.ps) > 0) {
+    wh <-  1:max(wh.ps)
+  } else {
+    wh <- numeric(0)
+  }
+  
+  plot(ps, log = "xy", ylim = c(4e-6, 1), ylab = "P-Value",
+     xlab = "Index", main = "")
+
+  points(wh, ps[wh], col = 4)
+  
+  abline(a = 0, b = (q / m), col = 2, untf = TRUE)
+  
+  abline(h = 0.1 / 2000, col = 3)
   
   invisible(wh.ps) # invisibly return the significant p-values
 }
@@ -182,9 +229,11 @@ FDR_plot <- function(p.values, q){
 Test your function. First, attempt to duplicate the left and right panels of Figure 13.6. 
 
 ```{r ISLR 13.6 Left}
+FDR_plot(fund.pvalues, 0.05)
 ```
 
 ```{r ISLR 13.6 Right}
+FDR_plot(fund.pvalues, 0.3)
 ```
 
 Then, test your function on the simulated dataset in the chunk below, using $q = 0.1$.
@@ -192,6 +241,8 @@ Then, test your function on the simulated dataset in the chunk below, using $q =
 ```{r sim p-values}
 set.seed(12)
 sim_pvalues <- runif(1000, min = 1e-5, max = 0.05001)
+
+FDR_plot(sim_pvalues, 0.1)
 # Now put a line of code running your function on this set of "significant" p-values
 ```
 
@@ -204,18 +255,24 @@ This problem is adapted from ISLR Chapter 13, Exercise 8.
 Using the code in Exercise 13.7.8, create a 20 x 100 matrix where each column represents 20 random numbers from $N(0, 1)$. 
 
 ```{r Code 13.7.8}
+set.seed(1)
 
+n <- 20
+
+m <- 100
+
+X <- matrix(rnorm(n * m), ncol = m)
 ```
 
 Then, run a t-test on each column of the matrix testing $H_0: \mu = 0$ against $H_a: \mu \neq 0$. We are going to use the `apply` function to do this rather than adapt the `for` loop from the ISLR Labs. (Recall from the class activities that the `apply` function applies a single function to each row (`MARGIN = 1`) or column (`MARGIN = 2`) of a matrix.)
 
 Don't forget to delete the `eval = FALSE` after you've fixed this code chunk to run properly!
 
-```{r t-test-apply, eval = FALSE}
+```{r t-test-apply}
 t_test_0 <- function(x){
   # x: a vector of data
   
-  p_value <- # write a line of code that extracts the p-value from the t-test we want to do
+  p_value <- t.test(x, mu = 0)$p.value
     
   return(p_value)
 
@@ -227,7 +284,7 @@ p_values <- apply(X, 2, t_test_0)
 Plot a histogram of the p-values obtained.
 
 ```{r 13.7.8a histogram}
-
+hist(p_values)
 ```
 
 ## Part b (Code: 1 pt, Explanation: 0.5 pts)
