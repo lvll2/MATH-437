@@ -5,6 +5,12 @@ date: "Due February 10, 2023"
 output: pdf_document
 ---
 
+```{r}
+library(tidyverse)
+library(ISLR2)
+```
+
+
 # Instructions
 
 You should submit either two or three files:
@@ -104,7 +110,7 @@ From the Parametric vs. Nonparametric Tests: Two-Sample Tests activity, copy to 
 
 _______________________________________________________________________________
 t.test section:
-```{r p-values2 example, eval = FALSE}
+```{r, eval = FALSE}
 nG <- 10
 d <- 0.8
 for (i in 1:length(pvalues)){
@@ -125,7 +131,7 @@ for (i in 1:length(pvalues)){
 }
 ```
 
-```{r p-values 3 example, eval = FALSE}
+```{r, eval = FALSE}
 # histogram of the p-values under H0
 hist(pvalues)
 
@@ -171,12 +177,31 @@ plot(ecdf(pvalues),
 mean(pvalues <= 0.05)
 
 ```
+
+
+
+
+
 _______________________________________________________________________________
-
-From the Parametrics vs. Nonparametric Tests: Multi-Sample Tests activity, copy to this homework your simulation code/results from the *Both Assumptions Violated* section of each test as well as the results tables for all simulations (in the Class Results section).
-
-_______________________________________________________________________________
-
+$$
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+$n_G$ & t-Test Assumptions & Type I Error Rate & Power at $d = 0.2$ & Power at $d = 0.5$ & Power at $d = 0.8$\\
+\hline
+10 & Met & 0.0507 & 6.95% & 18.18% & 38.3% \\
+\hline
+25 & Met & 0.05 & 10.32% & 40% & 79% \\
+\hline
+50 & Met & 0.0504 & 15.92% & & \\
+\hline
+10 & Violated & 0 & 0.02% & 16.34% & 20.4% \\
+\hline
+25 & Violated & 0 & & 89% & 93% \\
+\hline
+50 & Violated & 0 & 1.23% & & \\
+\hline
+\end{tabular}
+$$
 _______________________________________________________________________________
 
 Write a couple of paragraphs explaining the difference between parametric and nonparametric methods and explain why classic nonparametric methods (Mann-Whitney and Kruskal-Wallis) are a better choice than the corresponding parametric methods (two-sample t-test and one-way ANOVA) when the assumptions of the parametric method are clearly violated.
@@ -200,12 +225,17 @@ Textbook Exercise 2.4.8 with the following changes:
 # Elite <- as.factor (Elite)
 # college <- data.frame (college , Elite)
 
-college %>% mutate(Elite = case_when(Top10perc > 50 ~"Yes",Top10perc<= 50 ~ "No"))
+College %>% mutate(Elite = case_when(Top10perc > 50 ~"Yes",Top10perc<= 50 ~ "No"))
 
 
+min(College$PhD)
 
+College %>% 
+  filter(PhD >100)
 
 ```
+
+Texas A&M University at Galveston could not have been properly collected as the percentage of faculty with PH.D.'s is over 100% which is clearly an error in the collection of data processes.
 
 
 ## Applied Problem 2 (Code: 1 pt; Explanation: 2 pts)
