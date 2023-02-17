@@ -36,7 +36,7 @@ Answer: In general, questions that would be answered in inference would include 
 
 4. Generally, what types of prediction questions are answered using *regression* methods and what types are answered using *classification* methods?
 
-Answer: The types of predicton questions 
+Answer: The types of prediction questions answered using regression methods are those that have a quantitative response and prediction questions with qualitative responses are generally answered using classification methods. Although some methods can be used for either response type.
 
 5. What are the major advantages of using a *nonparametric* method over a *parametric* method? What are the disadvantages?
 
