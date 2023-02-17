@@ -60,7 +60,7 @@ Answer: Overfitting is when too much power is given to the training data set tha
 
 10. Briefly explain how a *Bayes classifier* works.
 
-Answer: 
+Answer: Bayes classifier works by assigning an observation to a class based on the probability that an observation belongs to that class given an observed predictor variable. The threshold that determines to which class an observation is assigned is called the Bayes decision boundary.
 
 # Conceptual Problems
 
