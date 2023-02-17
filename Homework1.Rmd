@@ -44,7 +44,7 @@ Answer: The major advantages of nonparametric methods is the fact that the probl
 
 6. In prediction, we typically aim to minimize a *loss function* that more-or-less represents the total error in our predictions. Give one example each for regression and classification problems of a measure of model (in)accuracy.
 
-Answer: 
+Answer: A measure of model accuracy for regression problems is mean squared error and for classification problems the most common measure used is error rate. In both cases, the MSE and error rate should be computed using test data rather than data from the training set.
 
 7. Why do we only fit the model on a *training set*? What do we do with the rest of the data?
 
@@ -52,7 +52,7 @@ Answer: We only fit the model of a training set as it has the majority of the da
 
 8. Generally, as a model becomes more complex, what happens to the *bias* of the model and why? What happens to the *variance* of the model and why?
 
-Answer:
+Answer: As a model becomes more complex, or flexible, the bias of the model will decrease as it will more closely follow the training data which often has non-linear relationships. However, as the model becomes more complex, it will have higher variance as it follows the training data because its flexibility makes the model sensitive to changes in the training data that would not have a major effect on more simplified, rigid models.
 
 9. What is meant by the term *overfitting*? Explain this in terms of the bias-variance trade-off.
 
