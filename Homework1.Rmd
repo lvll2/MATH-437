@@ -110,7 +110,7 @@ From the Parametric vs. Nonparametric Tests: Two-Sample Tests activity, copy to 
 
 _______________________________________________________________________________
 t.test section:
-```{r, eval = FALSE}
+```{r}
 nG <- 10
 d <- 0.8
 for (i in 1:length(pvalues)){
@@ -131,7 +131,7 @@ for (i in 1:length(pvalues)){
 }
 ```
 
-```{r, eval = FALSE}
+```{r}
 # histogram of the p-values under H0
 hist(pvalues)
 
@@ -144,7 +144,7 @@ mean(pvalues <= 0.05)
 
 ```
 Mann-Whitney Section: 
-```{r p-values2 example, eval = FALSE}
+```{r p-values2 example}
 nG <- 10
 d <- 0.8
 for (i in 1:length(pvalues)){
@@ -165,7 +165,7 @@ for (i in 1:length(pvalues)){
 }
 ```
 
-```{r p-values 3 example, eval = FALSE}
+```{r p-values 3 example}
 # histogram of the p-values under H0
 hist(pvalues)
 
@@ -183,25 +183,25 @@ mean(pvalues <= 0.05)
 
 
 _______________________________________________________________________________
-$$
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline
-$n_G$ & t-Test Assumptions & Type I Error Rate & Power at $d = 0.2$ & Power at $d = 0.5$ & Power at $d = 0.8$\\
-\hline
-10 & Met & 0.0507 & 6.95% & 18.18% & 38.3% \\
-\hline
-25 & Met & 0.05 & 10.32% & 40% & 79% \\
-\hline
-50 & Met & 0.0504 & 15.92% & & \\
-\hline
-10 & Violated & 0 & 0.02% & 16.34% & 20.4% \\
-\hline
-25 & Violated & 0 & & 89% & 93% \\
-\hline
-50 & Violated & 0 & 1.23% & & \\
-\hline
-\end{tabular}
-$$
+<!-- $$ -->
+<!-- \begin{tabular}{|c|c|c|c|c|c|} -->
+<!-- \hline -->
+<!-- $n_G$ & t-Test Assumptions & Type I Error Rate & Power at $d = 0.2$ & Power at $d = 0.5$ & Power at $d = 0.8$\\ -->
+<!-- \hline -->
+<!-- 10 & Met & 0.0507 & 6.95% & 18.18% & 38.3% \\ -->
+<!-- \hline -->
+<!-- 25 & Met & 0.05 & 10.32% & 40% & 79% \\ -->
+<!-- \hline -->
+<!-- 50 & Met & 0.0504 & 15.92% & & \\ -->
+<!-- \hline -->
+<!-- 10 & Violated & 0 & 0.02% & 16.34% & 20.4% \\ -->
+<!-- \hline -->
+<!-- 25 & Violated & 0 & & 89% & 93% \\ -->
+<!-- \hline -->
+<!-- 50 & Violated & 0 & 1.23% & & \\ -->
+<!-- \hline -->
+<!-- \end{tabular} -->
+<!-- $$ -->
 _______________________________________________________________________________
 
 Write a couple of paragraphs explaining the difference between parametric and nonparametric methods and explain why classic nonparametric methods (Mann-Whitney and Kruskal-Wallis) are a better choice than the corresponding parametric methods (two-sample t-test and one-way ANOVA) when the assumptions of the parametric method are clearly violated.
@@ -219,23 +219,49 @@ Textbook Exercise 2.4.8 with the following changes:
 * As part of your brief summary in part (c.vi), identify at least one data point that cannot possibly have been recorded correctly, and explain why.
 
 ```{r}
-  
+rownames (college) <- college[, 1]
+View(College)
 # Elite <- rep ("No", nrow (college))
 # Elite[college$Top10perc > 50] <- "Yes "
 # Elite <- as.factor (Elite)
 # college <- data.frame (college , Elite)
+summary(College)
 
-College %>% mutate(Elite = case_when(Top10perc > 50 ~"Yes",Top10perc<= 50 ~ "No"))
+pairs(College[,1:10])
 
-
-min(College$PhD)
-
+ggplot(data = College,
+       mapping = aes(x = Private,
+                     y = Outstate)) +
+  geom_boxplot()
 College %>% 
   filter(PhD >100)
+
+College <- College %>% mutate(Elite = case_when(Top10perc > 50 ~"Yes",Top10perc<= 50 ~ "No"))
+
+summary(College$Elite)
+ggplot(data = College,
+       mapping = aes(x = Elite,
+                     y = Outstate)) +
+  geom_boxplot()
+
+par(mfrow=c(2,2))
+hist(College$Books)
+hist(College$Apps)
+hist(College$Accept)
+hist(College$Enroll)
+
+summary(College$Elite)
+ggplot(data = College,
+       mapping = aes(x = Elite,
+                     y = Enroll)) +
+  geom_boxplot()
+
 
 ```
 
 Texas A&M University at Galveston could not have been properly collected as the percentage of faculty with PH.D.'s is over 100% which is clearly an error in the collection of data processes.
+
+It is clear with just a little bit of data exploration that colleges tend to be in the same area regarding most numerical variables but seemingly skewed right. One reason this is occuring can be thanked to the idea that "elite" colleges cost far greater than the "average" ones resulting in this inbalance of distribution.
 
 
 ## Applied Problem 2 (Code: 1 pt; Explanation: 2 pts)
@@ -265,7 +291,7 @@ violent_data %>%
 
 ```
 
-
+The reason why a t-test may not be okay for us is the fact that our sample size is very small. The issue is that with larger data sets we are covered by the central limit theorem that tells us even if the distribution is not normal the difference between y1 and y2 will be. However this is not the case with smaller data sets thus we have failed to meet the requirements necessary to perform the test.
 
 
 ## Applied Problem 3 (Code: 1 pt; Explanation: 2 pts)
