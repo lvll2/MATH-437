@@ -159,7 +159,7 @@ Textbook Exercise 13.7.2
 
 From the Parametric vs. Nonparametric Tests: Two-Sample Tests activity, copy to this homework your simulation code/results from the *Assumptions Violated, Ha True* section of each test as well as the results tables for all simulations (in the Class Results section). 
 
-```{r p-values1 example, eval = FALSE}
+```{r p-values1 example}
 pvalues <- numeric(length = 10000)
 ```
 _______________________________________________________________________________
@@ -272,8 +272,8 @@ Textbook Exercise 2.4.8 with the following changes:
 * As part of your brief summary in part (c.vi), identify at least one data point that cannot possibly have been recorded correctly, and explain why.
 
 ```{r}
-rownames (college) <- college[, 1]
-View(College)
+# row.names (College) <- College[, 1]
+# View(College)
 # Elite <- rep ("No", nrow (college))
 # Elite[college$Top10perc > 50] <- "Yes "
 # Elite <- as.factor (Elite)
