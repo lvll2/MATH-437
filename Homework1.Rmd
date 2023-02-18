@@ -191,33 +191,28 @@ mean(pvalues <= 0.05)
 ```
 
 
-_______________________________________________________________________________
-<!-- $$ -->
-<!-- \begin{tabular}{|c|c|c|c|c|c|} -->
-<!-- \hline -->
-<!-- $n_G$ & t-Test Assumptions & Type I Error Rate & Power at $d = 0.2$ & Power at $d = 0.5$ & Power at $d = 0.8$\\ -->
-<!-- \hline -->
-<!-- 10 & Met & 0.0507 & 6.95% & 18.18% & 38.3% \\ -->
-<!-- \hline -->
-<!-- 25 & Met & 0.05 & 10.32% & 40% & 79% \\ -->
-<!-- \hline -->
-<!-- 50 & Met & 0.0504 & 15.92% & & \\ -->
-<!-- \hline -->
-<!-- 10 & Violated & 0 & 0.02% & 16.34% & 20.4% \\ -->
-<!-- \hline -->
-<!-- 25 & Violated & 0 & & 89% & 93% \\ -->
-<!-- \hline -->
-<!-- 50 & Violated & 0 & 1.23% & & \\ -->
-<!-- \hline -->
-<!-- \end{tabular} -->
-<!-- $$ -->
-_______________________________________________________________________________
+$$\begin{tabular}{|c|c|c|c|c|c|}  \hline
+$n_G$ & t-Test Assumptions & Type I Error Rate & Power at $d = 0.2$ & Power at $d = 0.5$ & Power at $d = 0.8$\\
+\hline
+10 & Met & 0.0507 & 6.95\% & 18.18\% & 38.3\% \\
+\hline
+25 & Met & 0.05 & 10.32\% & 40\% & 79\% \\
+ \hline
+50 & Met & 0.0504 & 15.92\% & 68.12\% & 98\% \\
+ \hline
+10 & Violated & 0 & 0.02\% & 16.34\% & 20.4\% \\
+\hline
+25 & Violated & 0 & 0.06\% & 89\% & 93\% \\
+\hline
+50 & Violated & 0 & 1.23\% & 86.55\% & 100\% \\
+\hline
+\end{tabular}$$
 
 Write a couple of paragraphs explaining the difference between parametric and nonparametric methods and explain why classic nonparametric methods (Mann-Whitney and Kruskal-Wallis) are a better choice than the corresponding parametric methods (two-sample t-test and one-way ANOVA) when the assumptions of the parametric method are clearly violated.
 
 Answer: The primary reason why we would use a non-parametric model is when we violate our assumptions. It was clear that violated assumptions destroyed the power and validity of the tests that we were performing but when using non-parametric methods those violations were not of concern. This ties into the idea of not having to assume a family of functions that the data would follow but instead we tested based the shape of the data as it was. 
   Overall, the relationship between parametric and non-parametric is best understood when trying to understand the shape that a distribution follows. For example, the relationship between age and height in children is linear so fitting a linear model makes sense. However, if we were fitting the model of a molecules position in space at a certain point in time a linear model may no longer follow the spread of the data and thus instead of doing a thirteenth degree Taylor polynomial that severely over fits the data a non-parametric solution allows us to answer prediction based problems. 
-  Clearly violating assumption in a t-test also decreases power making the likelihood of a type two error to increase. Especially with small data sets the violation of assumptions is particular dangerous as the central limit theorem no longer protects a lot of the necessary conditions (as seen in the applied problem 2). Note that nonparametric methods are based solely on the data within the data set and thus the collection of good data is much more important as the thousands of simulations are based on it, it is also important in traditional parametric methods but catching it becomes increasingly important if the error is significant.
+  Clearly violating assumption in a t-test also decreases power causing the likelihood of making a type two error to increase. Especially with small data sets the violation of assumptions is particular dangerous as the central limit theorem no longer protects a lot of the necessary conditions (as seen in the applied problem 2). Note that nonparametric methods are based solely on the data within the data set and thus the collection of good data is much more important as the thousands of simulations are based on it, it is also important in traditional parametric methods but catching it becomes increasingly important if the error is significant.
 
 # Applied Problems
 
