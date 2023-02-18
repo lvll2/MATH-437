@@ -74,7 +74,49 @@ Answer: Bayes classifier works by assigning an observation to a class based on t
 
 Write me a brief (2-3 paragraphs) summary of what you learned in the P-Values and Power in-class activity about how the distribution of p-values (over very many tests) is affected by the validity/violation of test assumptions and the power of the test. Did anything surprise you or clarify a concept for you? Support your writing with a few graphs you produced in class (it is easiest to copy and re-run the relevant code chunks).
 
-The P-values and Power in class activity clarified a few topics. The primary takeaway was despite the population distribution not being normal, the spread of p-values are which led to us seeing 
+  The understanding of p-values as a probability is part of the fundamentals of understanding statistics. I enjoyed the idea of how p-values are a function of z-scores and population sizes. The basis of p-values are the inputs, which produce a value between 0 and 1. When all of the assumptions of a hypothesis test are met, the distribution of that probability is evenly, uniformly, distributed. This is the foundation of meeting all of the assumptions but the curve occurs when we break assumptions. 
+  When assumptions are broken we were still seeing a uniformly distribution of p-values but only when our n, sample size, was large. The reason we were seeing the the same uniform distribution is because a large sample size meant that whatever we were testing, i.e. a two sample t-test on two populations in which the distribution was binomial was the difference between the values were still normal! This is how the central limit theorem covered us.The general rule that we decided on is so long as the z-score is roughly normally distributed, we can trust the p-value since it would be uniformly random so long as our sample size is large, our z-scores will be normally distributed despite the population parameters not being normally distributed. 
+  This idea does not hold for when our n is small since the differences between the two populations is much less likely to be normal. Power was incorporated into this idea as the activity taught us what power really was. One of the key summaries that made sense was understanding "if H_a is correct and we have 80% power, 80% of p-values will be below 0.05." This intuitively makes sense and clarified how the ability of a test to reject H_0 when H_a is true, or also, to prevent the likelihood of having a type II error occur.
+  
+```{r} 
+set.seed(23)
+n <- 100
+mu <- 70
+sigma <- 10
+
+xbar <- numeric(10000) # empty vector to store sample means in
+
+for(i in 1:10000){
+  sim_values <- rnorm(n, mean = mu, sd = sigma)
+  xbar[i] <- mean(sim_values)
+}
+
+```
+
+```{r z test stat}
+z_scores <- (xbar - mu)/(sigma/sqrt(n))
+
+hist(z_scores)
+```
+
+```{r z to p}
+p_lower <- pnorm(z_scores, mean = 0, sd = 1, lower.tail = TRUE)
+p_upper <- pnorm(z_scores, mean = 0, sd = 1, lower.tail = FALSE)
+two_sided_p_value <- 2*pmin(p_lower, p_upper)
+# pmin is a pairwise minimum, comparing the values at each index in the vectors
+# Here it will return p_lower when z < 0 and p_upper when z > 0
+
+hist(two_sided_p_value)
+```
+
+```{r}
+plot(ecdf(two_sided_p_value),
+     xlab = "p-value",
+     ylab = "F(p-value)",
+     main = "Empirical CDF of the P-Value Under H0")
+
+```
+
 
 ## Conceptual Problem 2 (3 pts) 
 
