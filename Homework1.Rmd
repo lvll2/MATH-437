@@ -1,6 +1,6 @@
 ---
 title: 'Homework Assignment #1'
-author: "Math 437 - Modern Data Analysis"
+author: "Nicholas Noel & Lissette Villa"
 date: "Due February 10, 2023"
 output: pdf_document
 ---
@@ -117,6 +117,9 @@ Textbook Exercise 13.7.2
 
 From the Parametric vs. Nonparametric Tests: Two-Sample Tests activity, copy to this homework your simulation code/results from the *Assumptions Violated, Ha True* section of each test as well as the results tables for all simulations (in the Class Results section). 
 
+```{r p-values1 example, eval = FALSE}
+pvalues <- numeric(length = 10000)
+```
 _______________________________________________________________________________
 t.test section:
 ```{r}
@@ -186,9 +189,6 @@ plot(ecdf(pvalues),
 mean(pvalues <= 0.05)
 
 ```
-
-
-
 
 
 _______________________________________________________________________________
@@ -306,3 +306,42 @@ The reason why a t-test may not be okay for us is the fact that our sample size 
 ## Applied Problem 3 (Code: 1 pt; Explanation: 2 pts)
 
 Use the permutation test function you wrote in Lab 2 to determine whether the research hypothesis in the previous question was supported. Be sure to follow all steps of hypothesis testing, up to and including writing a conclusion that answers the research question in context.
+
+```{r script to function}
+permutation_t_test <- function(formula, data, alternative = "t",
+                               permutations = 10000, seed = 9034){
+ set.seed(seed)
+  
+ permutation_df <- model.frame(formula = formula, data = data)
+ 
+ t_obs <- t.test(formula = formula, data = data, 
+                  alternative = alternative, var.equal = TRUE)$stat
+ 
+ t_perm <- numeric(permutations)
+ 
+
+ for (i in 1:length(t_perm)){
+
+  permutation_df[[1]] <-sample(permutation_df[[1]])
+ 
+  
+  t_perm[i] <- t.test(formula, permutation_df, var.equal = TRUE)$statistic}
+
+ T_all <- c(t_obs, t_perm)
+
+  p_left <- sum(T_all <= t_obs)/(length(t_perm) + 1)
+  
+  p_right <- sum(T_all >= t_obs)/(length(t_perm) + 1)
+ 
+  p_value <- dplyr::case_when(alternative == "g" ~ p_right,
+                              alternative == "l" ~ p_left,
+                              alternative == "t" ~ 2*min(p_left, p_right),
+                              TRUE ~ NaN )
+
+  results <- list(obs = t_obs,
+                  sim = t_perm,
+                  p_val = p_value)
+
+  return(results) # Last line of the function returns our output
+}
+```
