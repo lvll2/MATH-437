@@ -342,6 +342,16 @@ permutation_t_test <- function(formula, data, alternative = "t",
                   sim = t_perm,
                   p_val = p_value)
 
-  return(results) # Last line of the function returns our output
+  return(results) 
 }
 ```
+
+```{r}
+violent_output <- permutation_t_test(Time ~ Video, violent_data)
+violent_output$p_val
+```
+
+Step 1: 
+$H_0$: There is no difference in the violence tolerance of children who watched
+violent film or television and those who did not.
+$H_a$: 
