@@ -159,7 +159,7 @@ Textbook Exercise 13.7.2
 
 From the Parametric vs. Nonparametric Tests: Two-Sample Tests activity, copy to this homework your simulation code/results from the *Assumptions Violated, Ha True* section of each test as well as the results tables for all simulations (in the Class Results section). 
 
-```{r p-values1 example, eval = FALSE}
+```{r p-values1 example}
 pvalues <- numeric(length = 10000)
 ```
 _______________________________________________________________________________
