@@ -346,12 +346,22 @@ permutation_t_test <- function(formula, data, alternative = "t",
 }
 ```
 
-```{r}
-violent_output <- permutation_t_test(Time ~ Video, violent_data)
-violent_output$p_val
-```
 
 Step 1: 
 $H_0$: There is no difference in the violence tolerance of children who watched
 violent film or television and those who did not.
-$H_a$: 
+$H_a$: There is a difference in the violence tolerance of children who watched violent film or television and those who did not.
+
+Step 2:
+Our significance level will be $\alpha$ = 0.05
+
+Step 3: Testing
+```{r}
+violent_output <- permutation_t_test(Time ~ Video, violent_data)
+p_value <- violent_output$p_val
+```
+
+Step 4: Conclusion
+Fail to reject $H_0$ at an $\alpha$ = 0.05 level of significance. Their is
+insufficient evidence to conclude that watching violent film or television
+affects a child's violence tolerance.
