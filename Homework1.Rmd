@@ -86,17 +86,26 @@ Textbook Exercise 2.4.4
 be useful. Describe the response, as well as the predictors. Is the
 goal of each application inference or prediction? Explain your
 answer.
-Answer:
+Answer: Classification might be useful in:
+ 1. Predicting a persons risk for developing a cardiovascular disease which        would be the response and some predictors might be genetics, BMI, and the      presence of comorbidities such as abdominal obesity. 
+ 2. Determining the risk level of a customer buying auto insurance. The            response would be the likelihood of having a claim. The predictors would be     their age, driving record, average daily miles driven, car make and model,     etc. The goal of this application is prediction of the frequency of a claim     which would thereby help the insurer determine the buyers coverage and         payments.
+ 3. Inferring the relationship between a persons diet, physical activity level,     and intellectual stimulation and the types of disease or ailments they         develop later in life. The response variable would be some measure of          health, a simple one would be if they have a disease or not. Some              predictors would be the types of foods they eat, how often they exercise       and for how long, their level of education, and their job type.
 
 (b) Describe three real-life applications in which regression might
 be useful. Describe the response, as well as the predictors. Is the
 goal of each application inference or prediction? Explain your
 answer.
-Answer: 
+Answer: Regression might be useful for:
+  1. Predicting a persons future income. The response would be their yearly         salary. The predictors would be their level of education, field of work,       location of residence, and the location of their workplace.
+  2. Predicting the final score of a basketball game. The response would            be the number of points scored. Some predictors would be the team playing,      their previous scores, the presence of high scoring players, and if it's a      home or away game.
+  3. Making inferences related to the number of hot dogs someone buys. The          response would be number of hot dogs purchased in a month. Some predictors      would be the person's yearly income, their nationality, their current          location of residence, if they have a Costco membership, the month or          season, if they attend baseball games or not, etc.
 
 (c) Describe three real-life applications in which cluster analysis
 might be useful.
-Answer: 
+Answer: Cluster analysis might be useful for:
+  1. Grouping loan applicants into high and low risk categories for defaulting      on a loan.
+  2. Grouping potential customers into appropriate groups to effectively            advertise to them based on factors such as age, gender, and income.
+  3. Determining geographic areas that would utilize public transit based on        factors such as population density and the average income of a resident.
 
 ## Conceptual Problem 3 (3 pts) 
 
