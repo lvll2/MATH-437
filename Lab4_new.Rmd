@@ -1,6 +1,6 @@
 ---
 title: 'Lab Assignment #4'
-author: "Math 437 - Modern Data Analysis"
+author: "Nick Noel & Liz Villa"
 date: "Due February 27, 2023"
 output: html_document
 ---
@@ -20,6 +20,7 @@ library(ISLR2)
 library(ggplot2)
 library(dplyr)
 library(car) # For problem 3
+library(boot)
 ```
 
 This lab assignment is worth a total of **19.5 points**.
@@ -32,15 +33,54 @@ Run the code in the first half of ISLR Lab 5.3.4, "Estimating the Accuracy of a 
 
 If you are in the actuarial science concentration, you should be familiar with (or will at some point see) this formula! For the rest of us, note that $X$ and $Y$ are assumed to be the yearly return of two different financial assets, and $\alpha$, the quantity to be estimated, is the fraction of money to be invested in $X$ such that the variance (risk) of the total investment $\alpha X + (1 - \alpha) Y$ is minimized. In this problem $\alpha$ is not the significance level!
 
+```{r}
+alpha.fn <- function(data, index) {
+  X <- data$X[index]
+  Y <- data$Y[index]
+  (var(Y) - cov(X, Y)) / (var(X) + var(Y) - 2 * cov(X, Y))
+}
+```
+
+```{r}
+alpha.fn(Portfolio, 1:100)
+```
+
+```{r}
+set.seed(7)
+alpha.fn(Portfolio, sample(100, 100, replace = T))
+```
+
+```{r}
+boot(Portfolio, alpha.fn, R = 1000)
+```
+
+
 ## Part b (Code: 2 pts)
 
 According to the instructions for Lab 5.3.4, "We can implement a bootstrap analysis by performing this command [alpha.fn on a bootstrap sample] many times, recording all of the corresponding estimates for $\alpha$, and computing the resulting standard deviation."
 
 Write a code chunk that performs all of those steps and prints out the standard deviation. Use 1000 bootstrap samples. 
 
+```{r}
+set.seed(292)
+bsn <- 1000
+bsalpha <- rep(NA, bsn)
+for(i in 1:bsn){bsalpha[i] = alpha.fn(Portfolio, sample(100, 100, replace = T))}
+sd(bsalpha)
+```
+
 ## Part c (Code: 1 pt)
 
 Replicate the center panel of textbook Figure 5.10: a histogram of  the bootstrap estimates of $\alpha$ (from Part b) with a solid pink (or red) line at the true value of $\alpha = 0.6$. You may use either base R plotting commands (which uses `abline` to add the vertical line) or the `ggplot2` package (which adds a `geom_vline` to the plot). 
+
+```{r}
+ggplot(mapping = aes(bsalpha)) +
+  geom_histogram(bins = 12, fill = "steelblue", color = "black") +
+  geom_vline(xintercept = 0.6, color = "pink", size = 1) +
+  xlab("alpha")
+
+```
+
 
 ## Part d (Explanation: 1 pt)
 
