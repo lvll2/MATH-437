@@ -199,7 +199,7 @@ abline(h = 0.1 / 2000, col = 3)
 
 Finish writing the `FDR_plot` function in the code chunk below. This function should take two arguments: `p.values`, a vector of p-values, and `q`, the desired False Discovery Rate, and produce a graph like those in Figure 13.6. (Assume that on the graphs, $q$ and $\alpha$ are set to the same value.)
 
-```{r FDR plot, eval = FALSE}
+```{r FDR plot}
 FDR_plot <- function(p.values, q){
   ps <- sort(p.values)
 
@@ -291,7 +291,7 @@ hist(p_values)
 
 Without any adjustment for multiple hypothesis tests, how many null hypotheses would be rejected at $\alpha = 0.05$? We can take advantage of the fact that R implicitly converts *logical* (TRUE/FALSE) variables to *numerical* variables.
 
-```{r 13.7.8b, eval = FALSE}
+```{r 13.7.8b}
 alpha <- 0.05
 sum(p_values <= alpha)
 ```
@@ -299,13 +299,23 @@ sum(p_values <= alpha)
 Obtain the adjusted p-values using the Holm step-down procedure. How many null hypotheses would be rejected if we control the FWER at 0.05?
 
 ```{r 13.7.8c holm}
-
+sum(p.adjust(p_values, method = "holm") <= alpha)
 ```
 
 Obtain the adjusted p-values using the Benjamini-Hochberg procedure. How many null hypotheses would be rejected if we control the FDR at 0.05?
 
 ```{r 13.7.8d bh}
+ps <- sort(p_values)
+m <-  length(p_values)
 
+wh.ps <- which(ps < alpha * (1:m)/m)
+if(length(wh.ps) > 0) {
+  wh <- 1:max(wh.ps)
+} else {
+  wh <- numeric(0)
+}
+
+length(wh.ps)
 ```
 
 ## Part c (Code: 1 pt)
