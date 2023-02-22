@@ -255,7 +255,7 @@ This problem is adapted from ISLR Chapter 13, Exercise 8.
 Using the code in Exercise 13.7.8, create a 20 x 100 matrix where each column represents 20 random numbers from $N(0, 1)$. 
 
 ```{r Code 13.7.8}
-set.seed(1)
+set.seed(437)
 
 n <- 20
 
@@ -323,7 +323,10 @@ length(wh.ps)
 Create a new matrix, `X2`, that is exactly the same as X, except that the first 25 fund managers do actually have a slight long-term return of $+1\%$ (i.e., in rows 1-25 $\mu = 1$ not 0.01). Conduct your 100 t-tests and plot a histogram of the new p-values.
 
 ```{r create X2}
-X2 <- matrix(c(rnorm(25*20,mean = 1),rnorm(75*20, mean = 0)),ncol = 100)
+
+sub1 <- matrix(rnorm(20*25, mean = 1), ncol = 25)
+sub2 <- matrix(rnorm(20*75), ncol = 75)
+X2 <- cbind(sub1,sub2)
 ```
 
 ```{r t-test-apply redux}
