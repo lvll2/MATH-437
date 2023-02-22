@@ -295,28 +295,25 @@ Without any adjustment for multiple hypothesis tests, how many null hypotheses w
 alpha <- 0.05
 sum(p_values <= alpha)
 ```
+Without adjustment, 4 null hypotheses would be rejected at $\alpha = 0.05$.
+
 
 Obtain the adjusted p-values using the Holm step-down procedure. How many null hypotheses would be rejected if we control the FWER at 0.05?
 
 ```{r 13.7.8c holm}
 sum(p.adjust(p_values, method = "holm") <= alpha)
 ```
+When adjusting p-values using the Holm step-down procedure, we are rejecting
+zero null hypotheses.
+
 
 Obtain the adjusted p-values using the Benjamini-Hochberg procedure. How many null hypotheses would be rejected if we control the FDR at 0.05?
 
 ```{r 13.7.8d bh}
-ps <- sort(p_values)
-m <-  length(p_values)
-
-wh.ps <- which(ps < alpha * (1:m)/m)
-if(length(wh.ps) > 0) {
-  wh <- 1:max(wh.ps)
-} else {
-  wh <- numeric(0)
-}
-
-length(wh.ps)
+sum(p.adjust(p_values, method = "BH") <= alpha)
 ```
+When adjusting p-values using the Benjamini-Hochberg procedure, we are still
+rejecting 0 null hypotheses.
 
 ## Part c (Code: 1 pt)
 
