@@ -53,27 +53,48 @@ Note that the distribution you graphed in Part c is a sampling distribution of $
 Do an Internet search for "Boston housing dataset" and answer the following questions as best you can.
 
 * Who collected this data? How old is this dataset?
+Answer: Data was collected by the U.S. Census Service concerning housing in the area of Boston Massachusetts in 1978 (Or around then, 1978 was when the data was officially published, possible that the data was collected somewhat earlier.
+)
 * What does one row in this dataset represent?
+Answer: One row in the dataset represents a the data collected for a single house on the multiple variables.
+
 
 ## Part b (Explanation: 1.5 pts)
 
 In your search, you should eventually come across references to a *fourteenth* variable, `B`, which the textbook authors have removed from the dataset. What does this mysterious variable represent?
 
+Answer: According to a data dictionary we found, B was reported as follows:
+"B - 1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town". In simpler terms, the variable B is regarding the proportion of black people in a town.
+
 Suppose you are a data scientist at Zillow or a similar company whose housing price models are often used as a reference when people decide how much to offer to buy or sell a home for. What ethical issues would arise from using the variable `B` in your model?
+
+Answer: Using the ethnicity of those around said property as a factor of the value of the property seems like a very unethical way of determining the value of a property. The original research was based around the air pollution of the area so likely dealt with the variable to acknowledge socioeconomic issues as opposed to putting a value on the property.
 
 ## Part c (Code: 1 pt; Explanation: 1 pt)
 
 In the next problem we will be trying to predict `medv` from `lstat`. What does the variable `medv` represent? What are the measurement units?
 
+Answer: MEDV - Median value of owner-occupied homes in $1000's
+
+
 Using the `ggplot2` package, create a histogram of the variable `medv`. Use a `center` of 35 and a `binwidth` of 2.
+
+```{r}
+Boston %>% 
+  ggplot(aes(x = medv)) +
+  geom_histogram(center = 35, binwidth = 2)
+```
+
 
 What looks a bit off about this histogram? Try filling in the `filter` function in the chunk below to confirm your suspicions.
 
 ```{r filter Boston medv, eval = FALSE}
 Boston %>% 
-  filter(replace this with a condition) %>%
+  filter(medv == 50) %>%
   count() # getting sample size without having to summarize
 ```
+
+The prices were capped at 50,000 and thus any property worth more than that was lumped into one large group of a value of 50.
 
 ## Part d (Code: 1 pt; Explanation: 1 pt)
 
@@ -82,15 +103,93 @@ The full documentation for this dataset is somewhat confusing and raises more qu
 Other variables are sensibly defined, but are counterintuitive to what we would expect. Pick either the variable `age` or `rm`, and answer the following questions:
 
 * What do you expect this variable would represent, if the observational units were houses?
+
+Answer: I would expect the variable, age, to represent the age of the house.
 * What does this variable actually represent?
+
+Answer: AGE - proportion of owner-occupied units built prior to 1940
+
 * What is the distribution of this variable in the dataset? Include at least one graph to support your answer.
+
+```{r}
+Boston %>% 
+  ggplot(aes(x = age)) +
+  geom_histogram()
+```
+
+
 * Does this variable appear to have a relationship with the response variable `medv`? Include at least one graph to support your answer.
+
+```{r}
+Boston %>% 
+  ggplot(aes(x = age, y = medv)) +
+  geom_point() +
+  geom_smooth(method = lm)
+```
+
+Based on the above graph there does not seem to be a relationship between our predictor age, and response, median value of owner-occupied home. 
+
 
 # Problem 3: Simple Linear Regression
 
 ## Part a (Code: 0.5 pts; Explanation: 1 pt)
 
 Run the code in ISLR Lab 3.6.2. Put each chunk from the textbook in its own chunk.
+
+```{r}
+head(Boston)
+```
+
+```{r}
+lm.fit <- lm(medv ~lstat, data = Boston)
+```
+
+```{r}
+lm.fit <- lm(medv ~lstat, data = Boston)
+#attach(Boston) I commented this out because I hate using attach but  I understand why we would use it
+# lm.fit <- lm(medv ∼ lstat)
+```
+
+```{r}
+lm.fit
+
+summarise(lm.fit)
+```
+
+```{r}
+names(lm.fit)
+
+coef(lm.fit)
+```
+
+```{r}
+confint(lm.fit)
+```
+
+```{r}
+predict(lm.fit, data.frame(lstat = (c(5, 10, 15))),interval = "confidence")
+
+predict (lm.fit , data.frame(lstat = (c(5, 10, 15))),interval = "prediction")
+```
+
+```{r}
+plot(Boston$lstat,Boston$medv)
+abline (lm.fit)
+```
+
+```{r}
+plot(Boston$lstat,Boston$medv)
+abline (lm.fit , lwd = 3)
+abline (lm.fit , lwd = 3, col = " red ")
+plot (Boston$lstat , Boston$medv , col = " red ")
+plot (Boston$lstat , Boston$medv , pch = 20) 
+plot (Boston$lstat , Boston$medv , pch = "+")
+plot (1:20, 1:20, pch = 1:20)
+```
+
+
+PAGE 114 OF ISLR2
+
 
 Briefly explain what the `confint()` and `predict()` functions output when applied to a linear model.
 
@@ -114,10 +213,48 @@ Refer to the diagnostic plots you created in Part (a) to answer the following qu
 
 Run the code in ISLR Lab 3.6.3. Put each chunk from the textbook in its own chunk. (Note that you will have to install the `car` package.)
 
+```{r}
+lm.fit <- lm(data = Boston, medv ~ lstat + age)
+summary (lm.fit)
+```
+
+```{r}
+lm.fit <- lm(data = Boston, medv ~ .)
+summary (lm.fit)
+```
+
+
+```{r}
+library (car)
+vif (lm.fit)
+```
+
+```{r}
+lm.fit1 <- lm(data = Boston, medv ~ . -age)
+summary (lm.fit1)
+```
+
+```{r}
+lm.fit1 <- update(lm.fit,~.-age)
+
+```
+
+
+
 Briefly explain what the `vif()` and `update()` functions do when applied to a linear model.
+
+"vif()" can be used to compute variance inflation factors. the update() function when applied to a linear model updates our model by changing the predictors of the model, in our case it what to keep all others and remove the age variable.
+
 
 ## Part b (Code: 0.5 pts; Explanation: 1 pt)
 
 Jumping straight into modeling without looking at the data is a very bad idea. Create a scatterplot matrix showing only the three variables in the first `lm.fit` object (`medv`, `lstat`, `age`).
+
+```{r}
+lm.fit <- lm(data = Boston, medv ~ lstat + age)
+scatterplotMatrix(~ medv+lstat + age, data = Boston)
+```
+
+
 
 Do you see any evidence of nonlinearity? Any evidence of collinearity? Explain your reasoning.
