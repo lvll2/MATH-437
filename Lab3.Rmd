@@ -340,6 +340,7 @@ hist(p_values2)
 Without any adjustment for multiple hypothesis tests, how many of the 75 true null hypotheses would be rejected at $\alpha = 0.05$? How many of the 25 false null hypotheses would be rejected?
 
 ```{r 13.7.8b redux}
+
 reject.falseH0 <- sum(p_values2[1:25] <= alpha)
 reject.trueH0 <- sum(p_values2[26:100] <= alpha)
 c(true = reject.trueH0, false = reject.falseH0)
@@ -348,19 +349,19 @@ c(true = reject.trueH0, false = reject.falseH0)
 Obtain the adjusted p-values using the Holm step-down procedure. How many null hypotheses of each type would be rejected if we control the FWER at 0.05?
 
 ```{r 13.7.8c holm redux}
-
-reject.falseH0 <- sum(p.adjust(p_values2[1:25],  method = "holm") <= alpha)
-reject.trueH0 <- sum(p.adjust(p_values2[26:100],  method = "holm") <= alpha)
+p.adj <- p.adjust(p_values2, method = "holm")
+reject.falseH0 <- sum(p.adj[1:25] <= alpha)
+reject.trueH0 <- sum(p.adj[26:100] <= alpha)
 c(true = reject.trueH0, false = reject.falseH0)
 ```
 
 Obtain the adjusted p-values using the Benjamini-Hochberg procedure. How many null hypotheses of each type would be rejected if we control the FDR at 0.05?
 
 ```{r 13.7.8d bh redux}
-reject.falseH0 <- sum(p.adjust(p_values2[1:25],  method = "BH") <= alpha)
-reject.trueH0 <- sum(p.adjust(p_values2[26:100],  method = "BH") <= alpha)
+p.adj <- p.adjust(p_values2, method = "BH")
+reject.falseH0 <- sum(p.adj[1:25] <= alpha)
+reject.trueH0 <- sum(p.adj[26:100] <= alpha)
 c(true = reject.trueH0, false = reject.falseH0)
-
 ```
 
 Compare your results from the three procedures. Why is it important to consider the situation where *some* null hypotheses are true, when evaluating the performance of the different procedures?
