@@ -228,10 +228,27 @@ plot (1:20, 1:20, pch = 1:20)
 ```
 
 
-PAGE 114 OF ISLR2
+```{r}
+par(mfrow = c(2, 2))
+plot(lm.fit)
+```
+
+
+```{r}
+plot ( predict (lm.fit), residuals (lm.fit))
+plot ( predict (lm.fit), rstudent (lm.fit))
+```
+
+```{r}
+plot ( hatvalues (lm.fit))
+which.max(hatvalues(lm.fit))
+```
+
 
 
 Briefly explain what the `confint()` and `predict()` functions output when applied to a linear model.
+
+Answer: "confint()" produces a confidence interval for the coefficient estimates, since these are not known values we estimate them and confint() just allows us to see the spread of possible values. "predict()" on the other hand produces a confidence interval or prediction interval for the prediction of y based on whatever the x variable may be.
 
 ## Part b (Explanation: 2.5 pts)
 
@@ -239,13 +256,18 @@ Write out the equation of the least-squares line relating `lstat` and `medv`. Wr
 
 Given the issue raised in Problem 1d with the `lstat` interpretation, let's just say in our interpretations that `lstat` represents the percentage of people in the neighborhood considered lower class.
 
+Answer:
+
 ## Part c (Explanation: 1.5 pts)
 
 Refer to the diagnostic plots you created in Part (a) to answer the following questions:
 
 * Why do the lab instructions claim that "there is some evidence of non-linearity"?
+Answer:
 * Do you believe that the residuals are normally distributed? Why or why not?
+Answer:
 * Do you believe that the response variable is homoskedastic (the residuals have roughly constant variance across the entire predictor range)? Why or why not?
+Answer:
 
 # Problem 4: Multiple Linear Regression
 
@@ -298,3 +320,7 @@ scatterplotMatrix(~ medv+lstat + age, data = Boston)
 
 
 Do you see any evidence of nonlinearity? Any evidence of collinearity? Explain your reasoning.
+Answer:
+
+
+All thats left is : 4b, 3b, 3c
