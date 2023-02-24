@@ -20,15 +20,34 @@ This homework assignment is worth a total of **40 points**.
 Read Chapter 13 of Introduction to Statistical Learning, Second Edition. Based on your reading, answer the following questions.
 
 1. What is a *p-value*? What is the difference between a one-sided and a two-sided p-value?
+Answer: the p-value is the probability of observing a test statistic that is equal to or more extreme than the observed statistic under H0 is true. The difference between the one and two sided p-value is a two sided p-value is based on the absolute value of the test statistic, i.e. our t-score could be 1.65 or -1.65 but the one sided p-value is only looking at one of those values. 
+
 2. In traditional NHST-style significance testing, what are the two possible decisions? When do we make each decision?
+Answer:The two possible decisions are to reject the null hypothesis, occurs when our p-value is less than our pre-determined alpha. The other is to fail to reject our null hypothesis which occurs when our p-value is larger than that alpha. 
+
 3. What is the difference between a *Type I Error* and a *Type II Error*?
+Answer: The best case of type I and II error I have learned is the story of the boy who cried wolf. At first the city makes a type one error by rejecting H0(there is no wolf) when in fact there was no wolf, followed by them making a type II error by not rejecting H0(again there is no wolf) when in reality there is.
+
 4. Briefly explain why it is necessary to adjust the significance level (or equivalently, the p-values) when testing a large number of null hypotheses.
+Answer:
+
 5. Compare and contrast the *Family-Wise Error Rate* (FWER) and the *False Discovery Rate* (FDR).
+Answer:
+
 6. Compare and contrast the *Bonferroni Method* and *Holm's Step-Down Method* for controlling the FWER.
+Answer: 
+
 7. Why do we prefer to use *Tukey's Method* or *Scheffe's Method* to control the FWER? In what conditions is it appropriate to use those methods instead of the Bonferroni or Holm methods?
+Answer: 
+
 8. Briefly describe the *Benjamini-Hochberg* procedure for controlling the FDR.
+Answer:
+
 9. What is/are the major assumption(s) of a *permutation test*? What is the general procedure for obtaining the null distribution of a test statistic using a permutation test?
+Answer:
+
 10. When is it useful/recommended to use a permutation testing approach as opposed to a traditional theory-based approach?
+Answer:
 
 # Conceptual Problems
 
