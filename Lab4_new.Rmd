@@ -86,7 +86,13 @@ ggplot(mapping = aes(bsalpha)) +
 
 Note that the distribution you graphed in Part c is a sampling distribution of $\hat{\alpha}$. Explain why it would be appropriate to use this sampling distribution to construct a confidence interval for $\alpha$, but not to obtain a p-value for a hypothesis test of $H_0: \alpha = 0.6$ against $H_a: \alpha \neq 0.6$.
 
-
+A confidence interval concerns the estimate of a parameter and bootstrapping is
+able to create a distribution which has variability and distribution similar to
+the true population. It would not be appropriate to obtain a p-value for a
+hypothesis test of $H_0: \alpha = 0.6$ against $H_a: \alpha \neq 0.6$ since we
+are using simulated values of alpha rather than true values that accurately
+reflect the distribution of the population therefore making the null hypothesis
+false from the start.
 
 # Problem 2: Domain Knowledge and Exploratory Data Analysis
 
