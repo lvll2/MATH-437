@@ -329,4 +329,4 @@ Do you see any evidence of nonlinearity? Any evidence of collinearity? Explain y
 Answer:
 
 
-All thats left is : 4b, 3b, 3c
+All thats left is : 4b, 3c
