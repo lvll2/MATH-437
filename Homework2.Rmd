@@ -55,13 +55,16 @@ Answer:
 
 Textbook Exercise 13.7.6
 
+
 ## Conceptual Problem 2 (2 pts)
 
 Suppose that we test $m = 1000$ independent null hypotheses, of which 10% are true, at significance level $\alpha = 0.05$ and achieve a false discovery rate of $q = 0.20$. Construct a table following Table 13.2 in the textbook, identifying the appropriate values of $V$, $S$, $U$, $W$, and $R$ in this situation.
+Answer:
 
 ## Conceptual Problem 3 (3 pts)
 
 Suppose that we test $m = 1000$ independent null hypotheses, of which an unknown number $m_0$ are true, at significance level $\alpha = 0.05$. Suppose that each test also has a power of 0.80. Find and plot the false discovery rate as a function of $m_0$.
+Answer: 
 
 ## Conceptual Problem 4 (2.5 pts)
 
