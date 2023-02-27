@@ -135,9 +135,10 @@ Using the `dplyr` package, subset the `mpg` dataset from the `ggplot2` package t
 library(dplyr)
 library(ggplot2)
 
-mpg %>% 
+filtered_data <- mpg %>% 
   filter(year == 2008,
          class == c("minivan", "pickup", "suv"))
+
 
 ```
 
@@ -147,7 +148,9 @@ H0: There is no significant difference between gas mileage between minivans and 
 Ha: There is a significant difference between gas mileage between minivans and SUVs
 
 ```{r}
-anova()
+lm1 <- lm(hwy ~ class, data = filtered_data)
+
+anova(lm1)
 ```
 
 
