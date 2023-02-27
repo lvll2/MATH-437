@@ -29,13 +29,13 @@ Answer:The two possible decisions are to reject the null hypothesis, occurs when
 Answer: The best case of type I and II error I have learned is the story of the boy who cried wolf. At first the city makes a type one error by rejecting H0(there is no wolf) when in fact there was no wolf, followed by them making a type II error by not rejecting H0(again there is no wolf) when in reality there is.
 
 4. Briefly explain why it is necessary to adjust the significance level (or equivalently, the p-values) when testing a large number of null hypotheses.
-Answer:
+Answer: The reason why we need to adjust the significance level when testing a large number of null hypotheses is to account the chance of seeing a small p-value strictly by chance. When multiple testing is concerned, seeing small p-values is inevitable and the way to account for such type I errors is to adjust the significance of a test.
 
 5. Compare and contrast the *Family-Wise Error Rate* (FWER) and the *False Discovery Rate* (FDR).
-Answer:
+Answer: The FWER and FDR are similar in the sense that both are looking at the liklihood of type I error rates are but are very different in ideas. FWER looks at the probability of making at least one type I error across m tests whereas FDR is looking to minimize the proportion of type one error rates and total rejections of H0. 
 
 6. Compare and contrast the *Bonferroni Method* and *Holm's Step-Down Method* for controlling the FWER.
-Answer: 
+Answer: Both the Bonferroni and Holm's step-down method look at reducing our FWER, taking utilization of an algorithm regarding ordering p-values but where they really differ is Bonferroni uses a significance level based m, the number of tests, whereas Holms step down is dependent upon both m tests but also where our p-value lands in terms of rank. It is also considered that Bonferroni is much more conservative compared to the more robust Holm's.
 
 7. Why do we prefer to use *Tukey's Method* or *Scheffe's Method* to control the FWER? In what conditions is it appropriate to use those methods instead of the Bonferroni or Holm methods?
 Answer: 
@@ -53,7 +53,22 @@ Answer:
 
 ## Conceptual Problem 1 (5 pts) 
 
-Textbook Exercise 13.7.6
+Textbook Exercise 13.7.6:
+
+For each of the three panels in Figure 13.3, answer the following
+questions:
+(a) How many false positives, false negatives, true positives, true
+negatives, Type I errors, and Type II errors result from applying
+the Bonferroni procedure to control the FWER at level α =
+0.05?
+(b) How many false positives, false negatives, true positives, true
+negatives, Type I errors, and Type II errors result from applying
+the Holm procedure to control the FWER at level α = 0.05?
+(c) What is the false discovery rate associated with using the Bonferroni procedure to control the FWER at level α = 0.05?
+(d) What is the false discovery rate associated with using the Holm
+procedure to control the FWER at level α = 0.05?
+(e) How would the answers to (a) and (c) change if we instead used
+the Bonferroni procedure to control the FWER at level α = 0.001?
 
 
 ## Conceptual Problem 2 (2 pts)
@@ -68,7 +83,18 @@ Answer:
 
 ## Conceptual Problem 4 (2.5 pts)
 
-Textbook Exercise 5.4.2 parts (a), (b), and (c).
+Textbook Exercise 5.4.2 parts (a), (b), and (c).:
+
+We will now derive the probability that a given observation is part
+of a bootstrap sample. Suppose that we obtain a bootstrap sample
+from a set of n observations.
+(a) What is the probability that the first bootstrap observation is
+not the jth observation from the original sample? Justify your
+answer.
+(b) What is the probability that the second bootstrap observation
+is not the jth observation from the original sample?
+(c) Argue that the probability that the jth observation is not in the
+bootstrap sample is (1 − 1/n)n.
 
 # Simulation Problems
 
