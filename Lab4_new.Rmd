@@ -209,6 +209,7 @@ confint(lm.fit)
 ```
 
 ```{r}
+
 predict(lm.fit, data.frame(lstat = (c(5, 10, 15))),interval = "confidence")
 
 predict (lm.fit , data.frame(lstat = (c(5, 10, 15))),interval = "prediction")
@@ -266,14 +267,24 @@ Answer: This would then be an incorrect interpretation of the model as this woul
 
 ## Part c (Explanation: 1.5 pts)
 
+```{r}
+par(mfrow = c(2, 2))
+plot(lm.fit)
+```
+
 Refer to the diagnostic plots you created in Part (a) to answer the following questions:
 
 * Why do the lab instructions claim that "there is some evidence of non-linearity"?
-Answer:
+
+Answer: Based on the Residuals versus Leverage as well as the residuals versus fitted we see the potential evidence of non-linearity in favor of a skewed right model.
+
 * Do you believe that the residuals are normally distributed? Why or why not?
-Answer:
+
+Answer:Based on our QQ plot our residuals are not likely normally distributed but instead skewed right.
+
 * Do you believe that the response variable is homoskedastic (the residuals have roughly constant variance across the entire predictor range)? Why or why not?
-Answer:
+
+Answer: I do not believe the response variable to be homoskedastic since there seems to be a downward trend in the data regarding residuals versus predicted values.
 
 # Problem 4: Multiple Linear Regression
 
@@ -326,7 +337,5 @@ scatterplotMatrix(~ medv+lstat + age, data = Boston)
 
 
 Do you see any evidence of nonlinearity? Any evidence of collinearity? Explain your reasoning.
-Answer:
 
-
-All thats left is : 4b, 3c
+Answer: In the plots of both our x variables, lstat and age, against medv we see clear trends which inclines us to say the relationship between our prediction and response variables are not linear.
