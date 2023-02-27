@@ -86,7 +86,13 @@ ggplot(mapping = aes(bsalpha)) +
 
 Note that the distribution you graphed in Part c is a sampling distribution of $\hat{\alpha}$. Explain why it would be appropriate to use this sampling distribution to construct a confidence interval for $\alpha$, but not to obtain a p-value for a hypothesis test of $H_0: \alpha = 0.6$ against $H_a: \alpha \neq 0.6$.
 
-
+A confidence interval concerns the estimate of a parameter and bootstrapping is
+able to create a distribution which has variability and distribution similar to
+the true population. It would not be appropriate to obtain a p-value for a
+hypothesis test of $H_0: \alpha = 0.6$ against $H_a: \alpha \neq 0.6$ since we
+are using simulated values of alpha rather than true values that accurately
+reflect the distribution of the population therefore making the null hypothesis
+false from the start.
 
 # Problem 2: Domain Knowledge and Exploratory Data Analysis
 
@@ -209,25 +215,24 @@ confint(lm.fit)
 ```
 
 ```{r}
-
 predict(lm.fit, data.frame(lstat = (c(5, 10, 15))),interval = "confidence")
 
-predict (lm.fit , data.frame(lstat = (c(5, 10, 15))),interval = "prediction")
+predict(lm.fit, data.frame(lstat = (c(5, 10, 15))),interval = "prediction")
+```
+
+```{r}
+plot(Boston$lstat, Boston$medv)
+abline(lm.fit)
 ```
 
 ```{r}
 plot(Boston$lstat,Boston$medv)
-abline (lm.fit)
-```
-
-```{r}
-plot(Boston$lstat,Boston$medv)
-abline (lm.fit , lwd = 3)
-abline (lm.fit , lwd = 3, col = " red ")
-plot (Boston$lstat , Boston$medv , col = " red ")
-plot (Boston$lstat , Boston$medv , pch = 20) 
-plot (Boston$lstat , Boston$medv , pch = "+")
-plot (1:20, 1:20, pch = 1:20)
+abline(lm.fit, lwd = 3)
+abline(lm.fit, lwd = 3, col = " red ")
+plot(Boston$lstat, Boston$medv, col = " red ")
+plot(Boston$lstat, Boston$medv, pch = 20) 
+plot(Boston$lstat, Boston$medv, pch = "+")
+plot(1:20, 1:20, pch = 1:20)
 ```
 
 
@@ -238,12 +243,12 @@ plot(lm.fit)
 
 
 ```{r}
-plot ( predict (lm.fit), residuals (lm.fit))
-plot ( predict (lm.fit), rstudent (lm.fit))
+plot(predict(lm.fit), residuals(lm.fit))
+plot(predict(lm.fit), rstudent(lm.fit))
 ```
 
 ```{r}
-plot ( hatvalues (lm.fit))
+plot(hatvalues(lm.fit))
 which.max(hatvalues(lm.fit))
 ```
 
@@ -257,7 +262,7 @@ Answer: "confint()" produces a confidence interval for the coefficient estimates
 
 Write out the equation of the least-squares line relating `lstat` and `medv`. Write two sentences interpreting the parameter estimates (one for slope, one for intercept) in the context of the data. Remember to use the right observational units!
 
-medv = 34.55-0.95(lstat) + error
+medv = 34.55 - 0.95(lstat) + $\epsilon$
 
 The parameters of this equation is estimating the median value of the owners home in 1000s and our model has estimated that when "% lower status of the population" or in context of the data, "proportion of adults without some high school education and proportion of male workers classified as laborers" is equal to 0 the value is equal to 34,550 dollars. Our variable, "lstat", which again is  "% lower status of the population", for every percentage increase of this value we would expect to see a decrease in the value of the property of approximately 950 dollars.
 
@@ -294,23 +299,23 @@ Run the code in ISLR Lab 3.6.3. Put each chunk from the textbook in its own chun
 
 ```{r}
 lm.fit <- lm(data = Boston, medv ~ lstat + age)
-summary (lm.fit)
+summary(lm.fit)
 ```
 
 ```{r}
 lm.fit <- lm(data = Boston, medv ~ .)
-summary (lm.fit)
+summary(lm.fit)
 ```
 
 
 ```{r}
-library (car)
-vif (lm.fit)
+library(car)
+vif(lm.fit)
 ```
 
 ```{r}
 lm.fit1 <- lm(data = Boston, medv ~ . -age)
-summary (lm.fit1)
+summary(lm.fit1)
 ```
 
 ```{r}
