@@ -86,6 +86,8 @@ ggplot(mapping = aes(bsalpha)) +
 
 Note that the distribution you graphed in Part c is a sampling distribution of $\hat{\alpha}$. Explain why it would be appropriate to use this sampling distribution to construct a confidence interval for $\alpha$, but not to obtain a p-value for a hypothesis test of $H_0: \alpha = 0.6$ against $H_a: \alpha \neq 0.6$.
 
+
+
 # Problem 2: Domain Knowledge and Exploratory Data Analysis
 
 ## Part a (Explanation: 1 pt)
