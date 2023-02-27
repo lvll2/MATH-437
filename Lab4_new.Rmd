@@ -254,9 +254,13 @@ Answer: "confint()" produces a confidence interval for the coefficient estimates
 
 Write out the equation of the least-squares line relating `lstat` and `medv`. Write two sentences interpreting the parameter estimates (one for slope, one for intercept) in the context of the data. Remember to use the right observational units!
 
+medv = 34.55-0.95(lstat) + error
+
+The parameters of this equation is estimating the median value of the owners home in 1000s and our model has estimated that when "% lower status of the population" or in context of the data, "proportion of adults without some high school education and proportion of male workers classified as laborers" is equal to 0 the value is equal to 34,550 dollars. Our variable, "lstat", which again is  "% lower status of the population", for every percentage increase of this value we would expect to see a decrease in the value of the property of approximately 950 dollars.
+
 Given the issue raised in Problem 1d with the `lstat` interpretation, let's just say in our interpretations that `lstat` represents the percentage of people in the neighborhood considered lower class.
 
-Answer:
+Answer: This would then be an incorrect interpretation of the model as this would change the interpretation of our model to be based on class of citizens and not the proportion of adults without some high school education and proportion of male workers classified as laborers
 
 ## Part c (Explanation: 1.5 pts)
 
