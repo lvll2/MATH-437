@@ -38,7 +38,7 @@ Answer: The FWER and FDR are similar in the sense that both are looking at the l
 Answer: Both the Bonferroni and Holm's step-down method look at reducing our FWER, taking utilization of an algorithm regarding ordering p-values but where they really differ is Bonferroni uses a significance level based m, the number of tests, whereas Holms step down is dependent upon both m tests but also where our p-value lands in terms of rank. It is also considered that Bonferroni is much more conservative compared to the more robust Holm's.
 
 7. Why do we prefer to use *Tukey's Method* or *Scheffe's Method* to control the FWER? In what conditions is it appropriate to use those methods instead of the Bonferroni or Holm methods?
-Answer: 
+Answer: We prefer to use Tukey's or Scheffe's Method
 
 8. Briefly describe the *Benjamini-Hochberg* procedure for controlling the FDR.
 Answer:
