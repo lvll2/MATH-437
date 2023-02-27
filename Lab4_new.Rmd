@@ -195,7 +195,7 @@ lm.fit <- lm(medv ~lstat, data = Boston)
 ```{r}
 lm.fit
 
-summarise(lm.fit)
+# summarise(lm.fit)
 ```
 
 ```{r}
