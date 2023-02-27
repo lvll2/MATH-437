@@ -35,7 +35,7 @@ Answer: The reason why we need to adjust the significance level when testing a l
 Answer: The FWER and FDR are similar in the sense that both are looking at the liklihood of type I error rates are but are very different in ideas. FWER looks at the probability of making at least one type I error across m tests whereas FDR is looking to minimize the proportion of type one error rates and total rejections of H0. 
 
 6. Compare and contrast the *Bonferroni Method* and *Holm's Step-Down Method* for controlling the FWER.
-Answer: Both the Bonferroni and Holm's step-down method look at reducing our FWER, taking utilization of an algorithm regarding ordering p-values but where they really differ is Bonferroni uses a significance level based m, the number of tests, whereas Holms step down is dependent upon both m tests but also where our p-value lands in terms of rank. It is also considered that Bonferroni is much more conservative compared to the more robust Holm's.
+Answer: Both the Bonferroni and Holm's step-down method look at increasing our FWER, taking utilization of an algorithm regarding ordering p-values but where they really differ is Bonferroni uses a significance level based m, the number of tests, whereas Holms step down is dependent upon both m tests but also where our p-value lands in terms of rank. It is also considered that Bonferroni is much more conservative compared to the more robust Holm's.
 
 7. Why do we prefer to use *Tukey's Method* or *Scheffe's Method* to control the FWER? In what conditions is it appropriate to use those methods instead of the Bonferroni or Holm methods?
 Answer: We prefer to use Tukey's or Scheffe's Method
@@ -61,15 +61,28 @@ questions:
 negatives, Type I errors, and Type II errors result from applying
 the Bonferroni procedure to control the FWER at level α =
 0.05?
+
+Panel one has 
+
 (b) How many false positives, false negatives, true positives, true
 negatives, Type I errors, and Type II errors result from applying
 the Holm procedure to control the FWER at level α = 0.05?
+
+Panel one has 
+
 (c) What is the false discovery rate associated with using the Bonferroni procedure to control the FWER at level α = 0.05?
+
+The False discovery rate associated with using the Bonferroni procedure to control the FWER at level α = 0.05 is 
+
 (d) What is the false discovery rate associated with using the Holm
 procedure to control the FWER at level α = 0.05?
+
+The FDR associated with using the Holm procedure to control the FWER at level α = 0.05 is 
+
 (e) How would the answers to (a) and (c) change if we instead used
 the Bonferroni procedure to control the FWER at level α = 0.001?
 
+The answers would change by 
 
 ## Conceptual Problem 2 (2 pts)
 
@@ -118,7 +131,26 @@ Write a brief summary of what you learned from the activity. Make sure to addres
 
 Using the `dplyr` package, subset the `mpg` dataset from the `ggplot2` package to include only the cars from 2008 that are minivans, pickups, or SUVs (`%in%` is a useful replacement for `==` when trying to match to more than one possibility). Using this new dataset, determine which of the following statements is/are true, using an $\alpha = 0.10$ significance level/family-wise error rate or a $q = 0.10$ false discovery rate:
 
+```{r}
+library(dplyr)
+library(ggplot2)
+
+mpg %>% 
+  filter(year == 2008,
+         class == c("minivan", "pickup", "suv"))
+
+```
+
+
 1. There is a significant difference in highway gas mileage between minivans and SUVs.
+H0: There is no significant difference between gas mileage between minivans and SUVs
+Ha: There is a significant difference between gas mileage between minivans and SUVs
+
+```{r}
+anova()
+```
+
+
 2. There is a significant difference in highway gas mileage between pickups and SUVs.
 3. There is a significant difference in highway gas mileage between minivans and pickups.
 
