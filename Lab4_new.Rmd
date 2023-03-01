@@ -337,10 +337,12 @@ Jumping straight into modeling without looking at the data is a very bad idea. C
 ```{r}
 lm.fit <- lm(data = Boston, medv ~ lstat + age)
 scatterplotMatrix(~ medv+lstat + age, data = Boston)
+
+cor(Boston %>% select(lstat,age))
 ```
 
 
 
 Do you see any evidence of nonlinearity? Any evidence of collinearity? Explain your reasoning.
 
-Answer: In the plots of both our x variables, lstat and age, against medv we see clear trends which inclines us to say the relationship between our prediction and response variables are not linear.
+Answer: In the plots of both our x variables, lstat and age, against medv we see clear trends which inclines us to say the relationship between our prediction and response variables are not linear. There may be some signs of colinearity as well, as the relationship between our variables lstat and age have a correlation value of .6 so it is not too bad.

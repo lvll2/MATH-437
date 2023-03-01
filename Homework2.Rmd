@@ -129,7 +129,7 @@ Write a brief summary of what you learned from the activity. Make sure to addres
 
 ## Applied Problem 1 (Code: 4 pts; Explanation: 2 pts)
 
-Using the `dplyr` package, subset the `mpg` dataset from the `ggplot2` package to include only the cars from 2008 that are minivans, pickups, or SUVs (`%in%` is a useful replacement for `==` when trying to match to more than one possibility). Using this new dataset, determine which of the following statements is/are true, using an $\alpha = 0.10$ significance level/family-wise error rate or a $q = 0.10$ false discovery rate:
+Using the `dplyr` package, subset the `mpg` dataset from the `ggplot2` package to include only the cars from 2008 that are minivans, pickups, or SUVs (`%in%` is a useful replacement for `==` when trying to match to more than one possibility). Using    this new dataset, determine which of the following statements is/are true, using an $\alpha = 0.10$ significance level/family-wise error rate or a $q = 0.10$ false discovery rate:
 
 ```{r}
 library(dplyr)
@@ -137,7 +137,7 @@ library(ggplot2)
 
 filtered_data <- mpg %>% 
   filter(year == 2008,
-         class == c("minivan", "pickup", "suv"))
+         class %in% c("minivan", "pickup", "suv"))
 
 
 ```
@@ -148,7 +148,7 @@ H0: There is no significant difference between gas mileage between minivans and 
 Ha: There is a significant difference between gas mileage between minivans and SUVs
 
 ```{r}
-lm1 <- lm(hwy ~ class, data = filtered_data)
+lm1 <- aov(hwy ~ class, data = filtered_data)
 
 anova(lm1)
 ```
