@@ -1,6 +1,6 @@
 ---
 title: 'Lab Assignment #5'
-author: "Math 437 - Modern Data Analysis"
+author: "Nick Noel & Liz VIlla"
 date: "Due March 8, 2023"
 output: pdf_document
 ---
@@ -35,13 +35,47 @@ This lab assignment is worth a total of **15 points**.
 
 Run the code in ISLR Lab 3.6.6. Put each chunk from the textbook in its own chunk.
 
+```{r}
+head(Carseats)
+```
+
+```{r}
+lm.fit <- lm(Sales ~ . + Income:Advertising + Price:Age, data = Carseats)
+
+summary(lm.fit)
+```
+
+```{r}
+attach(Carseats)
+
+contrasts(ShelveLoc)
+```
+
+
+
 ## Part b (Explanation: 1 pt)
 
 Interpret the slope estimate corresponding to `ShelveLocGood` in the model fit in part (a).
 
+When compared to a bad shelf location, placing a child car seat in a good shelf location increases the expected sales by about 5 car seats.
+
 ## Part c (Code: 1 pt; Explanation: 1.5 pts)
 
 Using the RateMyProfessor dataset, fit a linear model predicting the overall rating of a professor (`overall`) from the difficulty rating (`difficulty`), chili pepper rating (`hotness`), and rank (`rank`). What are the reference levels for each categorical variable? How do you know?
+
+```{r}
+lm.fitrmp <- lm(overall ~ difficulty + hotness + rank, data = RateMyProfessor)
+
+summary(lm.fitrmp)
+
+unique(RateMyProfessor[c("hotness", "rank")])
+```
+
+The reference level for hotness is cold and for rank it is assistant professor.
+We know this because these categories do not appear in the coefficients,
+indicating that they were selected as the reference levels for the remaining
+categories to be compared to.
+
 
 ## Part d (Explanation: 1.5 pts)
 
