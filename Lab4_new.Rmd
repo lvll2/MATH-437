@@ -2,7 +2,9 @@
 title: 'Lab Assignment #4'
 author: "Nick Noel & Liz Villa"
 date: "Due February 27, 2023"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 # Instructions
@@ -101,8 +103,8 @@ false from the start.
 Do an Internet search for "Boston housing dataset" and answer the following questions as best you can.
 
 * Who collected this data? How old is this dataset?
-Answer: Data was collected by the U.S. Census Service concerning housing in the area of Boston Massachusetts in 1978 (Or around then, 1978 was when the data was officially published, possible that the data was collected somewhat earlier.
-)
+Answer: Data was collected by the U.S. Census Service concerning housing in the area of Boston Massachusetts in 1978 (Or around then, 1978 was when the data was officially published, possible that the data was collected somewhat earlier.)
+
 * What does one row in this dataset represent?
 Answer: One row in the dataset represents a the data collected for a single house on the multiple variables.
 
@@ -136,7 +138,7 @@ Boston %>%
 
 What looks a bit off about this histogram? Try filling in the `filter` function in the chunk below to confirm your suspicions.
 
-```{r filter Boston medv, eval = FALSE}
+```{r filter Boston medv}
 Boston %>% 
   filter(medv == 50) %>%
   count() # getting sample size without having to summarize
@@ -153,6 +155,7 @@ Other variables are sensibly defined, but are counterintuitive to what we would 
 * What do you expect this variable would represent, if the observational units were houses?
 
 Answer: I would expect the variable, age, to represent the age of the house.
+
 * What does this variable actually represent?
 
 Answer: AGE - proportion of owner-occupied units built prior to 1940
@@ -189,13 +192,13 @@ head(Boston)
 ```
 
 ```{r}
-lm.fit <- lm(medv ~lstat, data = Boston)
+lm.fit <- lm(medv ~ lstat, data = Boston)
 ```
 
 ```{r}
-lm.fit <- lm(medv ~lstat, data = Boston)
+lm.fit <- lm(medv ~ lstat, data = Boston)
 #attach(Boston) I commented this out because I hate using attach but  I understand why we would use it
-# lm.fit <- lm(medv ∼ lstat)
+# lm.fit <- lm(medv ~ lstat)
 ```
 
 ```{r}
@@ -319,7 +322,7 @@ summary(lm.fit1)
 ```
 
 ```{r}
-lm.fit1 <- update(lm.fit,~.-age)
+lm.fit1 <- update(lm.fit, ~ . -age)
 
 ```
 
@@ -338,11 +341,11 @@ Jumping straight into modeling without looking at the data is a very bad idea. C
 lm.fit <- lm(data = Boston, medv ~ lstat + age)
 scatterplotMatrix(~ medv+lstat + age, data = Boston)
 
-cor(Boston %>% select(lstat,age))
+cor(Boston %>% select(lstat, age))
 ```
 
 
 
 Do you see any evidence of nonlinearity? Any evidence of collinearity? Explain your reasoning.
 
-Answer: In the plots of both our x variables, lstat and age, against medv we see clear trends which inclines us to say the relationship between our prediction and response variables are not linear. There may be some signs of colinearity as well, as the relationship between our variables lstat and age have a correlation value of .6 so it is not too bad.
+Answer: In the plots of both our x variables, lstat and age, against medv we see clear trends which inclines us to say the relationship between our prediction and response variables are not linear. There may be some signs of collinearity as well, as the relationship between our variables lstat and age have a correlation value of .6 so it is not too bad.
