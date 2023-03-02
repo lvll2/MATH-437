@@ -31,6 +31,29 @@ This lab assignment is worth a total of **19.5 points**.
 
 Run the code in the first half of ISLR Lab 5.3.4, "Estimating the Accuracy of a Statistic of Interest." Put each chunk from the textbook in its own chunk.
 
+```{r}
+alpha.fn <- function (data , index) {
+  X <- data$X[index]
+  Y <- data$Y[index]
+  ( var (Y) - cov (X, Y)) / ( var (X) + var (Y) - 2 * cov (X, Y))
+  }
+```
+
+```{r}
+alpha.fn(Portfolio , 1:100)
+```
+
+```{r}
+set.seed (7)
+alpha.fn(Portfolio , sample (100, 100, replace = T))
+```
+
+```{r}
+boot(Portfolio , alpha.fn, R = 1000)
+```
+
+
+
 If you are in the actuarial science concentration, you should be familiar with (or will at some point see) this formula! For the rest of us, note that $X$ and $Y$ are assumed to be the yearly return of two different financial assets, and $\alpha$, the quantity to be estimated, is the fraction of money to be invested in $X$ such that the variance (risk) of the total investment $\alpha X + (1 - \alpha) Y$ is minimized. In this problem $\alpha$ is not the significance level!
 
 ```{r}
