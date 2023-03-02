@@ -94,34 +94,70 @@ Holding difficulty constant, which of the following instructors would be predict
 
 Run the single line of code in ISLR Lab 3.6.4. 
 
+```{r}
+summary(lm(medv~lstat * age , data = Boston))
+
+summary(lm(medv~lstat + age , data = Boston))
+
+```
+
+
 ## Part b (Explanation: 2 pts)
 
 Notice that `age` is a significant predictor of `medv` in the model without the interaction term (from ISLR Lab 3.6.3 on Lab 4), but it is no longer a significant predictor of `medv` once we add in the interaction term. The p-value is huge (0.971!). What do you think is happening here? Are we okay to remove the `age` variable from the model with the interaction term? Why or why not?
+
+The result of adding our interaction term, age:lstat, yields us the same amount of significance regarding our model but has the added benefit of accounting for the interaction between the two terms. In all honesty, it seems like the model can go with or without the the interaction term as we are still seeing age be a significant factor, just regarding the interaction in this new model. We cannot take out just the age variable and leave in the interaction term though as a result of the hierarchical principal that states such.
+
+
 
 ## Part c (Code: 1 pt; Explanation: 1.5 pts)
 
 Create a new dataset, `associates`, by `filter`ing the `RateMyProfessor` dataset to include only the Associate Professors.
 
+```{r}
+associates <- RateMyProfessor %>% 
+  filter(rank == "Associate Professor")
+```
+
+
 Next, complete this code chunk to create a graph of overall rating vs. difficulty rating for the associate professors, with "hot" professors shown in red and "cold" professors shown in blue. Remember to delete `eval = FALSE` once you get the code to run!
 
-```{r ggplot associates, eval = FALSE}
-ggplot() + # add appropriate arguments here or in the next line
-  geom_point(alpha = 0.25) +
-  # if you added arguments to geom_point, add the same arguments to geom_smooth
-  # otherwise don't touch these lines - they will run fine
-  geom_smooth(method = "lm", se = FALSE) + # regression line, no confidence bands
+```{r ggplot associates}
+ggplot(data = associates, aes(x = overall, y = difficulty)) +
+  geom_point(alpha = .25, aes(color = hotness)) +
+  geom_smooth(method = "lm", se = FALSE,aes(color = hotness)) +
   scale_color_manual(name = "Chili Pepper Rating",  # make legend nice
-                     labels = c(hot = "Attractive", cold = "Less-attractive"),
-                     values = c(hot = "red", cold = "blue")) +
+                     labels = c(hot = "Attractive", 
+                                cold ="Less-attractive"),
+                     values = c(hot = "red", cold = "blue")) + 
+  ggtitle("Bruh, these teachers ugly")
+  # scale_fill_manual(breaks = c("cold", "hot"), 
+  #                      values=c("blue", "red"))
 ```
 
 How does the difficulty of the professor modify the relationship between attractiveness and overall rating?
+
+The difficulty of a professor does not seem to be too dependent on attractiveness but their overall rating definitely seems to show less attractive teachers getting overall lower scores whereas attractive teachers tend to be on the higher end of overall rating.
 
 ## Part d (Code: 1 pt; Computation and Explanation: 2 pts)
 
 Using the `RateMyProfessor` dataset, fit a linear model predicting overall rating from the difficulty rating (`difficulty`), chili pepper rating (`hotness`), rank (`rank`), and an interaction term between `difficulty` and `hotness`.
 
+```{r}
+
+hist(RateMyProfessor$over)
+
+lm_for_teachers <- lm(overall ~ difficulty + hotness + rank + difficulty:hotness , data = RateMyProfessor)
+summary(lm_for_teachers)
+```
+
 Using your results, write out the least-squares regression equation predicting overall rating from difficulty for an attractive associate professor. Also, write out the least-squares regression equation predicting overall rating from difficulty for a less-attractive associate professor. Explain how you obtained each equation.
+
+Total formula :
+overall = 5.4708 - .6408(difficulty) - .2524(hot?) -.0489(Associate Professor?) - .0443(Professor) +.2971(difficulty)(hot?)
+
+For an attractive associate professor: 
+
 
 Do your equations support your conclusions from part (c)? Explain why or why not.
 
