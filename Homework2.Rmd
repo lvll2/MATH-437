@@ -20,23 +20,28 @@ This homework assignment is worth a total of **40 points**.
 Read Chapter 13 of Introduction to Statistical Learning, Second Edition. Based on your reading, answer the following questions.
 
 1. What is a *p-value*? What is the difference between a one-sided and a two-sided p-value?
+
 Answer: The p-value is the probability of observing a test statistic that is equal to or more extreme than the observed statistic under the assumption that $H_0$ is true. The difference between the one and two sided p-value is a two sided p-value is based on the absolute value of the test statistic, i.e. our t-score could be 1.65 or -1.65 but the one sided p-value is only looking at one of those values. 
 
+
 2. In traditional NHST-style significance testing, what are the two possible decisions? When do we make each decision?
+
 Answer: The two possible decisions are to reject the null hypothesis, occurs when our p-value is less than our pre-determined alpha. The other is to fail to reject our null hypothesis which occurs when our p-value is larger than that alpha. 
 
+
 3. What is the difference between a *Type I Error* and a *Type II Error*?
+
 Answer: The best case of Type I and Type II error I have learned is the story of the boy who cried wolf. At first the city makes a Type I error by rejecting $H_0$ (there is no wolf) when in fact there was no wolf, followed by them making a Type II error by not rejecting $H_0$ (again there is no wolf) when in reality there is. So a Type I Error occurs when we reject $H_0$ when $H_0$ was in fact true and a Type II Error is occurs when we do not reject $H_0$ when $H_a$ was true.
+
 
 4. Briefly explain why it is necessary to adjust the significance level (or equivalently, the p-values) when testing a large number of null hypotheses.
 Answer: The reason why we need to adjust the significance level when testing a large number of null hypotheses is to account for the chance of seeing a small p-value strictly by chance. When a large number of tests are conducted, the number of Type I Errors we expect to make will increase so it becomes necessary to adjust the significance level to control for this.
 
 5. Compare and contrast the *Family-Wise Error Rate* (FWER) and the *False Discovery Rate* (FDR).
-Answer: The FWER and FDR are similar in the sense that both are looking at the liklihood of type I error rates are but are very different in ideas. FWER looks at the probability of making at least one type I error across m tests whereas FDR is looking to minimize the proportion of type one error rates and total rejections of H0. 
+Answer: The FWER and FDR are similar in the sense that both are looking at the likelihood of Type I Error rates are but are very different in ideas. FWER looks at the probability of making at least one Type I Error across $m$ tests whereas FDR is looking to minimize the proportion of type one error rates and total rejections of $H_0$. 
 
 6. Compare and contrast the *Bonferroni Method* and *Holm's Step-Down Method* for controlling the FWER.
-Answer: Both the Bonferroni and Holm's step-down method look at increasing our FWER, taking utilization of an algorithm regarding ordering p-values but where they really differ is Bonferroni uses a significance level based m, the number of tests, whereas Holms step down is dependent upon both m tests but also where our p-value lands in terms of rank. It is also considered that Bonferroni is much more conservative compared to the more robust Holm's.
-
+Answer: 
 Bonferroni & Holm's Step-Down Method both aim to decrease (or control) the FWER
 based on the number of tests conducted without making assumptions about the
 form of $H_0$, the choice of test statistic, or the (in)dependence of p-values.
@@ -44,7 +49,9 @@ Bonferroni's method adjusts the significance level based purely on the number
 of tests conducted, $m$, so that our new significance level is $\alpha^* = \frac{\alpha}{m}$. Holm's Step-Down Method ranks the p-values from every test in ascending order and begins comparing them beginning with the most conservative significance level of $\alpha^* = \frac{\alpha}{m}$ for the smallest p-value and if the p-value is significant, it adjusts the significance level for the subsequent p-value to be $\alpha^* = \frac{\alpha}{m - 1}$ and so on until a non-significant p-value is found, resulting in a higher number of null hypotheses rejected. 
 
 7. Why do we prefer to use *Tukey's Method* or *Scheffe's Method* to control the FWER? In what conditions is it appropriate to use those methods instead of the Bonferroni or Holm methods?
-Answer: We prefer to use Tukey's or Scheffe's Method
+
+Answer: We prefer to use Tukey's or Scheffe's Method because they allows us to further control the FWER while increasing power. It is more appropriate to use Tukeys methods when we have dependence between p-values caused by similar hypotheses tests so we can conduct pairwise comparisons and we can use Scheffe's to control FWER at a specific significance level $\alpha$.
+
 
 8. Briefly describe the *Benjamini-Hochberg* procedure for controlling the FDR.
 Answer:
@@ -68,13 +75,21 @@ negatives, Type I errors, and Type II errors result from applying
 the Bonferroni procedure to control the FWER at level α =
 0.05?
 
-Panel one has 
+1. Panel one has seven true positives, one false negative, and two true negatives. Thus it has One Type II Error and no Type I Errors.
+
+2. Panel two has seven true positives, one false negative, and two true negatives. Thus it has one Type II Error and no Type I Errors.
+
+3. Panel three has three true positives, five false negatives, and two true negatives. Thus it has five Type II Errors.
 
 (b) How many false positives, false negatives, true positives, true
 negatives, Type I errors, and Type II errors result from applying
 the Holm procedure to control the FWER at level α = 0.05?
 
-Panel one has 
+1. Panel one has seven true positives, one false negative, and two true negatives. Thus it has One Type II Error and no Type I Errors.
+
+2. Panel two has eight true positives, and two true negatives. Thus it has no Type I Errors or Type II Errors.
+
+3. Panel two has eight true positives, and two true negatives. Thus it has no Type I Errors or Type II Errors.
 
 (c) What is the false discovery rate associated with using the Bonferroni procedure to control the FWER at level α = 0.05?
 
