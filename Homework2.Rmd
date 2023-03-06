@@ -72,8 +72,7 @@ For each of the three panels in Figure 13.3, answer the following
 questions:
 (a) How many false positives, false negatives, true positives, true
 negatives, Type I errors, and Type II errors result from applying
-the Bonferroni procedure to control the FWER at level α =
-0.05?
+the Bonferroni procedure to control the FWER at level $\alpha  = 0.05$?
 
 1. Panel one has seven true positives, one false negative, and two true negatives. Thus it has One Type II Error and no Type I Errors.
 
@@ -83,7 +82,7 @@ the Bonferroni procedure to control the FWER at level α =
 
 (b) How many false positives, false negatives, true positives, true
 negatives, Type I errors, and Type II errors result from applying
-the Holm procedure to control the FWER at level α = 0.05?
+the Holm procedure to control the FWER at level $\alpha  = 0.05$?
 
 1. Panel one has seven true positives, one false negative, and two true negatives. Thus it has One Type II Error and no Type I Errors.
 
@@ -91,17 +90,17 @@ the Holm procedure to control the FWER at level α = 0.05?
 
 3. Panel two has eight true positives, and two true negatives. Thus it has no Type I Errors or Type II Errors.
 
-(c) What is the false discovery rate associated with using the Bonferroni procedure to control the FWER at level α = 0.05?
+(c) What is the false discovery rate associated with using the Bonferroni procedure to control the FWER at level $\alpha  = 0.05$?
 
-The False discovery rate associated with using the Bonferroni procedure to control the FWER at level α = 0.05 is 0 for all three panels since there are no true null hypotheses being rejected.
+The False discovery rate associated with using the Bonferroni procedure to control the FWER at level $\alpha  = 0.05$ is 0 for all three panels since there are no true null hypotheses being rejected.
 
 (d) What is the false discovery rate associated with using the Holm
-procedure to control the FWER at level α = 0.05?
+procedure to control the FWER at level $\alpha  = 0.05$?
 
-The FDR associated with using the Holm procedure to control the FWER at level α = 0.05 is 0 since there are no false positives.
+The FDR associated with using the Holm procedure to control the FWER at level $\alpha  = 0.05$ is 0 since there are no false positives.
 
 (e) How would the answers to (a) and (c) change if we instead used
-the Bonferroni procedure to control the FWER at level α = 0.001?
+the Bonferroni procedure to control the FWER at level $\alpha  = 0.001$?
 
   a) At $\alpha = 0.001$, both panel one and two would have three false
   negatives (Type II Errors), two true negatives, and five true
@@ -117,16 +116,24 @@ the Bonferroni procedure to control the FWER at level α = 0.001?
 Suppose that we test $m = 1000$ independent null hypotheses, of which 10% are true, at significance level $\alpha = 0.05$ and achieve a false discovery rate of $q = 0.20$. Construct a table following Table 13.2 in the textbook, identifying the appropriate values of $V$, $S$, $U$, $W$, and $R$ in this situation.
 Answer:
 
-$$\begin{tabular}{|c|c c|c|}  \hline
- & H_0 True & H_0 False & Total & \\
-\hline 
-Reject H_0 & 20 & 80 & 100 \\ 
+$m_0$ = 100
 
-Do not reject H_0 & 80 & 820 & 900 \\ 
+$V = \alpha*m_0 = 5$
+
+$0.2 = V/(V + S)$ -> $S = 20$
+
+
+$$
+\begin{tabular}{|c|c c|c|}  \hline
+ & $H_0$ True & $H_0$ False & Total \\
+\hline 
+Reject $H_0$ & 5 & 20 & 25 \\ 
+Do not reject $H_0$ & 95 & 880 & 975 \\ 
  \hline
 Total & 100 & 900 & 1000 \\ 
- \hline  
-\end{tabular}$$
+\hline  
+\end{tabular}
+$$
 
 ## Conceptual Problem 3 (3 pts)
 
@@ -143,15 +150,17 @@ from a set of n observations.
 (a) What is the probability that the first bootstrap observation is
 not the jth observation from the original sample? Justify your
 answer.
-Answer: The probability of the first bootstrap observation not being the jth observation seems very likely. Thus logically the odds of any one observation being the jth is 1/n, so the odds of it not being the jth must then be 1-1/n.
+Answer: The probability of the first bootstrap observation not being the jth observation seems very likely. Thus logically the odds of any one observation being the jth is 1/n, so the odds of it not being the jth must then be 1 - 1/n.
 
 (b) What is the probability that the second bootstrap observation
 is not the jth observation from the original sample?
-Answer: Using the same logic as the previous problem the probability of the second observation being the jth observation is also 1/n. Then the probability that it is not is also 1-1/n.
+Answer: Using the same logic as the previous problem the probability of the second observation being the jth observation is also 1/n. Then the probability that it is not is also 1 - 1/n.
 
-(c) Argue that the probability that the jth observation is not in the
-bootstrap sample is (1 − 1/n)n.
+(c) Argue that the probability that the jth observation is not in the bootstrap
+sample is (1 - 1/n)^n.
+
 Answer: Since we are using a bootstrap sample the samples are then independent. Meaning that the probability of jth observation not being in the bootstrap sample is the same as the previous two but all over the total number of simulations n, thus the formula is (1-1/n)/n
+
 
 # Simulation Problems
 
