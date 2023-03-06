@@ -199,11 +199,18 @@ anova(lm1)
 
 
 2. There is a significant difference in highway gas mileage between pickups and SUVs.
-3. There is a significant difference in highway gas mileage between minivans and pickups.
+H0: There is not a significant differencce in highway gas mileage between pickups and SUVs
+Ha: There is a significant differencce in highway gas mileage between pickups and SUVs
 
+3. There is a significant difference in highway gas mileage between minivans and pickups.
+H0: There is a not significant difference in highway gas mileage between minivans and pickups.
+Ha: There is a significant difference in highway gas mileage between minivans and pickups.
 Use the following methods.
 
 (a) Three two-sample t-tests with no adjustments for multiple testing. Store all three p-values in a single vector so that you can use the `p.adjust` function in later parts.
+
+
+
 (b) Three two-sample t-tests followed by Bonferroni's method. 
 (c) Three two-sample t-tests followed by Holm's step-down method.
 (d) A one-way ANOVA followed by Tukey's method.
