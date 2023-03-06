@@ -117,19 +117,16 @@ the Bonferroni procedure to control the FWER at level α = 0.001?
 Suppose that we test $m = 1000$ independent null hypotheses, of which 10% are true, at significance level $\alpha = 0.05$ and achieve a false discovery rate of $q = 0.20$. Construct a table following Table 13.2 in the textbook, identifying the appropriate values of $V$, $S$, $U$, $W$, and $R$ in this situation.
 Answer:
 
-```{r}
-x <- matrix ( rnorm (10 * 1000), 10, 1000)
-x[, 1:100] <- x[, 1:100] + 0.5
+$$\begin{tabular}{|c|c c|c|}  \hline
+ & H_0 True & H_0 False & Total & \\
+\hline 
+Reject H_0 & 20 & 80 & 100 \\ 
 
-p.values <- rep (0, 1000)
- for (i in 1:100){
- p.values[i] <- t.test (x[, i], mu = 0)$p.value
- decision <- rep ("Do not reject H0", 100)
- decision[p.values <= .05] <- " Reject H0"
- }
-
-table(decision,c( rep ("H0 is False ", 500), rep ("H0 is True ", 500)))
-```
+Do not reject H_0 & 80 & 820 & 900 \\ 
+ \hline
+Total & 100 & 900 & 1000 \\ 
+ \hline  
+\end{tabular}$$
 
 ## Conceptual Problem 3 (3 pts)
 
