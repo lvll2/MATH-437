@@ -47,13 +47,13 @@ of tests conducted, $m$, so that our new significance level is $\alpha^* = \frac
 Answer: We prefer to use Tukey's or Scheffe's Method
 
 8. Briefly describe the *Benjamini-Hochberg* procedure for controlling the FDR.
-Answer:
+Answer: The Benjamini-Hochberg procedure begins by deciding on a specific q value to control the FDR at. Then finding and ordering our p-values such that the smallest p-value is first to the largest p-value. Next we define L as the maximum p-value for which the jth p-value is less than q(j/m). Lastly we reject all p-values for which p(j) is less than p(L).
 
 9. What is/are the major assumption(s) of a *permutation test*? What is the general procedure for obtaining the null distribution of a test statistic using a permutation test?
-Answer:
+Answer: The major assumptions of a permutation test is that the distribution of X and Y are similar such that values can be interchanged when calculating our T-values. The process of obtaining the null distribution is through permuting n(x) + n(y) B times for a large number, B. Once that is done the distribution of B is that null distribution.
 
 10. When is it useful/recommended to use a permutation testing approach as opposed to a traditional theory-based approach?
-Answer:
+Answer: We would want to use a permutation test when the distribution of our data does not follow a known shape. When our distribution follows that of a t-distribution, chi-squared distribution, F-distribution, etc. a traditional based approach works wonderful but when we are not following that we are inclined to go towards permutation methods.
 
 # Conceptual Problems
 
@@ -95,6 +95,20 @@ The answers would change by
 Suppose that we test $m = 1000$ independent null hypotheses, of which 10% are true, at significance level $\alpha = 0.05$ and achieve a false discovery rate of $q = 0.20$. Construct a table following Table 13.2 in the textbook, identifying the appropriate values of $V$, $S$, $U$, $W$, and $R$ in this situation.
 Answer:
 
+```{r}
+x <- matrix ( rnorm (10 * 1000), 10, 1000)
+x[, 1:100] <- x[, 1:100] + 0.5
+
+p.values <- rep (0, 1000)
+ for (i in 1:100){
+ p.values[i] <- t.test (x[, i], mu = 0)$p.value
+ decision <- rep ("Do not reject H0", 100)
+ decision[p.values <= .05] <- " Reject H0"
+ }
+
+table(decision,c( rep ("H0 is False ", 500), rep ("H0 is True ", 500)))
+```
+
 ## Conceptual Problem 3 (3 pts)
 
 Suppose that we test $m = 1000$ independent null hypotheses, of which an unknown number $m_0$ are true, at significance level $\alpha = 0.05$. Suppose that each test also has a power of 0.80. Find and plot the false discovery rate as a function of $m_0$.
@@ -110,10 +124,15 @@ from a set of n observations.
 (a) What is the probability that the first bootstrap observation is
 not the jth observation from the original sample? Justify your
 answer.
+Answer: The probability of the first bootstrap observation not being the jth observation seems very likely. Thus logically the odds of any one observation being the jth is 1/n, so the odds of it not being the jth must then be 1-1/n.
+
 (b) What is the probability that the second bootstrap observation
 is not the jth observation from the original sample?
+Answer: Using the same logic as the previous problem the probability of the second observation being the jth observation is also 1/n. Then the probability that it is not is also 1-1/n.
+
 (c) Argue that the probability that the jth observation is not in the
 bootstrap sample is (1 − 1/n)n.
+Answer: 
 
 # Simulation Problems
 
@@ -182,3 +201,7 @@ There is a significant difference in highway gas mileage between pickups and non
 ## Applied Problem 3 (Code: 5 pts; Explanation: 3 pts)
 
 Textbook Exercise 5.4.9.
+
+
+
+Conceptual problem: 2,3,4c, 
