@@ -154,7 +154,7 @@ Answer: Using the same logic as the previous problem the probability of the seco
 
 (c) Argue that the probability that the jth observation is not in the
 bootstrap sample is (1 − 1/n)n.
-Answer: 
+Answer: Since we are using a bootstrap sample the samples are then independent. Meaning that the probability of jth observation not being in the bootstrap sample is the same as the previous two but all over the total number of simulations n, thus the formula is (1-1/n)/n
 
 # Simulation Problems
 
@@ -226,4 +226,4 @@ Textbook Exercise 5.4.9.
 
 
 
-Conceptual problem: 2,3,4c, 
+Conceptual problem: 2,3 
