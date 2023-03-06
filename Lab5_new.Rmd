@@ -36,6 +36,7 @@ This lab assignment is worth a total of **15 points**.
 Run the code in ISLR Lab 3.6.6. Put each chunk from the textbook in its own chunk.
 
 ```{r}
+library(ISLR2)
 head(Carseats)
 ```
 
@@ -115,6 +116,7 @@ The result of adding our interaction term, age:lstat, yields us the same amount 
 Create a new dataset, `associates`, by `filter`ing the `RateMyProfessor` dataset to include only the Associate Professors.
 
 ```{r}
+RateMyProfessor <- read.csv("RateMyProfessor.csv")
 associates <- RateMyProfessor %>% 
   filter(rank == "Associate Professor")
 ```
@@ -123,7 +125,7 @@ associates <- RateMyProfessor %>%
 Next, complete this code chunk to create a graph of overall rating vs. difficulty rating for the associate professors, with "hot" professors shown in red and "cold" professors shown in blue. Remember to delete `eval = FALSE` once you get the code to run!
 
 ```{r ggplot associates}
-ggplot(data = associates, aes(x = overall, y = difficulty)) +
+ggplot(data = associates, aes(x = difficulty, y = overall)) +
   geom_point(alpha = .25, aes(color = hotness)) +
   geom_smooth(method = "lm", se = FALSE,aes(color = hotness)) +
   scale_color_manual(name = "Chili Pepper Rating",  # make legend nice
@@ -137,7 +139,9 @@ ggplot(data = associates, aes(x = overall, y = difficulty)) +
 
 How does the difficulty of the professor modify the relationship between attractiveness and overall rating?
 
-The difficulty of a professor does not seem to be too dependent on attractiveness but their overall rating definitely seems to show less attractive teachers getting overall lower scores whereas attractive teachers tend to be on the higher end of overall rating.
+The difficulty of a professor does not seem to be too dependent on attractiveness but their overall rating definitely seems to show teachers with lower overall ratings having higher difficulties compared to teachers with higher ratings having less difficulty.
+
+As difficulty increases, overall rating also decreases. Attractiveness affects that as more attractive professors will have a slope less steep than a cold professor.
 
 ## Part d (Code: 1 pt; Computation and Explanation: 2 pts)
 
@@ -145,7 +149,7 @@ Using the `RateMyProfessor` dataset, fit a linear model predicting overall ratin
 
 ```{r}
 
-hist(RateMyProfessor$over)
+hist(RateMyProfessor$overall)
 
 lm_for_teachers <- lm(overall ~ difficulty + hotness + rank + difficulty:hotness , data = RateMyProfessor)
 summary(lm_for_teachers)
@@ -154,12 +158,20 @@ summary(lm_for_teachers)
 Using your results, write out the least-squares regression equation predicting overall rating from difficulty for an attractive associate professor. Also, write out the least-squares regression equation predicting overall rating from difficulty for a less-attractive associate professor. Explain how you obtained each equation.
 
 Total formula :
+
 overall = 5.4708 - .6408(difficulty) - .2524(hot?) -.0489(Associate Professor?) - .0443(Professor) +.2971(difficulty)(hot?)
 
 For an attractive associate professor: 
 
+overall = 5.4708 - .6408(difficulty) -.2524(1) - .0489(1) - 0 +.2971(difficulty)(1)
+
+overall =5.1695- 0.3437(difficulty) 
+
+
 
 Do your equations support your conclusions from part (c)? Explain why or why not.
+
+Our equations do in fact support our conclusion from part c for the most part. Being attractive changes our slope by increasing (making less steep of a decline) which can be seen in our plot. 
 
 # Problem 3: Regression with Nonlinear Transformations of the Predictors
 
@@ -167,13 +179,57 @@ Do your equations support your conclusions from part (c)? Explain why or why not
 
 Run the first four code chunks in ISLR Lab 7.8.1 (up through the point where `fit2b` is created). Put each chunk from the textbook in its own chunk.
 
+```{r}
+library(ISLR2)
+
+fit <- lm(wage~poly (age, 4), data = Wage)
+coef(summary(fit))
+```
+
+```{r}
+fit2 <- lm(wage~poly (age, 4, raw =T), data = Wage)
+coef(summary(fit2))
+```
+
+```{r}
+
+fit2a <- lm(wage~age+I(age^2)+I(age^3)+age^4, data = Wage)
+coef(fit2a)
+
+```
+
+```{r}
+
+fit2b <- lm(wage~cbind(age, age^2, age^3, age^4), data = Wage)
+
+```
+
+
 ## Part b (Code: 1 pt)
 
 In the code chunk below, create a data frame with a single variable, `age`, ranging from 18 to 80, then use the `augment` function (in the `broom` package) to obtain the predicted wage, standard error of the mean wage, and the lower and upper bounds of a 95% confidence interval for the population mean wage at each age. (You can use any of `fit`, `fit2`, `fit2a`, or `fit2b` - they should all give the same predictions.)
 
+```{r}
+attach(Wage)
+agelims <- range(Wage$age)
+
+#create a data frame with a single variable, `age`, ranging from 18 to 80
+age.grid <- as.data.frame(seq(from = agelims[1], to = agelims[2]))
+
+#Use the `augment` function (in the `broom` package) to obtain the predicted wage
+preds <- augment(fit2b, newdata = age.grid)
+
+
+
+
+```
+
+
 What is the 95% confidence interval for the population mean wage of 25-year-olds? 50-year-olds?
 
 ```{r use augment to get predictions out}
+
+broom::augment(fit2b, newdata = age.grid, type = PROB)
 
 ```
 
