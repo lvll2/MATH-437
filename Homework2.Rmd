@@ -93,17 +93,24 @@ the Holm procedure to control the FWER at level α = 0.05?
 
 (c) What is the false discovery rate associated with using the Bonferroni procedure to control the FWER at level α = 0.05?
 
-The False discovery rate associated with using the Bonferroni procedure to control the FWER at level α = 0.05 is 
+The False discovery rate associated with using the Bonferroni procedure to control the FWER at level α = 0.05 is 0 for all three panels since there are no true null hypotheses being rejected.
 
 (d) What is the false discovery rate associated with using the Holm
 procedure to control the FWER at level α = 0.05?
 
-The FDR associated with using the Holm procedure to control the FWER at level α = 0.05 is 
+The FDR associated with using the Holm procedure to control the FWER at level α = 0.05 is 0 since there are no false positives.
 
 (e) How would the answers to (a) and (c) change if we instead used
 the Bonferroni procedure to control the FWER at level α = 0.001?
 
-The answers would change by 
+  a) At $\alpha = 0.001$, both panel one and two would have three false
+  negatives (Type II Errors), two true negatives, and five true
+  positives. Panel three would have five false negatives (Type II
+  Errors), two true negatives, and three true positives. No panel has
+  false positives (Type I Errors).
+  
+  c) The FDR would remain at 0 since there is still no false positives.
+      
 
 ## Conceptual Problem 2 (2 pts)
 
