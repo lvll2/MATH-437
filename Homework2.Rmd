@@ -140,6 +140,13 @@ $$
 Suppose that we test $m = 1000$ independent null hypotheses, of which an unknown number $m_0$ are true, at significance level $\alpha = 0.05$. Suppose that each test also has a power of 0.80. Find and plot the false discovery rate as a function of $m_0$.
 Answer: 
 
+```{r}
+al = 0.05
+fdr = function(m0){al*m0/(al*m0 + 800 - 0.8*m0)}
+plot(fdr, 1, 1000, xlab = "m_0", ylab = "False Discovery Rate")
+```
+
+
 ## Conceptual Problem 4 (2.5 pts)
 
 Textbook Exercise 5.4.2 parts (a), (b), and (c).:
