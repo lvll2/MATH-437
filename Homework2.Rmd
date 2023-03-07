@@ -166,7 +166,7 @@ Answer: Using the same logic as the previous problem the probability of the seco
 (c) Argue that the probability that the jth observation is not in the bootstrap
 sample is (1 - 1/n)^n.
 
-Answer: Since we are using a bootstrap sample the samples are then independent. Meaning that the probability of jth observation not being in the bootstrap sample is the same as the previous two but all over the total number of simulations n, thus the formula is (1-1/n)/n
+Answer: Since we are using a bootstrap sample the samples are then independent. Meaning that the probability of jth observation not being in the bootstrap sample is the same as the previous two questions but all n times, thus the formula is (1-1/n)^n
 
 
 # Simulation Problems
@@ -194,6 +194,7 @@ Using the `dplyr` package, subset the `mpg` dataset from the `ggplot2` package t
 ```{r}
 library(dplyr)
 library(ggplot2)
+library(ISLR2)
 
 filtered_data <- mpg %>% 
   filter(year == 2008,
@@ -205,14 +206,7 @@ filtered_data <- mpg %>%
 
 1. There is a significant difference in highway gas mileage between minivans and SUVs.
 H0: There is no significant difference between gas mileage between minivans and SUVs
-Ha: There is a significant difference between gas mileage between minivans and SUVs
-
-```{r}
-lm1 <- aov(hwy ~ class, data = filtered_data)
-
-anova(lm1)
-```
-
+Ha: There is a significant difference between gas mileage between minivans and SUVs   
 
 2. There is a significant difference in highway gas mileage between pickups and SUVs.
 H0: There is not a significant differencce in highway gas mileage between pickups and SUVs
@@ -225,12 +219,56 @@ Use the following methods.
 
 (a) Three two-sample t-tests with no adjustments for multiple testing. Store all three p-values in a single vector so that you can use the `p.adjust` function in later parts.
 
+```{r}
+part_1_data <- mpg %>% 
+  filter(year == 2008,
+         class %in% c("minivan", "suv"))
+
+part_2_data <- mpg %>% 
+  filter(year == 2008,
+         class %in% c("pickup", "suv"))
+
+part_3_data <- mpg %>% 
+  filter(year == 2008,
+         class %in% c("minivan", "pickup"))
+```
+
+```{r}
+
+rejections <- c(t.test(hwy ~ class, data = part_1_data)$p.value,t.test(hwy ~ class, data = part_2_data)$p.value,t.test(hwy ~ class, data = part_3_data)$p.value)
+
+```
 
 
 (b) Three two-sample t-tests followed by Bonferroni's method. 
+
+```{r}
+bonferonni_values <- p.adjust(rejections, method = "bonferroni")
+```
+
+
+
 (c) Three two-sample t-tests followed by Holm's step-down method.
+```{r}
+holm_values <- p.adjust(rejections, method = "holm")
+
+```
+
 (d) A one-way ANOVA followed by Tukey's method.
+
+```{r}
+my_anova <- aov(hwy ~ class, data = filtered_data)
+summary(my_anova) # check for significant p-value
+TukeyHSD(my_anova) # 95% confidence intervals
+```
+
+
 (e) Three two-sample t-tests followed by the Benjamini-Hochberg (BH) method.
+
+```{r}
+p.adjust(rejections, method = "BH")
+```
+
 
 Compare and contrast your results.
 
@@ -240,10 +278,38 @@ Use a one-way ANOVA followed by Scheffe's method (`ScheffeTest` in the DescTools
 
 There is a significant difference in highway gas mileage between pickups and non-pickups (SUVs and minivans).
 
+```{r}
+library(DescTools)
+lm1 <- aov(hwy ~ class, data = filtered_data)
+
+anova(lm1)
+```
+
+```{r}
+my_anova <- aov(hwy ~ class, data = filtered_data)
+summary(my_anova) # check for significant p-value
+contrast.matrix <- matrix(
+c(1, -1/2, -1/2), # tests that mu1 is different from the average of mu2 and mu3
+nrow = 3, ncol = 1
+)
+ScheffeTest(my_anova, conf.level = 0.95) # 95% confidence intervals
+```
+
+
 ## Applied Problem 3 (Code: 5 pts; Explanation: 3 pts)
 
 Textbook Exercise 5.4.9.
+a)
+```{r}
 
+mu_hat <- mean(Boston$medv)
+```
+The mean of medv in the Boston housing data set is 22.53281
+b) the standard error is equal to standard deviation / sqrt(n)
+```{r}
+standard_error <- (sd(Boston$medv))/sqrt(nrow(Boston))
+```
+standard error is 0.4088611
 
 
 Conceptual problem: 2,3 

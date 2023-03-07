@@ -214,10 +214,10 @@ attach(Wage)
 agelims <- range(Wage$age)
 
 #create a data frame with a single variable, `age`, ranging from 18 to 80
-age.grid <- as.data.frame(seq(from = agelims[1], to = agelims[2]))
+age.grid <-data.frame(age = seq(from = agelims[1], to = agelims[2]))
 
 #Use the `augment` function (in the `broom` package) to obtain the predicted wage
-preds <- augment(fit2b, newdata = age.grid)
+preds <- augment(fit2b, new_data = age.grid)
 
 
 
@@ -229,7 +229,9 @@ What is the 95% confidence interval for the population mean wage of 25-year-olds
 
 ```{r use augment to get predictions out}
 
-broom::augment(fit2b, newdata = age.grid, type = PROB)
+broom::augment(fit2b, newdata = age.grid, interval = "confidence")
 
 ```
+For age 25:	88.47380	85.21437	91.73322
 
+For age 50: 119.57013	117.35377	121.78650
