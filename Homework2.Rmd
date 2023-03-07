@@ -187,6 +187,7 @@ Using the `dplyr` package, subset the `mpg` dataset from the `ggplot2` package t
 ```{r}
 library(dplyr)
 library(ggplot2)
+library(ISLR2)
 
 filtered_data <- mpg %>% 
   filter(year == 2008,
@@ -271,6 +272,7 @@ Use a one-way ANOVA followed by Scheffe's method (`ScheffeTest` in the DescTools
 There is a significant difference in highway gas mileage between pickups and non-pickups (SUVs and minivans).
 
 ```{r}
+library(DescTools)
 lm1 <- aov(hwy ~ class, data = filtered_data)
 
 anova(lm1)
@@ -290,7 +292,17 @@ ScheffeTest(my_anova, conf.level = 0.95) # 95% confidence intervals
 ## Applied Problem 3 (Code: 5 pts; Explanation: 3 pts)
 
 Textbook Exercise 5.4.9.
+a)
+```{r}
 
+mu_hat <- mean(Boston$medv)
+```
+The mean of medv in the Boston housing data set is 22.53281
+b) the standard error is equal to standard deviation / sqrt(n)
+```{r}
+standard_error <- (sd(Boston$medv))/sqrt(nrow(Boston))
+```
+standard error is 0.4088611
 
 
 Conceptual problem: 2,3 
