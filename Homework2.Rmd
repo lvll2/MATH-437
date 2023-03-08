@@ -175,6 +175,47 @@ Answer: Since we are using a bootstrap sample the samples are then independent. 
 
 Textbook Exercise 5.4.2 parts (e), (g), and (h). For part (g), you should create a line plot (using either `plot` with argument `type = "l"` or `geom_line`). Then, to make clearer what you should be commenting on, find the limit as $n \rightarrow \infty$ of the probability that the $j^{th}$ observation is in your bootstrap sample and add a horizontal red line (using `abline` or `geom_hline`) at that value. (Hint: the limit as $n \rightarrow \infty$ of the expression in part (c) is well-known and easily found on the Internet.)
 
+e) Using the formula in the previous question and plugging in 100, we can see our probability of the jth observation being in our bootstrap sample is 1-(1-(1/100))^100 = 0.634
+
+
+g) 
+```{r}
+a = 1:10
+b <- 1-(1-(1/a))^a
+c = 1:100
+d <- 1-(1-(1/c))^c
+x = 1:10000
+y <- 1-(1-(1/x))^x
+
+
+par(mfrow=c(2,2))
+plot(a,b, type = "l")
+abline(h=.634, col = "red")
+
+plot(c,d, type = "l")
+abline(h=.634, col = "red")
+
+plot(x,y, type = "l")
+abline(h=.634, col = "red")
+
+```
+
+
+
+h)
+
+```{r}
+
+store <- rep(NA, 10000)
+for (i in 1:10000){
+  store[i] <- sum(sample(1:100, rep = TRUE) ==4)>0
+}
+mean(store)
+
+```
+This result makes a lot of sense as the probability of of it being the 4th observation is the same as it being any jth observation, we are just reaffirming that idea through simulation. This result should and does fortunately follow the same result as part e!
+
+
 ## Simulation Problem 2 (Code: 1.5 pts; Explanation: 3.5 pts)
 
 Copy the *functions* you created in the Bootstrap Confidence Intervals class activity as well as Simulation Parts 3, 4, and 5.
@@ -501,4 +542,4 @@ standard_error <- (sd(Boston$medv))/sqrt(nrow(Boston))
 standard error is 0.4088611
 
 
-Conceptual problem: 2,3 
+Conceptual problem: 2,3 Simulation problems 
