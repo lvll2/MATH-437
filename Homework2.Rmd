@@ -466,7 +466,12 @@ part_3_data <- mpg %>%
 
 ```{r}
 
-rejections <- c(t.test(hwy ~ class, data = part_1_data)$p.value,t.test(hwy ~ class, data = part_2_data)$p.value,t.test(hwy ~ class, data = part_3_data)$p.value)
+rejections <- c(t.test(hwy ~ class, 
+                       data = part_1_data)$p.value,
+                t.test(hwy ~ class, 
+                       data = part_2_data)$p.value,
+                t.test(hwy ~ class, 
+                       data = part_3_data)$p.value)
 
 ```
 
@@ -486,51 +491,54 @@ H0: There is a not significant difference in highway gas mileage between minivan
 Ha: There is a significant difference in highway gas mileage between minivans and pickups.
 H0 REJECTED
 
+Main: 
+1) H0 REJECTED
+2) H0 REJECTED
+3) H0 REJECTED
 
-(b) Three two-sample t-tests followed by Bonferroni's method. 
+Bonferonni:
+1) H0 NOT REJECTED
+2) H0 NOT REJECTED
+3) H0 STILL REJECTED
 
-```{r}
-bonferonni_values <- p.adjust(rejections, method = "bonferroni")
-```
+Holm's
+1) H0 NOT REJECTED
+2) H0 NOT REJECTED
+3) H0 STILL REJECTED
+
+Tukey:
+1) H0 REJECTED
+2) H0 NOT REJECTED
+3) H0 STILL REJECTED
+
+
+ Benjamini-Hochberg
+1) H0 REJECTED
+2) H0 REJECTED
+3) H0 STILL REJECTED
+
+
 Bonferonni:
 1) H0 NOT REJECTED
 2) H0 NOT REJECTED
 3) H0 STILL REJECTED
 
 
-(c) Three two-sample t-tests followed by Holm's step-down method.
-```{r}
-holm_values <- p.adjust(rejections, method = "holm")
-
-```
 Holm's
 1) H0 NOT REJECTED
 2) H0 NOT REJECTED
 3) H0 STILL REJECTED
 
-(d) A one-way ANOVA followed by Tukey's method.
-
-```{r}
-my_anova <- aov(hwy ~ class, data = filtered_data)
-summary(my_anova) # check for significant p-value
-TukeyHSD(my_anova) # 95% confidence intervals
-```
 Tukey:
 1) H0 REJECTED
 2) H0 NOT REJECTED
 3) H0 STILL REJECTED
 
-(e) Three two-sample t-tests followed by the Benjamini-Hochberg (BH) method.
 
-```{r}
-BH_values <- p.adjust(rejections, method = "BH")
-```
  Benjamini-Hochberg
 1) H0 REJECTED
 2) H0 REJECTED
 3) H0 STILL REJECTED
-
-Compare and contrast your results.
 
 
 ## Applied Problem 2 (Code: 1 pt; Explanation: 1 pt)
