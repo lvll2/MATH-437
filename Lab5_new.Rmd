@@ -132,7 +132,7 @@ ggplot(data = associates, aes(x = difficulty, y = overall)) +
                      labels = c(hot = "Attractive", 
                                 cold ="Less-attractive"),
                      values = c(hot = "red", cold = "blue")) + 
-  ggtitle("Bruh, these teachers ugly")
+  ggtitle("How Hot are the Good Teachers?")
   # scale_fill_manual(breaks = c("cold", "hot"), 
   #                      values=c("blue", "red"))
 ```
@@ -149,7 +149,7 @@ Using the `RateMyProfessor` dataset, fit a linear model predicting overall ratin
 
 ```{r}
 
-hist(RateMyProfessor$overall)
+# hist(RateMyProfessor$overall)
 
 lm_for_teachers <- lm(overall ~ difficulty + hotness + rank + difficulty:hotness , data = RateMyProfessor)
 summary(lm_for_teachers)
