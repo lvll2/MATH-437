@@ -5,13 +5,12 @@ date: "Due February 24, 2023"
 output:
   pdf_document: default
   word_document: default
+  html_document:
+    df_print: paged
 ---
 
-```{r, include=FALSE}
-options(tinytex.verbose = TRUE)
-```
 
-```{r}
+```{r, include= FALSE}
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
