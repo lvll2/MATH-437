@@ -140,6 +140,13 @@ $$
 Suppose that we test $m = 1000$ independent null hypotheses, of which an unknown number $m_0$ are true, at significance level $\alpha = 0.05$. Suppose that each test also has a power of 0.80. Find and plot the false discovery rate as a function of $m_0$.
 Answer: 
 
+```{r}
+al = 0.05
+fdr = function(m0){al*m0/(al*m0 + 800 - 0.8*m0)}
+plot(fdr, 1, 1000, xlab = "m_0", ylab = "False Discovery Rate")
+```
+
+
 ## Conceptual Problem 4 (2.5 pts)
 
 Textbook Exercise 5.4.2 parts (a), (b), and (c).:
@@ -212,6 +219,195 @@ This result makes a lot of sense as the probability of of it being the 4th obser
 ## Simulation Problem 2 (Code: 1.5 pts; Explanation: 3.5 pts)
 
 Copy the *functions* you created in the Bootstrap Confidence Intervals class activity as well as Simulation Parts 3, 4, and 5.
+
+```{r bootstrap resample function}
+bootstrap_resample <- function(data_vector, B, summary_fn = mean,
+                               seed = 100, ...){
+  # data_vector: a vector of data
+  # B: the number of bootstrap resamples
+  # summary_fn: the name of a function to apply to the resampled data
+  # ...: any additional arguments to summary_fn
+  
+  boot_samples <- matrix(0, nrow = length(data_vector), ncol = B)
+  
+  n <-length(data_vector)
+  # We need to add some code here!
+  set.seed(seed)
+  for (i in 1:B) {
+     boot_samples[,i] <- sample(data_vector, size = n, replace = TRUE)
+    
+  }
+
+  boot_stat <- apply(boot_samples, 2, summary_fn, ...)
+  # Seriously, do not name any arguments x or FUN when using apply within a function
+  # Advice from someone who spent 30 minutes debugging a sample solution
+  
+  return(boot_stat)
+}
+```
+
+```{r bootstrap CI function}
+bootstrap_ci <- function(data_vector, method, B = 1000, seed = 100, C = 0.95, summary_fn = mean, ...){
+  # data_vector: a vector of data
+  # method: the CI method
+  # B: the number of bootstrap resamples
+  # seed: the seed to use
+  # C: the confidence level as a decimal
+  # summary_fn: the name of a function to apply to the resampled data
+  # ...: any additional arguments to summary_fn
+
+
+  
+  obs_stat <- do.call(summary_fn, args = list(data_vector, ...))
+  # do.call allows you to call a function without having to hard-code what that function is
+  # the args argument is a list of arguments to the function
+  # so this will find the observed value of the statistic given the original data vector
+  
+  bootstrap_values <- bootstrap_resample(data_vector, B, summary_fn, ...)
+  
+  alpha <- 1 - C
+  
+  if (method == "percentile"){
+      # write code to get the percentile confidence level out of the returned bootstrap_values and store in a length 2 vector boot_ci
+    
+    boot_ci <- quantile(bootstrap_values, 
+                        probs = c(alpha/2, 1 - alpha/2)
+                        )
+  } else if (method == "basic"){
+    # write code to get the "basic" confidence level and store in a length 2 vector boot_ci
+    boot_ci <- 2 * obs_stat - 
+      quantile(bootstrap_values, probs = c(1 - alpha/2, alpha/2))
+  } else if (method == "normal"){
+    # write code to get the normal-theory confidence interval and store in a length 2 vector boot_ci
+    # make sure to use the adjustments in the course notes, e.g., don't use 1/sqrt(n) as your standard deviation of sample means
+    center <- 2*obs_stat - mean(bootstrap_values)
+    crit_value <- qnorm(alpha/2)
+    se_boot <- sd(bootstrap_values)
+    boot_ci <- center + c(1, -1) * crit_value * se_boot
+      
+  }
+  
+  return(boot_ci)
+}
+```
+
+## Simulation Part 3 - Assumptions Not Met, Large Samples
+
+Simulate 1000 sets of 100 random numbers from a $Exp(1)$ distribution and store them in a 1000 x 100 matrix `sim_data3`. Note that `sim_data3` represents 1000 samples of size 100 under conditions where we *know* the assumptions of a t confidence interval are not met but we are hoping that the Central Limit Theorem can cover us.
+
+```{r sim3}
+set.seed(437)
+# need to do the simulation now!
+sim_data3 <- matrix(rexp(1000*100), nrow = 1000, ncol = 10)
+```
+
+Copy and modify your code chunks from Simulation Part 1 to produce 95% confidence intervals using `sim_data3`. What proportion of "95% confidence intervals" actually contained the true parameter value? Did any methods perform noticeably better/worse?
+
+```{r t-CI3}
+# You should be able to just run this code chunk without any fixes
+pop_mean3 <- 1
+ci_t3 <- apply(sim_data3, 1, function(x) t.test(x)$conf.int)
+ci_t_df3 <- as.data.frame(t(ci_t3))
+names(ci_t_df3) <- c("lower", "upper")
+ci_t_df3 %>% mutate(covered = lower <= pop_mean3 & upper >= pop_mean3) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+```{r boot percentile CI 3}
+# You should be able to just run this code chunk without any fixes
+ci_perc3 <- apply(sim_data3, 1, bootstrap_ci, method = "percentile", B = 1000, summary_fn = mean, na.rm = TRUE)
+# don't need any ... arguments here, but illustrating the idea of the ...
+# notice that bootstrap_ci has default seed = 100 and C = 0.95 arguments
+ci_perc_df3 <- as.data.frame(t(ci_perc3))
+names(ci_perc_df3) <- c("lower", "upper")
+ci_perc_df3 %>% mutate(covered = lower <= pop_mean3 & upper >= pop_mean3) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+Copy and modify the chunk above for the basic and normal-theory intervals.
+
+```{r boot basic CI 3}
+ci_basic3 <- apply(sim_data3, 1, bootstrap_ci, method = "basic", B = 1000, summary_fn = mean, na.rm = TRUE)
+
+ci_basic_df3 <- as.data.frame(t(ci_basic3))
+names(ci_basic_df3) <- c("lower", "upper")
+ci_basic_df3 %>% mutate(covered = lower <= pop_mean3 & upper >= pop_mean3) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+```{r boot normal CI 3}
+ci_normal3 <- apply(sim_data3, 1, bootstrap_ci, method = "normal", B = 1000, summary_fn = mean, na.rm = TRUE)
+
+ci_normal_df3 <- as.data.frame(t(ci_normal3))
+names(ci_normal_df3) <- c("lower", "upper")
+ci_normal_df3 %>% mutate(covered = lower <= pop_mean3 & upper >= pop_mean3) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+
+## Simulation Part 4 - Assumptions Not Met, Small Samples
+
+Simulate 1000 sets of 10 random numbers from a $Exp(1)$ distribution and store them in a 1000 x 100 matrix `sim_data4`. Note that `sim_data4` represents 1000 samples of size 10 under conditions where we *know* the assumptions of a t confidence interval are not met and Central Limit Theorem is almost certainly *not* going to cover us.
+
+
+```{r sim4}
+set.seed(437)
+# need to do the simulation now!
+sim_data4 <- matrix(rexp(1000*10), nrow = 1000, ncol = 10)
+```
+
+Copy and modify your code chunks from Simulation Part 1 to produce 95% confidence intervals using `sim_data4`. What proportion of "95% confidence intervals" actually contained the true parameter value? Did any methods perform noticeably better/worse?
+
+All of the methods performed worse as breaking the central limit theorem was still an issue even though bootstrapping tends to ignore it. The range of values was around 84-86% with the t test being noticeably better at 90%.
+
+```{r t-CI4}
+pop_mean4 <- 1
+ci_t4 <- apply(sim_data4, 1, function(x) t.test(x)$conf.int)
+ci_t_df4 <- as.data.frame(t(ci_t4))
+names(ci_t_df4) <- c("lower", "upper")
+ci_t_df4 %>% mutate(covered = lower <= pop_mean4 & upper >= pop_mean4) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+```{r boot percentile CI 4}
+ci_perc4 <- apply(sim_data4, 1, bootstrap_ci, method = "percentile", B = 1000, summary_fn = mean, na.rm = TRUE)
+ci_perc_df4 <- as.data.frame(t(ci_perc4))
+names(ci_perc_df4) <- c("lower", "upper")
+ci_perc_df4 %>% mutate(covered = lower <= pop_mean4 & upper >= pop_mean4) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+
+```{r boot basic CI 4}
+ci_basic4 <- apply(sim_data4, 1, bootstrap_ci, method = "basic", B = 1000, summary_fn = mean, na.rm = TRUE)
+
+ci_basic_df4 <- as.data.frame(t(ci_basic4))
+names(ci_basic_df4) <- c("lower", "upper")
+ci_basic_df4 %>% mutate(covered = lower <= pop_mean4 & upper >= pop_mean4) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+```{r boot normal CI 4}
+ci_normal4 <- apply(sim_data4, 1, bootstrap_ci, method = "normal", B = 1000, summary_fn = mean, na.rm = TRUE)
+
+ci_normal_df4 <- as.data.frame(t(ci_normal4))
+names(ci_normal_df4) <- c("lower", "upper")
+ci_normal_df4 %>% mutate(covered = lower <= pop_mean4 & upper >= pop_mean4) %>%
+  summarize(coverage_probability = mean(covered))
+```
+
+## Simulation Part 5 - Range Preservation
+
+Produce a histogram of the lower bound of the CIs you obtained using each of the four methods in Simulation Part 4. Which methods appear to be range-preserving (that is, cannot give implausible values for the parameter) even under this "worst-case scenario"? 
+
+```{r}
+par(mfrow= c(2,2))
+hist(ci_normal_df4$lower)
+hist(ci_basic_df4$lower)
+hist(ci_perc_df4$lower)
+hist(ci_t_df4$lower)
+```
+
 
 Write a brief summary of what you learned from the activity. Make sure to address the following questions:
 
