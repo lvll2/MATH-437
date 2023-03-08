@@ -404,7 +404,7 @@ Produce a histogram of the lower bound of the CIs you obtained using each of the
 par(mfrow= c(2,2))
 hist(ci_normal_df4$lower)
 hist(ci_basic_df4$lower)
-hist(ci_perc_df4$lower)
+hist(ci_perc_df4$lower, xlim = c(0, 1.5))
 hist(ci_t_df4$lower)
 ```
 
@@ -412,8 +412,19 @@ hist(ci_t_df4$lower)
 Write a brief summary of what you learned from the activity. Make sure to address the following questions:
 
 - Are theory-based methods *guaranteed* to achieve the appropriate coverage? What about bootstrap-based methods?
+Theory-based methods are not guaranteed to achieve the appropriate coverage
+because the distribution assumed by the theory-based methods do not accurately
+reflect the distribution of our statistic. With bootstrap-based methods we are
+not making assumptions about
+
+
+
 - Which of the four methods appear to be range-preserving even in a "worst-case scenario"? 
+The percentile method appears to be range-preserving even in a "worst-case scenario"
+since it does not give implausible values (< 0) for the parameter.
+
 - When and why would a bootstrap method be useful to obtain a confidence interval even if it doesn't achieve the appropriate coverage?
+Bootstrap method might be useful to obtain a confidence interval 
 
 # Applied Problems
 
