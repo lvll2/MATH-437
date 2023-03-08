@@ -1,0 +1,29 @@
+---
+title: 'Homework Assignment #2'
+author: "Math 437 - Modern Data Analysis"
+date: "Due February 24, 2023"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(ISLR2)
+library(DescTools)
+
+```
+
+# Instructions
+
+
+8. Briefly describe the *Benjamini-Hochberg* procedure for controlling the FDR.
+Answer: The Benjamini-Hochberg procedure begins by deciding on a specific q value to control the FDR at. Then finding and ordering our p-values such that the smallest p-value is first to the largest p-value. Next we define L as the maximum p-value for which the jth p-value is less than q(j/m). Lastly we reject all p-values for which p(j) is less than p(L).
+
+9. What is/are the major assumption(s) of a *permutation test*? What is the general procedure for obtaining the null distribution of a test statistic using a permutation test?
+Answer: The major assumptions of a permutation test is that the distribution of X and Y are similar such that values can be interchanged when calculating our T-values. The process of obtaining the null distribution is through permuting n(x) + n(y) B times for a large number, B. Once that is done the distribution of B is that null distribution.
+
+10. When is it useful/recommended to use a permutation testing approach as opposed to a traditional theory-based approach?
+Answer: We would want to use a permutation test when the distribution of our data does not follow a known shape. When our distribution follows that of a t-distribution, chi-squared distribution, F-distribution, etc. a traditional based approach works wonderful but when we are not following that we are inclined to go towards permutation methods.

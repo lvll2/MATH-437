@@ -2,8 +2,24 @@
 title: 'Homework Assignment #2'
 author: "Math 437 - Modern Data Analysis"
 date: "Due February 24, 2023"
-output: pdf_document
+output:
+  pdf_document: default
+  word_document: default
 ---
+
+```{r, include=FALSE}
+options(tinytex.verbose = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(ISLR2)
+library(DescTools)
+
+```
+
 
 # Instructions
 
@@ -423,9 +439,6 @@ Write a brief summary of what you learned from the activity. Make sure to addres
 Using the `dplyr` package, subset the `mpg` dataset from the `ggplot2` package to include only the cars from 2008 that are minivans, pickups, or SUVs (`%in%` is a useful replacement for `==` when trying to match to more than one possibility). Using    this new dataset, determine which of the following statements is/are true, using an $\alpha = 0.10$ significance level/family-wise error rate or a $q = 0.10$ false discovery rate:
 
 ```{r}
-library(dplyr)
-library(ggplot2)
-library(ISLR2)
 
 filtered_data <- mpg %>% 
   filter(year == 2008,
@@ -548,7 +561,6 @@ Use a one-way ANOVA followed by Scheffe's method (`ScheffeTest` in the DescTools
 There is a significant difference in highway gas mileage between pickups and non-pickups (SUVs and minivans).
 
 ```{r}
-library(DescTools)
 lm1 <- aov(hwy ~ class, data = filtered_data)
 
 anova(lm1)
@@ -579,7 +591,7 @@ b) the standard error is equal to standard deviation / sqrt(n)
 ```{r}
 standard_error <- (sd(Boston$medv))/sqrt(nrow(Boston))
 ```
-standard error is 0.4088611
+standard error is 0.4088612
 
 
 Conceptual problem: 2,3 Simulation problems 
