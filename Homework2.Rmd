@@ -2,8 +2,24 @@
 title: 'Homework Assignment #2'
 author: "Math 437 - Modern Data Analysis"
 date: "Due February 24, 2023"
-output: pdf_document
+output:
+  pdf_document: default
+  word_document: default
 ---
+
+```{r, include=FALSE}
+options(tinytex.verbose = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(ISLR2)
+library(DescTools)
+
+```
+
 
 # Instructions
 
@@ -200,6 +216,7 @@ abline(h=.634, col = "red")
 
 ```
 
+Here you can see that our probability quickly converges, especially when n is large, to .634
 
 
 h)
@@ -433,9 +450,6 @@ Bootstrap method might be useful to obtain a confidence interval
 Using the `dplyr` package, subset the `mpg` dataset from the `ggplot2` package to include only the cars from 2008 that are minivans, pickups, or SUVs (`%in%` is a useful replacement for `==` when trying to match to more than one possibility). Using    this new dataset, determine which of the following statements is/are true, using an $\alpha = 0.10$ significance level/family-wise error rate or a $q = 0.10$ false discovery rate:
 
 ```{r}
-library(dplyr)
-library(ggplot2)
-library(ISLR2)
 
 filtered_data <- mpg %>% 
   filter(year == 2008,
@@ -476,42 +490,80 @@ part_3_data <- mpg %>%
 
 ```{r}
 
-rejections <- c(t.test(hwy ~ class, data = part_1_data)$p.value,t.test(hwy ~ class, data = part_2_data)$p.value,t.test(hwy ~ class, data = part_3_data)$p.value)
+rejections <- c(t.test(hwy ~ class, 
+                       data = part_1_data)$p.value,
+                t.test(hwy ~ class, 
+                       data = part_2_data)$p.value,
+                t.test(hwy ~ class, 
+                       data = part_3_data)$p.value)
 
 ```
 
-
-(b) Three two-sample t-tests followed by Bonferroni's method. 
-
-```{r}
-bonferonni_values <- p.adjust(rejections, method = "bonferroni")
-```
+1. There is a significant difference in highway gas mileage between minivans and SUVs.
+H0: There is no significant difference between gas mileage between minivans and SUVs
+Ha: There is a significant difference between gas mileage between minivans and SUVs   
+H0 REJECTED  
 
 
+2. There is a significant difference in highway gas mileage between pickups and SUVs.
+H0: There is not a significant differencce in highway gas mileage between pickups and SUVs
+Ha: There is a significant differencce in highway gas mileage between pickups and SUVs
+H0 REJECTED
 
-(c) Three two-sample t-tests followed by Holm's step-down method.
-```{r}
-holm_values <- p.adjust(rejections, method = "holm")
+3. There is a significant difference in highway gas mileage between minivans and pickups.
+H0: There is a not significant difference in highway gas mileage between minivans and pickups.
+Ha: There is a significant difference in highway gas mileage between minivans and pickups.
+H0 REJECTED
 
-```
+Main: 
+1) H0 REJECTED
+2) H0 REJECTED
+3) H0 REJECTED
 
-(d) A one-way ANOVA followed by Tukey's method.
+Bonferonni:
+1) H0 NOT REJECTED
+2) H0 NOT REJECTED
+3) H0 STILL REJECTED
 
-```{r}
-my_anova <- aov(hwy ~ class, data = filtered_data)
-summary(my_anova) # check for significant p-value
-TukeyHSD(my_anova) # 95% confidence intervals
-```
+Holm's
+1) H0 NOT REJECTED
+2) H0 NOT REJECTED
+3) H0 STILL REJECTED
+
+Tukey:
+1) H0 REJECTED
+2) H0 NOT REJECTED
+3) H0 STILL REJECTED
 
 
-(e) Three two-sample t-tests followed by the Benjamini-Hochberg (BH) method.
+ Benjamini-Hochberg
+1) H0 REJECTED
+2) H0 REJECTED
+3) H0 STILL REJECTED
 
-```{r}
-p.adjust(rejections, method = "BH")
-```
+
+Bonferonni:
+1) H0 NOT REJECTED
+2) H0 NOT REJECTED
+3) H0 STILL REJECTED
 
 
-Compare and contrast your results.
+Holm's
+1) H0 NOT REJECTED
+2) H0 NOT REJECTED
+3) H0 STILL REJECTED
+
+Tukey:
+1) H0 REJECTED
+2) H0 NOT REJECTED
+3) H0 STILL REJECTED
+
+
+ Benjamini-Hochberg
+1) H0 REJECTED
+2) H0 REJECTED
+3) H0 STILL REJECTED
+
 
 ## Applied Problem 2 (Code: 1 pt; Explanation: 1 pt)
 
@@ -520,7 +572,6 @@ Use a one-way ANOVA followed by Scheffe's method (`ScheffeTest` in the DescTools
 There is a significant difference in highway gas mileage between pickups and non-pickups (SUVs and minivans).
 
 ```{r}
-library(DescTools)
 lm1 <- aov(hwy ~ class, data = filtered_data)
 
 anova(lm1)
@@ -536,6 +587,7 @@ nrow = 3, ncol = 1
 ScheffeTest(my_anova, conf.level = 0.95) # 95% confidence intervals
 ```
 
+There is a significant difference at an alpha level of .1
 
 ## Applied Problem 3 (Code: 5 pts; Explanation: 3 pts)
 
@@ -550,7 +602,7 @@ b) the standard error is equal to standard deviation / sqrt(n)
 ```{r}
 standard_error <- (sd(Boston$medv))/sqrt(nrow(Boston))
 ```
-standard error is 0.4088611
+standard error is 0.4088612
 
 
 Conceptual problem: 2,3 Simulation problems 
