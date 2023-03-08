@@ -89,6 +89,16 @@ Holding difficulty constant, which of the following instructors would be predict
 * Less-attractive Associate Professor
 * Less-attractive Professor
 
+Attractive Assistant Professors would be predicted to have the highest overall
+rating since holding all else constant, being an associate professor or professor
+decreases the average overall rating, and being hot increases the average overall
+rating. A less-attractive associate professor would be predicted to have the 
+lowest overall rating since being rated as hot increases the average overall
+rating compared to being less attractive and compared to being an assistant
+professor, associate professors on average have lower overall ratings than
+professors.
+
+
 # Problem 2: Interaction Terms
 
 ## Part a (Code: 0.5 pts)
