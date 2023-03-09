@@ -428,19 +428,24 @@ hist(ci_t_df4$lower)
 Write a brief summary of what you learned from the activity. Make sure to address the following questions:
 
 - Are theory-based methods *guaranteed* to achieve the appropriate coverage? What about bootstrap-based methods?
+
 Theory-based methods are not guaranteed to achieve the appropriate coverage
-because the distribution assumed by the theory-based methods do not accurately
-reflect the distribution of our statistic. With bootstrap-based methods we are
-not making assumptions about
-
-
+but they can achieve appropriate coverage for populations that are normally
+distributed or meet the requirements for the Central Limit Theorem. With 
+bootstrap-based methods we are not guaranteed appropriate coverage as was seen
+in the simulations where we consistently had coverage probabilities around 10%
+lower than the appropriate coverage.
 
 - Which of the four methods appear to be range-preserving even in a "worst-case scenario"? 
+
 The percentile method appears to be range-preserving even in a "worst-case scenario"
 since it does not give implausible values (< 0) for the parameter.
 
 - When and why would a bootstrap method be useful to obtain a confidence interval even if it doesn't achieve the appropriate coverage?
-Bootstrap method might be useful to obtain a confidence interval 
+
+Bootstrap method would be useful to obtain a confidence interval when the
+distribution assumed by the theory-based methods do not accurately reflect the distribution of our statistic or when we are unsure about the distribution,
+since bootstrapping allows us to estimate the distribution based on our sample.
 
 # Applied Problems
 
