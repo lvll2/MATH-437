@@ -1,0 +1,410 @@
+---
+title: "Generative Models Example Code and Class Activities"
+author: "Math 437 Spring 2023"
+date: "3/13/2023"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Background Information
+
+1. How does a Bayesian approach to classification work, in general?
+
+Let's keep working on classifying fruit vs. vegetable.
+
+```{r import data and packages, message = F, warning = F}
+library(tidyverse)
+library(MASS) # LDA and QDA
+library(e1071) # Naive Bayes
+Restrain <- readr::read_csv("Restrain.csv")
+fv <- Restrain %>% filter(SubCategory %in% c("Fruits", "Vegetables"))
+```
+
+Let's try to predict whether a food is a fruit or a vegetable. As usual, it's a good idea to convert to factor:
+
+```{r convert to factor}
+fv$SubCategory <- factor(fv$SubCategory, levels = c("Fruits","Vegetables"))
+```
+
+And to do our training-test split:
+
+```{r split}
+set.seed(1003)
+n <- nrow(fv)
+test.rows <- sample(n, floor(0.20*n), replace = FALSE)
+fv_train <- fv[-test.rows,]
+fv_test <- fv[test.rows,]
+```
+
+## Tidymodels version
+
+
+```{r validation split, message = F, warning = F}
+library(tidymodels) # load everything we need
+set.seed(1880)
+fv_split <- initial_split(fv, prop = 0.80) 
+
+fv_train_tidy <- training(fv_split)
+fv_valid_tidy <- testing(fv_split)
+```
+
+
+# Naive Bayes
+
+The workhorse function is `naiveBayes`, which is in the e1071 package. First let's see how it works with just one predictor, `Taste`:
+
+```{r NB-univariate}
+nb1 <- naiveBayes(SubCategory ~ Taste, data = fv_train)
+nb1
+```
+
+1. What assumptions are made about the pdf $f_k(\text{Taste})$ when we run naive Bayes with one predictor variable?
+We are assuming that the pdf $f_k(\text{Taste})$ is normally distributed
+
+
+2. Briefly explain what each of the following mean:
+
+- A-priori probabilites: $\hat{pi}$ 
+If we know nothing about taste, based on the training set we would assume
+ 0.297619 chance of being a fruit etc.
+- Conditional probabilities
+$\mu_hat$ and $\sigma_hat$
+
+To predict with naive Bayes, we can use either `type = "raw"` (for class probabilities) or `type = "class"` (to predict the class with the highest probability):
+
+```{r NB-prediction1}
+nb1_predicted_probs <- predict(nb1, newdata = fv_test, type = "raw")
+nb1_predicted_probs
+```
+
+```{r NB-prediction1-classes}
+nb1_predicted_classes <- predict(nb1, newdata = fv_test, type = "class")
+
+nb1_assessment <- tibble(Food = fv_test$Food,
+  actual = fv_test$SubCategory,
+  predicted = nb1_predicted_classes,
+  pred_Fruit = nb1_predicted_probs[,1],
+  pred_Vegetable = nb1_predicted_probs[,2])
+head(nb1_assessment)
+table(nb1_assessment$predicted, nb1_assessment$actual, 
+      dnn = c("Predicted", "Actual"))
+```
+
+This looks like we're getting 70% accuracy.
+
+Let's look at a multivariate model:
+
+```{r NB-multivariate}
+nb2 <- naiveBayes(SubCategory ~ Taste + Healthiness + Cravings, data = fv_train)
+nb2
+```
+
+1. What assumptions are made about the joint pdf $f_k(\text{Taste}, \text{Healthiness}, \text{Cravings})$ when we run naive Bayes with multiple predictor variables?
+We are assuming that the predictor variables are independent.
+check w/ correlation matrix
+
+```{r NB-prediction2-classes}
+nb2_predicted_probs <- predict(nb2, newdata = fv_test, type = "raw")
+nb2_predicted_classes <- predict(nb2, newdata = fv_test, type = "class")
+
+nb2_assessment <- tibble(Food = fv_test$Food,
+  actual = fv_test$SubCategory,
+  predicted = nb2_predicted_classes,
+  pred_Fruit = nb2_predicted_probs[,1],
+  pred_Vegetable = nb2_predicted_probs[,2])
+
+table(nb2_assessment$predicted, nb2_assessment$actual, 
+      dnn = c("Predicted", "Actual"))
+```
+
+Looks like we're not getting an increase in accuracy by adding the extra variables to the model - we are better at classifying fruits but worse at classifying vegetables.
+
+## Naive Bayes with Tidymodels
+
+There are a couple of weird things when running naive Bayes with tidymodels:
+
+- Categorical predictors *must* be expressed as factor variables - no indicator variables or character/string variables.
+- The `discrim` package is required to fit this model.
+
+```{r nb-tidy-new packages, message = FALSE, warning = FALSE}
+library(discrim)
+library(klaR) # default package to fit naive Bayes with tidymodels
+```
+
+```{r add nb-tidy model}
+nb_model <- naive_Bayes(mode = "classification", engine = "klaR")
+
+nb_wflow <- workflow() %>%
+  add_model(nb_model)
+```
+
+Since we have only numerical predictors, we don't have to do any pre-processing in our recipe:
+
+```{r add nb-tidy recipe}
+nb_recipe <- recipe(
+  SubCategory ~ Taste + Cravings + Healthiness, # response ~ predictors
+  data = fv_train_tidy
+)
+
+nb_wflow <- nb_wflow %>%
+  add_recipe(nb_recipe)
+```
+
+```{r fit nb-tidy model}
+nb_fit <- fit(nb_wflow, data = fv_train_tidy)
+nb_fit
+```
+
+1. What is this `density.default(x = xx)` and why is it getting called?
+This is what is estimating our $f(x)$ for our pdf (nonparametric method).
+
+As usual, we use the `predict` function to make predictions:
+
+```{r make nb-tidy predictions}
+nb_predictions_tidy <- predict(nb_fit, new_data = fv_valid_tidy)
+nb_predictions_tidy
+```
+
+```{r make probabilistic predictions}
+nb_predictions_raw <- predict(nb_fit, new_data = fv_valid_tidy, type = "prob")
+nb_predictions_raw
+```
+
+Or include both the class predictions and the probabilities using `augment`:
+
+```{r nb-tidy augment}
+predictions_nb_df <- broom::augment(nb_fit, new_data = fv_valid_tidy)
+predictions_nb_df %>% dplyr::select(
+  Food,
+  SubCategory, 
+  .pred_class, 
+  .pred_Fruits, 
+  .pred_Vegetables)
+```
+
+As usual, we can assess the accuracy of our predictions using the `yardstick` package:
+
+```{r accuracy}
+accuracy(predictions_nb_df, truth = SubCategory, estimate = .pred_class)
+```
+
+# Linear Discriminant Analysis
+
+The workhorse function is `lda`, which is in the MASS package. First let's see how it works with just one predictor, `Taste`:
+
+```{r Lda-no error}
+lda1 <- lda(SubCategory ~ Taste, data = fv_train)
+lda1
+```
+
+1. What assumptions are made about the pdf $f_k(\text{Taste})$ when we run LDA with one variable?
+
+2. Briefly explain what each of the following mean:
+
+- Prior probabilities of groups
+- Group means
+- Coefficients of linear discriminants
+
+Predictions with lda get a bit weird; we don't include an argument indicating whether we want class predictions or probabilites.
+
+```{r lda predictions}
+lda1_predictions <- predict(lda1, newdata = fv_test)
+str(lda1_predictions)
+```
+
+2. What is contained in `class`, `posterior`, and `x`?
+
+```{r lda classification accuracy}
+lda1_assessment <- tibble(Food = fv_test$Food,
+                           Taste = fv_test$Taste, SubCategory = fv_test$SubCategory,
+                          pred_Fruit = lda1_predictions$posterior[,1],
+                          pred_Vegetable = lda1_predictions$posterior[,2],
+                          pred_class = lda1_predictions$class)
+
+table(lda1_assessment$pred_class, lda1_assessment$SubCategory, 
+      dnn = c("Predicted", "Actual"))
+```
+
+Let's look at a multivariate linear discriminant analysis:
+
+```{r Lda multivariate}
+lda2 <- lda(SubCategory ~ Taste + Healthiness + Cravings, data = fv_train)
+lda2
+```
+
+3. What assumptions are made about the joint pdf $f_k(\text{Taste}, \text{Healthiness}, \text{Cravings})$ when we run LDA with more than one predictor variable?
+
+```{r lda2 predictions}
+lda2_predictions <- predict(lda2, newdata = fv_test)
+str(lda2_predictions)
+plot(lda2_predictions$x, lda2_predictions$posterior[,1])
+abline(h = 0.5)
+```
+
+
+```{r lda classification accuracy 2}
+lda2_assessment <- tibble(Food = fv_test$Food,
+                           Taste = fv_test$Taste, SubCategory = fv_test$SubCategory,
+                          pred_Fruit = lda2_predictions$posterior[,1],
+                          pred_Vegetable = lda2_predictions$posterior[,2],
+                          pred_class = lda2_predictions$class)
+
+table(lda2_assessment$pred_class, lda2_assessment$SubCategory, 
+      dnn = c("Predicted", "Actual"))
+```
+
+## LDA with Tidymodels
+
+The `discrim` package is also required to fit this model.
+
+
+```{r add lda-tidy model}
+lda_model <- discrim_linear(mode = "classification", engine = "MASS")
+
+lda_wflow <- workflow() %>%
+  add_model(lda_model)
+```
+
+Since we have only numerical predictors, we don't have to do any pre-processing in our recipe. If we had categorical predictors, we would have to convert them to indicator variables using `step_dummy()`.
+
+```{r add lda-tidy recipe}
+lda_recipe <- recipe(
+  SubCategory ~ Taste + Cravings + Healthiness, # response ~ predictors
+  data = fv_train_tidy
+)
+lda_wflow <- lda_wflow %>%
+  add_recipe(lda_recipe)
+```
+
+```{r fit lda-tidy model}
+lda_fit <- fit(lda_wflow, data = fv_train_tidy)
+lda_fit
+```
+
+Notice that since we are using the `lda` function in the MASS package, we get out essentially the same information. The advantage here is that everything becomes tidier for prediction:
+
+```{r make lda-tidy predictions}
+lda_predictions_tidy <- predict(lda_fit, new_data = fv_valid_tidy)
+lda_predictions_tidy
+```
+
+```{r lda-tidy make probabilistic predictions}
+lda_predictions_raw <- predict(lda_fit, new_data = fv_valid_tidy, type = "prob")
+lda_predictions_raw
+```
+
+```{r lda-tidy augment}
+predictions_lda_df <- broom::augment(lda_fit, new_data = fv_valid_tidy)
+predictions_lda_df %>% dplyr::select(
+  Food,
+  SubCategory, 
+  .pred_class, 
+  .pred_Fruits, 
+  .pred_Vegetables)
+```
+
+# Quadratic Discriminant Analysis
+
+1. What is the major assumption in LDA that is *not* made in QDA?
+
+Literally the only coding difference is that we use `qda` instead of `lda`.
+
+```{r qda-no error}
+qda1 <- qda(SubCategory ~ Taste, data = fv_train)
+qda1
+```
+
+```{r qda predictions}
+qda1_predictions <- predict(qda1, newdata = fv_test)
+str(qda1_predictions)
+```
+
+2. What is the difference between the output of `qda`/`predict.qda` and `lda`/`predict.lda`?
+
+```{r qda classification accuracy}
+qda1_assessment <- tibble(Food = fv_test$Food,
+                           Taste = fv_test$Taste, SubCategory = fv_test$SubCategory,
+                          pred_Fruit = qda1_predictions$posterior[,1],
+                          pred_Vegetable = qda1_predictions$posterior[,2],
+                          pred_class = lda1_predictions$class)
+
+table(qda1_assessment$pred_class, qda1_assessment$SubCategory, 
+      dnn = c("Predicted", "Actual"))
+```
+
+Let's look at a multivariate quadratic discriminant analysis:
+
+```{r qda multivariate}
+qda2 <- qda(SubCategory ~ Taste + Healthiness + Cravings, data = fv_train)
+qda2
+```
+
+```{r qda2 predictions}
+qda2_predictions <- predict(qda2, newdata = fv_test)
+str(qda2_predictions)
+```
+
+```{r qda classification accuracy 2}
+qda2_assessment <- tibble(Food = fv_test$Food,
+                           Taste = fv_test$Taste, SubCategory = fv_test$SubCategory,
+                          pred_Fruit = qda2_predictions$posterior[,1],
+                          pred_Vegetable = qda2_predictions$posterior[,2],
+                          pred_class = qda2_predictions$class)
+
+table(qda2_assessment$pred_class, qda2_assessment$SubCategory, 
+      dnn = c("Predicted", "Actual"))
+```
+
+## QDA with Tidymodels
+
+Literally the only difference from LDA is that we use `discrim_quad` instead of `discrim_linear`. There are a few extra alternative packages that will fit LDA but not QDA, but generally we're just going to use the MASS package for both.
+
+```{r add qda-tidy model}
+qda_model <- discrim_quad(mode = "classification", engine = "MASS")
+
+qda_wflow <- workflow() %>%
+  add_model(qda_model)
+```
+
+Since we have only numerical predictors, we don't have to do any pre-processing in our recipe:
+
+```{r add qda-tidy recipe}
+qda_recipe <- recipe(
+  SubCategory ~ Taste + Cravings + Healthiness, # response ~ predictors
+  data = fv_train_tidy
+)
+qda_wflow <- qda_wflow %>%
+  add_recipe(qda_recipe)
+```
+
+```{r fit qda-tidy model}
+qda_fit <- fit(qda_wflow, data = fv_train_tidy)
+qda_fit
+```
+
+```{r make qda-tidy predictions}
+qda_predictions_tidy <- predict(qda_fit, new_data = fv_valid_tidy)
+qda_predictions_tidy
+```
+
+```{r qda-tidy make probabilistic predictions}
+qda_predictions_raw <- predict(qda_fit, new_data = fv_valid_tidy, type = "prob")
+qda_predictions_raw
+```
+
+```{r qda-tidy augment}
+predictions_qda_df <- broom::augment(qda_fit, new_data = fv_valid_tidy)
+predictions_qda_df %>% dplyr::select(
+  Food,
+  SubCategory, 
+  .pred_class, 
+  .pred_Fruits, 
+  .pred_Vegetables)
+```
+
+# Comparing LDA and QDA
+
+1. Which of LDA and QDA tends to have the higher bias? Which tends to have the higher variance? Why?
