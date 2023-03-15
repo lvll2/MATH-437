@@ -62,7 +62,7 @@ nb1
 ```
 
 1. What assumptions are made about the pdf $f_k(\text{Taste})$ when we run naive Bayes with one predictor variable?
-We are assuming that the pdf $f_k(\text{Taste})$ is normally distributed
+We are assuming that the pdf $f_k(\text{Taste})$ is normally distributed and that SD is the same between the categories. 
 
 
 2. Briefly explain what each of the following mean:
@@ -207,6 +207,9 @@ lda1
 - Prior probabilities of groups
 - Group means
 - Coefficients of linear discriminants
+it's scaling x and finding x in terms of the group means. it's how we transform taste into something that can be used to find where
+the decision boundary for a class is. 
+
 
 Predictions with lda get a bit weird; we don't include an argument indicating whether we want class predictions or probabilites.
 
@@ -216,7 +219,13 @@ str(lda1_predictions)
 ```
 
 2. What is contained in `class`, `posterior`, and `x`?
+class contains what class an observation is being predicted as.
 
+posterior contains the chance each observation will be predicted
+as one or the other class(its a 20x2 matrix bc we have 20 obs and
+2 classes).
+
+x is the transformation of the predictors along a single dimension
 ```{r lda classification accuracy}
 lda1_assessment <- tibble(Food = fv_test$Food,
                            Taste = fv_test$Taste, SubCategory = fv_test$SubCategory,
@@ -236,6 +245,10 @@ lda2
 ```
 
 3. What assumptions are made about the joint pdf $f_k(\text{Taste}, \text{Healthiness}, \text{Cravings})$ when we run LDA with more than one predictor variable?
+Each variable is assumed to have a normal distribution but they do
+not have to be independent, they can be correlated. We are keeping 
+the assumption that th evariances and covariances are the same
+across classes.
 
 ```{r lda2 predictions}
 lda2_predictions <- predict(lda2, newdata = fv_test)
@@ -262,6 +275,7 @@ The `discrim` package is also required to fit this model.
 
 
 ```{r add lda-tidy model}
+library(discrim)
 lda_model <- discrim_linear(mode = "classification", engine = "MASS")
 
 lda_wflow <- workflow() %>%
@@ -309,7 +323,7 @@ predictions_lda_df %>% dplyr::select(
 # Quadratic Discriminant Analysis
 
 1. What is the major assumption in LDA that is *not* made in QDA?
-
+That the standard deviations are the same across classes.
 Literally the only coding difference is that we use `qda` instead of `lda`.
 
 ```{r qda-no error}
@@ -358,6 +372,15 @@ table(qda2_assessment$pred_class, qda2_assessment$SubCategory,
       dnn = c("Predicted", "Actual"))
 ```
 
+With qda we have to estimate every parameter in every covariance matrix. But with LDA we estimate every parameter in only one covariance matrix. With a good algorithm:
+LDA estimates (k - 1)(p + 1) parameters (where p = # predictors)
+QDA estimates (k - 1)(p(p+1)/2) + p + 1) parameters
+
+it's going to take longer to do QDA bc the number of parameters
+increases quadratically rather than linearly like in LDA. 
+
+Note: when n is huge, small differences in $\hat{\epsilon}_k$ are
+statistically significant
 ## QDA with Tidymodels
 
 Literally the only difference from LDA is that we use `discrim_quad` instead of `discrim_linear`. There are a few extra alternative packages that will fit LDA but not QDA, but generally we're just going to use the MASS package for both.
@@ -408,3 +431,7 @@ predictions_qda_df %>% dplyr::select(
 # Comparing LDA and QDA
 
 1. Which of LDA and QDA tends to have the higher bias? Which tends to have the higher variance? Why?
+QDA has a higher variance because it makes less assumptions and is
+much more flexible, we are more sensitive to the observation in the training set being used, with a lot of data it is usually not a big deal. LDA has more assumptions and therefore has a higher bias if that assumption is violated. Need to find the happy medium between
+variance and bias to maximize accuracy of predictions.
+

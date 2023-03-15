@@ -1,0 +1,521 @@
+Food,Category,SubCategory,Taste,Cravings,Healthiness
+Apple turnover,Eat Less Of,Bakery (sweet),53.95,14.63,18.73
+Brioche,Eat Less Of,Bakery (sweet),62.7,19.25,28.12
+Chocolate chip brioche,Eat Less Of,Bakery (sweet),54.95,20.66,17.71
+Croissant,Eat Less Of,Bakery (sweet),60.85,18.68,15.46
+Almond croissant,Eat Less Of,Bakery (sweet),58.35,25.48,16.82
+Vanilla danish,Eat Less Of,Bakery (sweet),61.8,23.8,11.93
+Fruit danish,Eat Less Of,Bakery (sweet),57.32,20.88,9.98
+Cinnamon whirl,Eat Less Of,Bakery (sweet),59.2,16.98,9.88
+Maple & pecan plait,Eat Less Of,Bakery (sweet),57.13,17.05,11.51
+Pain au raisin,Eat Less Of,Bakery (sweet),50.72,19.88,9.26
+Pain au chocolat,Eat Less Of,Bakery (sweet),67.02,24.71,17.04
+Belgian waffle,Eat Less Of,Bakery (sweet),55.36,15.34,10.52
+Belgian bun,Eat Less Of,Bakery (sweet),66.61,21.66,6.15
+Chelsea bun,Eat Less Of,Bakery (sweet),49.09,9.05,7.6
+Iced finger bun,Eat Less Of,Bakery (sweet),51.25,12.59,9.75
+Eccles cake,Eat Less Of,Bakery (sweet),26.07,7.19,14.24
+Fruit loaf,Eat Less Of,Bakery (sweet),53.43,16.74,34.45
+Teacake,Eat Less Of,Bakery (sweet),45.58,14.9,26.9
+Fruit scone,Eat Less Of,Bakery (sweet),63.48,20.69,18.29
+Plain scone,Eat Less Of,Bakery (sweet),53.88,16.39,27.1
+Cheese scone,Eat Less Of,Bakery (sweet),54.58,13.02,22.14
+Welsh cake,Eat Less Of,Bakery (sweet),39.33,8.52,19.24
+Chocolate chip cookie,Eat Less Of,Bakery (sweet),76.88,38.52,14.48
+Double chocolate cookie,Eat Less Of,Bakery (sweet),78.07,38.19,10.81
+White chocolate cookie,Eat Less Of,Bakery (sweet),67.95,29.9,11.07
+Oat & raisin cookie,Eat Less Of,Bakery (sweet),58.95,24.32,23.49
+Sugared doughnut,Eat Less Of,Bakery (sweet),71.79,30.45,4.43
+Glazed doughnut,Eat Less Of,Bakery (sweet),66.36,23.67,5.83
+Jam doughnut,Eat Less Of,Bakery (sweet),75,29.36,5.05
+Custard doughnut,Eat Less Of,Bakery (sweet),55.58,20.02,6.42
+Chocolate iced doughnut,Eat Less Of,Bakery (sweet),65.2,22.85,5.45
+Strawberry iced doughnut,Eat Less Of,Bakery (sweet),59.6,20.24,4.69
+Gingerbread man,Eat Less Of,Bakery (sweet),58.66,19.59,22.46
+Triple chocolate muffin,Eat Less Of,Bakery (sweet),71.12,31.59,11.41
+Blueberry muffin,Eat Less Of,Bakery (sweet),59.41,22.59,15.66
+Chocolate & caramel shortbread,Eat Less Of,Bakery (sweet),76.71,32.68,7.27
+Chocolate chip shortbread,Eat Less Of,Bakery (sweet),75.29,31.24,13.76
+Rocky road,Eat Less Of,Bakery (sweet),56.82,22.89,7.93
+Plain flapjack,Eat Less Of,Bakery (sweet),59.64,10.76,28.21
+Fruit flapjack,Eat Less Of,Bakery (sweet),55.39,14.39,36.76
+Chocolate flapjack,Eat Less Of,Bakery (sweet),57.62,25.5,17.52
+Bakewell tart,Eat Less Of,Bakery (sweet),57.1,17.3,10.75
+Victoria sponge,Eat Less Of,Bakery (sweet),67.17,21.32,14.2
+Angel cake,Eat Less Of,Bakery (sweet),63.18,25.62,8.27
+Chocolate cupcake,Eat Less Of,Bakery (sweet),73.55,40.55,6.5
+Red velvet cupcake,Eat Less Of,Bakery (sweet),56.62,22.88,7.67
+Vanilla cupcake,Eat Less Of,Bakery (sweet),50.84,19.79,5.65
+Chocolate cake,Eat Less Of,Bakery (sweet),70.51,38.76,5.68
+Red velvet cake,Eat Less Of,Bakery (sweet),64.33,25.1,9.33
+Lemon drizzle cake,Eat Less Of,Bakery (sweet),74.04,30.24,10.76
+Carrot cake,Eat Less Of,Bakery (sweet),58.67,22.57,18.9
+Coffee & walnut cake,Eat Less Of,Bakery (sweet),60.39,18.57,12.55
+Fruit cake,Eat Less Of,Bakery (sweet),34.5,11.57,24.65
+Ginger cake,Eat Less Of,Bakery (sweet),57.52,6.62,29.15
+Battenberg cake,Eat Less Of,Bakery (sweet),36.7,9.25,8.95
+Choux bun,Eat Less Of,Bakery (sweet),65,20.72,7.35
+Chocolate eclair,Eat Less Of,Bakery (sweet),72.12,25.88,8.4
+Cream horn,Eat Less Of,Bakery (sweet),53.02,7.81,8.29
+Cream slice,Eat Less Of,Bakery (sweet),49.2,19.78,7.02
+Custard slice,Eat Less Of,Bakery (sweet),59.27,12.8,8.22
+Fresh cream doughnut,Eat Less Of,Bakery (sweet),63.4,26.12,9
+Cherry bakewell,Eat Less Of,Bakery (sweet),39.65,12.22,9.52
+Coconut macaroon,Eat Less Of,Bakery (sweet),50.43,9.62,20.74
+Brownie,Eat Less Of,Bakery (sweet),74.41,26.93,9.86
+Custard tart,Eat Less Of,Bakery (sweet),60.61,24.17,10.29
+French fancy,Eat Less Of,Bakery (sweet),57.56,17.77,5.67
+Jam tart,Eat Less Of,Bakery (sweet),55.59,11.46,13.67
+Mince pie,Eat Less Of,Bakery (sweet),56.33,8.81,17.62
+Raspberry swiss roll,Eat Less Of,Bakery (sweet),51.53,19.21,9.09
+Chocolate swiss roll,Eat Less Of,Bakery (sweet),57.86,20.84,7.98
+Babybel,Eat Less Of,Savoury snacks,46.86,18.33,40.98
+Halloumi,Eat Less Of,Savoury snacks,53.36,19.88,40.62
+Manchego,Eat Less Of,Savoury snacks,47.14,14.7,38.63
+Mascarpone,Eat Less Of,Savoury snacks,46.92,9.15,35.8
+Mozzarella,Eat Less Of,Savoury snacks,64,26.83,43.55
+Hard cheese,Eat Less Of,Savoury snacks,68.63,38.71,36.02
+Ricotta,Eat Less Of,Savoury snacks,51.89,12.2,39.55
+Smoked cheese,Eat Less Of,Savoury snacks,44.62,15.55,25.32
+Blue cheese,Eat Less Of,Savoury snacks,35.02,12.44,31.98
+Soft cheese,Eat Less Of,Savoury snacks,52.92,16,30.62
+Garlic & herb soft cheese,Eat Less Of,Savoury snacks,46.55,9.89,32.95
+Brie,Eat Less Of,Savoury snacks,50.31,22.02,29.64
+Cheddar,Eat Less Of,Savoury snacks,75.98,49.64,37.19
+Laughing cow,Eat Less Of,Savoury snacks,45.31,11.4,33.53
+Dairylea,Eat Less Of,Savoury snacks,49.44,14.76,36.56
+Feta,Eat Less Of,Savoury snacks,51.82,19.16,44.04
+Goats cheese,Eat Less Of,Savoury snacks,44.73,12.27,45.17
+Gouda,Eat Less Of,Savoury snacks,45.21,17.88,32.64
+Gruyere,Eat Less Of,Savoury snacks,37.25,7.22,26.52
+Cocktail sausages,Eat Less Of,Bakery (savoury),51.07,13.15,19.41
+Cornish pasty,Eat Less Of,Bakery (savoury),55.07,20.02,21.68
+Steak slice,Eat Less Of,Bakery (savoury),58.61,23.41,16.27
+Chicken & bacon pasty,Eat Less Of,Bakery (savoury),47.64,11.82,18.69
+Chicken & mushroom slice,Eat Less Of,Bakery (savoury),56.39,18.51,22.71
+Ham & cheese slice,Eat Less Of,Bakery (savoury),46.1,18.26,16.07
+Vegetable slice,Eat Less Of,Bakery (savoury),32.77,8.05,21.7
+Cheese & onion slice,Eat Less Of,Bakery (savoury),46.07,18.19,19.53
+Pork Pie,Eat Less Of,Bakery (savoury),43.24,17.07,11.24
+Pork & egg slice,Eat Less Of,Bakery (savoury),28.43,9.05,18.55
+Cheese & bacon quiche,Eat Less Of,Bakery (savoury),66.95,17.14,27.19
+Vegetable quiche,Eat Less Of,Bakery (savoury),44.74,12.77,46.65
+Cheese & onion quiche,Eat Less Of,Bakery (savoury),47.88,8.97,30.05
+Sausage roll,Eat Less Of,Bakery (savoury),59.85,27.73,13.53
+Scotch egg,Eat Less Of,Bakery (savoury),40.77,12.47,27.38
+Fried chicken strips,Eat Less Of,Bakery (savoury),67.47,27.5,14.45
+Apple pie,Eat Less Of,Desserts,66.9,20.98,22.52
+Cherry pie,Eat Less Of,Desserts,52.28,12.77,18.95
+Lemon meringue pie,Eat Less Of,Desserts,51.68,13.7,13.23
+Key lime pie,Eat Less Of,Desserts,43.95,10.72,15.62
+Banoffee pie,Eat Less Of,Desserts,39.56,9.46,9.37
+Pecan pie,Eat Less Of,Desserts,49.85,13.61,13.88
+Fruit Crumble,Eat Less Of,Desserts,65.47,20.7,32.7
+Toffee meringue,Eat Less Of,Desserts,43.95,9.69,7.5
+Panna cotta,Eat Less Of,Desserts,48.07,9.98,21.02
+Profiteroles,Eat Less Of,Desserts,76.78,24.88,5.54
+Tiramisu,Eat Less Of,Desserts,60.12,22.81,15.14
+Chocolate gateau,Eat Less Of,Desserts,72.19,29.64,7.1
+Strawberry gateau,Eat Less Of,Desserts,60.45,9.62,13.55
+Black forest gateau,Eat Less Of,Desserts,57.95,16.26,5.64
+Vanilla cheesecake,Eat Less Of,Desserts,68.38,24.75,11.3
+Chocolate cheesecake,Eat Less Of,Desserts,66.65,26.67,6.09
+Strawberry cheesecake,Eat Less Of,Desserts,69.66,27.37,14.24
+Lemon cheesecake,Eat Less Of,Desserts,70.21,23.72,9.21
+Bread & butter pudding,Eat Less Of,Desserts,35.12,9.5,10.74
+Chocolate sponge pudding,Eat Less Of,Desserts,78.67,22.98,7
+Apple sponge pudding,Eat Less Of,Desserts,50.6,9.26,18.88
+Jam sponge pudding,Eat Less Of,Desserts,56.17,13.23,12.4
+Sticky toffee pudding,Eat Less Of,Desserts,67.07,26.16,6.87
+Spotted dick pudding,Eat Less Of,Desserts,43.17,7.73,8.41
+Lemon tart,Eat Less Of,Desserts,58.45,9.62,14.52
+Chocolate tart,Eat Less Of,Desserts,66.4,27.67,5.14
+Treacle tart,Eat Less Of,Desserts,46.07,9.71,7.48
+Chocolate mousse,Eat Less Of,Desserts,56.48,22.67,13.76
+Lemon mousse,Eat Less Of,Desserts,46.37,6.15,28.83
+Fruit trifle,Eat Less Of,Desserts,57.4,13.29,22.19
+Chocolate trifle,Eat Less Of,Desserts,66.79,18.35,5.47
+Creme brulee,Eat Less Of,Desserts,58.63,15.6,15.23
+Pork spare ribs,Eat Less Of,Takeaway (generic),66.29,18.83,28.79
+Duck with plum sauce,Eat Less Of,Takeaway (generic),60.42,16.42,29.27
+Chicken katsu curry,Eat Less Of,Takeaway (generic),67.48,25.05,45.02
+Chicken thai green curry,Eat Less Of,Takeaway (generic),57.3,20.77,52.07
+Prawn thai green curry,Eat Less Of,Takeaway (generic),54.51,24.44,61.02
+Vegetable thai green curry,Eat Less Of,Takeaway (generic),58.29,22.5,58.1
+Chicken thai red curry,Eat Less Of,Takeaway (generic),72.07,28.88,58.46
+Beef thai red curry,Eat Less Of,Takeaway (generic),59.31,18.02,52.33
+Prawn thai red curry,Eat Less Of,Takeaway (generic),61.95,28.71,56.19
+Vegetable thai red curry,Eat Less Of,Takeaway (generic),52.2,18.41,57.27
+Aromatic duck,Eat Less Of,Takeaway (generic),65.6,24.21,42.83
+Beef chow mein,Eat Less Of,Takeaway (generic),69.45,25.21,42.93
+Chicken chow mein,Eat Less Of,Takeaway (generic),76.33,33.74,32.33
+Seafood chow mein,Eat Less Of,Takeaway (generic),56.46,23.56,50.17
+Beef with black bean,Eat Less Of,Takeaway (generic),63.29,20.68,31.39
+Chinese special curry,Eat Less Of,Takeaway (generic),50.41,22.15,17.9
+Sweet & sour chicken,Eat Less Of,Takeaway (generic),72.71,30.52,36.79
+Sweet & sour prawns,Eat Less Of,Takeaway (generic),44.77,17.95,24.86
+Crispy chilli beef,Eat Less Of,Takeaway (generic),54.02,13.52,18.75
+Chicken cashew,Eat Less Of,Takeaway (generic),50.67,14.9,50.67
+Kung po chicken,Eat Less Of,Takeaway (generic),58.6,19.67,23.88
+Chicken korma,Eat Less Of,Takeaway (generic),67.05,34.5,33.69
+Vegetable korma,Eat Less Of,Takeaway (generic),40.45,16.4,43.14
+Butter chicken,Eat Less Of,Takeaway (generic),65.71,27.05,35.98
+Paneer palak,Eat Less Of,Takeaway (generic),30.76,8.07,60.52
+Chicken balti,Eat Less Of,Takeaway (generic),66.05,31.12,31.32
+Lamb balti,Eat Less Of,Takeaway (generic),45.91,16.79,36.14
+Chicken bhuna,Eat Less Of,Takeaway (generic),60.73,30.33,36.11
+Lamb bhuna,Eat Less Of,Takeaway (generic),65.39,23.8,30.39
+Lamb rogan josh,Eat Less Of,Takeaway (generic),53.76,21.76,37.29
+Chicken madras,Eat Less Of,Takeaway (generic),64.07,26.69,32.05
+Lamb vindaloo,Eat Less Of,Takeaway (generic),46.36,17.8,31.98
+Chicken jalfrezi,Eat Less Of,Takeaway (generic),66.1,23.86,42.14
+Chicken saag,Eat Less Of,Takeaway (generic),49.1,21,52.68
+Lamb saag,Eat Less Of,Takeaway (generic),41.15,14.12,36.33
+Vegetable saag,Eat Less Of,Takeaway (generic),34.53,10.07,58.38
+Chicken tikka masala,Eat Less Of,Takeaway (generic),71.46,34.37,33.61
+Beef bourguignon,Eat Less Of,Takeaway (generic),64.42,23.14,56.49
+Roast beef,Eat Less Of,Takeaway (generic),77.02,38.68,54.9
+Roast lamb,Eat Less Of,Takeaway (generic),69.35,31.07,48.7
+Steak & ale pie,Eat Less Of,Takeaway (generic),62.08,22.67,28.92
+Chicken pie,Eat Less Of,Takeaway (generic),66.95,20.67,30.33
+Shepherd's pie,Eat Less Of,Takeaway (generic),70.12,29.93,45.88
+Cottage pie,Eat Less Of,Takeaway (generic),67.43,25.57,46.6
+Fish pie,Eat Less Of,Takeaway (generic),55.89,14.44,46.2
+Spinach & ricotta cannelloni,Eat Less Of,Takeaway (generic),62.11,18.31,38.84
+Carbonara,Eat Less Of,Takeaway (generic),58.78,22.83,38.51
+Vegetarian lasagne,Eat Less Of,Takeaway (generic),54.93,18.32,46.34
+Spaghetti bolognese,Eat Less Of,Takeaway (generic),75.63,45.68,53.29
+Vegetable bake,Eat Less Of,Takeaway (generic),54.86,14.71,62.9
+Beef stroganoff,Eat Less Of,Takeaway (generic),66.16,23.16,51.57
+Full English breakfast,Eat Less Of,Takeaway (generic),76.51,38.37,16.6
+Fish & chips,Eat Less Of,Takeaway (generic),82.95,46.79,17.07
+Battered sausage & chips,Eat Less Of,Takeaway (generic),42.02,16.4,5.81
+Sausage & chips,Eat Less Of,Takeaway (generic),66.17,28.78,15.68
+Steak & chips,Eat Less Of,Takeaway (generic),81.21,35.93,34.6
+Toad in the hole,Eat Less Of,Takeaway (generic),67.76,23.36,26.48
+Sausages & mash,Eat Less Of,Takeaway (generic),69.05,32.2,34.83
+Beef wellington,Eat Less Of,Takeaway (generic),53.45,10.7,33.1
+Salmon en croute,Eat Less Of,Takeaway (generic),49.26,14.81,38.69
+Beef burrito,Eat Less Of,Takeaway (generic),59.07,19.22,33.59
+Chicken burrito,Eat Less Of,Takeaway (generic),55.31,24.95,29.9
+Bean burrito,Eat Less Of,Takeaway (generic),53.33,23.29,54.5
+Breakfast burrito,Eat Less Of,Takeaway (generic),49.93,14.18,27.24
+Vegetarian breakfast burrito,Eat Less Of,Takeaway (generic),45.76,11.14,45.02
+Chicken wings,Eat Less Of,Takeaway (generic),69.92,30.18,34.17
+Bean burger,Eat Less Of,Takeaway (generic),32.32,10.07,44.46
+Mushroom burger,Eat Less Of,Takeaway (generic),46.79,17,37.4
+Cheese & bacon skins,Eat Less Of,Takeaway (generic),61.46,21.59,24.54
+Cheese potato skins,Eat Less Of,Takeaway (generic),60.29,15.95,34.02
+Macaroni & cheese,Eat Less Of,Takeaway (generic),63.81,29.21,29.55
+Chicken enchilada,Eat Less Of,Takeaway (generic),60.45,19.92,35.02
+Beef enchilada,Eat Less Of,Takeaway (generic),61.22,19.56,34.85
+Pork enchilada,Eat Less Of,Takeaway (generic),61.4,19.69,38.26
+Vegetable enchilada,Eat Less Of,Takeaway (generic),55.86,14.95,52.53
+Nachos with chicken,Eat Less Of,Takeaway (generic),59.98,22.7,22.77
+Nachos with chilli,Eat Less Of,Takeaway (generic),63.12,24.85,26.2
+Chicken tacos,Eat Less Of,Takeaway (generic),65,25.32,47.24
+Beef tacos,Eat Less Of,Takeaway (generic),57.7,24.32,42.05
+Pork tacos,Eat Less Of,Takeaway (generic),55.12,21.52,35.57
+Fish tacos,Eat Less Of,Takeaway (generic),34.62,7.07,52.18
+Bean tacos,Eat Less Of,Takeaway (generic),52.51,18.98,51.22
+Beef chilli,Eat Less Of,Takeaway (generic),66.24,29.98,51.63
+Beef empanadas,Eat Less Of,Takeaway (generic),58.12,15.69,27.19
+Chicken empanadas,Eat Less Of,Takeaway (generic),49.37,11.12,28.24
+Pork empanadas,Eat Less Of,Takeaway (generic),40.07,12.98,21.71
+Vegetable empanadas,Eat Less Of,Takeaway (generic),50.39,11.29,37.12
+Chicken quesadillas,Eat Less Of,Takeaway (generic),54.07,18.67,34.77
+Beef quesadillas,Eat Less Of,Takeaway (generic),51.85,13.39,35.37
+Pork quesadillas,Eat Less Of,Takeaway (generic),50.77,21.98,40.27
+Cheese quesadillas,Eat Less Of,Takeaway (generic),67.12,31.93,47.53
+Vegetable quesadillas,Eat Less Of,Takeaway (generic),48.4,12.88,51.35
+BBQ ribs,Eat Less Of,Takeaway (generic),67.66,26.46,29.07
+BBQ chicken melt,Eat Less Of,Takeaway (generic),62.14,34.8,23.43
+WHOPPER,Eat Less Of,Takeaway (chain),60.75,19.67,14.32
+Angus Classic,Eat Less Of,Takeaway (chain),71,28.64,21.86
+Angus bacon & cheese,Eat Less Of,Takeaway (chain),63.17,23.76,18.76
+Big King,Eat Less Of,Takeaway (chain),66.29,36.29,10.41
+Cheeseburger,Eat Less Of,Takeaway (chain),63.64,34.33,12.07
+Hamburger,Eat Less Of,Takeaway (chain),70.69,34.48,16.05
+Chicken Royale,Eat Less Of,Takeaway (chain),60.98,22.78,17.73
+King Fish,Eat Less Of,Takeaway (chain),46.24,15.78,26.12
+Veggie Bean Burger,Eat Less Of,Takeaway (chain),31.44,7.66,37.61
+Aero Fusion,Eat Less Of,Takeaway (chain),35.28,9.42,10.67
+Margherita pizza,Eat Less Of,Takeaway (chain),79.39,48.41,28.71
+Hawaiian pizza,Eat Less Of,Takeaway (chain),61.36,27.76,16.17
+Domino's Mighty Meaty,Eat Less Of,Takeaway (chain),66.1,39.15,10.4
+Domino's Vegi Supreme,Eat Less Of,Takeaway (chain),51.95,20.46,20.9
+Domino's Pepperoni Passion,Eat Less Of,Takeaway (chain),59.34,28.39,11.49
+Pizza Hut Meat Feast,Eat Less Of,Takeaway (chain),67.44,37.32,8.2
+Pizza Hut Veggie Supreme,Eat Less Of,Takeaway (chain),71.4,32.8,14.16
+Pizza Hut Pepperoni Feast,Eat Less Of,Takeaway (chain),73.63,40.9,10.17
+McChicken Sandwich,Eat Less Of,Takeaway (chain),53,19.86,14.67
+Chicken McNuggets,Eat Less Of,Takeaway (chain),56.95,31.29,14.79
+Filet-o-Fish,Eat Less Of,Takeaway (chain),41.52,13.35,22.77
+Double Quarter Pounder,Eat Less Of,Takeaway (chain),65.54,43.76,11.22
+Hamburger,Eat Less Of,Takeaway (chain),56.56,30.09,14.74
+Cheeseburger,Eat Less Of,Takeaway (chain),66.53,33,12.4
+Big Mac,Eat Less Of,Takeaway (chain),59.81,31.81,9.19
+Egg & cheese McMuffin,Eat Less Of,Takeaway (chain),55.37,22.59,19.12
+Sausage & egg McMuffin,Eat Less Of,Takeaway (chain),60.17,21.07,10.43
+Bacon & egg McMuffin,Eat Less Of,Takeaway (chain),58.3,28.35,14.45
+Crunchie McFlurry,Eat Less Of,Takeaway (chain),62.9,19.93,10.98
+Dairy Milk McFlurry,Eat Less Of,Takeaway (chain),58.51,21.42,9.72
+Doner kebab,Eat Less Of,Takeaway (generic),53.1,18.78,8.78
+Big Daddy box,Eat Less Of,Takeaway (chain),60.33,27.4,6.57
+Fillet box,Eat Less Of,Takeaway (chain),66.65,35.77,12.47
+Boneless Banquet box,Eat Less Of,Takeaway (chain),58.95,27.05,13.93
+Fillet burger,Eat Less Of,Takeaway (chain),70.02,37.7,16.56
+The Daddy burger,Eat Less Of,Takeaway (chain),64.76,23.81,9.5
+Fillet Tower burger,Eat Less Of,Takeaway (chain),70.35,40.44,14.16
+Popcorn chicken,Eat Less Of,Takeaway (chain),58.27,19.61,20.73
+Original recipe,Eat Less Of,Takeaway (chain),67.93,22.56,11.67
+Mighty bucket,Eat Less Of,Takeaway (chain),60.33,26.62,9.9
+Zinger burrito wrap,Eat Less Of,Takeaway (chain),58.68,24.12,22.63
+Zinger twister wrap,Eat Less Of,Takeaway (chain),48.6,22.86,17.69
+BBQ wrap,Eat Less Of,Takeaway (chain),48.7,11.3,26.77
+Fruit & ice cream lolly,Eat Less Of,Desserts,65,17.7,20.4
+Chocolate covered ice cream,Eat Less Of,Desserts,71.36,30.76,12.95
+Ice cream sandwich,Eat Less Of,Desserts,73.45,21.83,10.12
+Vanilla ice cream,Eat Less Of,Desserts,67.83,22.22,18.2
+Strawberry ice cream,Eat Less Of,Desserts,63.41,16.95,22.32
+Chocolate ice cream,Eat Less Of,Desserts,71.39,34.39,11.02
+Toffee ice cream,Eat Less Of,Desserts,64.38,20.71,11.1
+Mint choc chip ice cream,Eat Less Of,Desserts,52.32,10.05,15.49
+Cookies & cream ice cream,Eat Less Of,Desserts,66.46,19.38,8.97
+Fruity ice cream,Eat Less Of,Desserts,58.88,19.23,31.23
+Ice cream roll,Eat Less Of,Desserts,47.56,11.56,10.17
+Viennetta,Eat Less Of,Desserts,57.12,17.3,12.22
+Chocolate sundae,Eat Less Of,Desserts,61.67,23.71,8.55
+Strawberry sundae,Eat Less Of,Desserts,61.17,12.71,10.31
+Ginger nut,Eat Less Of,Biscuits,45.43,15.31,21.76
+Golden Crunch Creams,Eat Less Of,Biscuits,54.07,12.8,8.98
+Hobnob,Eat Less Of,Biscuits,66.64,28.62,18.67
+Chocolate Hobnob,Eat Less Of,Biscuits,70.67,30.1,13.7
+Jaffa Cake,Eat Less Of,Biscuits,62.29,21.38,17
+Jammie Dodger,Eat Less Of,Biscuits,53.86,14.91,14.21
+Malted milk,Eat Less Of,Biscuits,48.98,17.71,18.62
+Nice biscuit,Eat Less Of,Biscuits,52.61,17.3,18.3
+Oreo,Eat Less Of,Biscuits,37.83,12.27,8.85
+Golden Oreo,Eat Less Of,Biscuits,46.82,11.67,9.64
+Party Ring,Eat Less Of,Biscuits,39,8.79,8.12
+Pink wafer,Eat Less Of,Biscuits,35.35,7.58,14.86
+Bourbon biscuit,Eat Less Of,Biscuits,55.37,16.63,15.54
+Rich tea,Eat Less Of,Biscuits,53.76,18.83,24.56
+Shortbread,Eat Less Of,Biscuits,67.83,20.55,13.05
+Viennese biscuit,Eat Less Of,Biscuits,68.28,23.8,9.32
+Viennese Whirl,Eat Less Of,Biscuits,45.41,10.15,8.8
+Chocolate finger,Eat Less Of,Biscuits,77.81,31.64,8.67
+Chocolate chip cookie,Eat Less Of,Biscuits,72.38,35.69,12.67
+Custard cream,Eat Less Of,Biscuits,56.02,17.48,11.84
+Plain digestive,Eat Less Of,Biscuits,53.95,20.98,25.25
+Chocolate digestive,Eat Less Of,Biscuits,75.56,32.81,16.37
+Caramel digestive,Eat Less Of,Biscuits,65.57,20.07,10.71
+Fig roll,Eat Less Of,Biscuits,27.74,4.19,29.37
+Fruit shortcake,Eat Less Of,Biscuits,49.31,25.36,16.26
+Garibaldi,Eat Less Of,Biscuits,35.05,7.3,25.19
+Cheese puffs,Eat Less Of,Savoury snacks,53.7,26.02,12.68
+Cheetos,Eat Less Of,Savoury snacks,44.49,13.83,6.22
+Mini Cheddars,Eat Less Of,Savoury snacks,55.54,20.39,15.66
+Monster Munch,Eat Less Of,Savoury snacks,44.85,19.39,9.93
+Nik Naks,Eat Less Of,Savoury snacks,52,18.95,9.6
+Wheat Crunchies,Eat Less Of,Savoury snacks,42.77,11.45,15.73
+Onion rings,Eat Less Of,Savoury snacks,51.5,21.05,15.26
+Pringles original,Eat Less Of,Savoury snacks,68.79,28.64,13.29
+Pringles sour cream & onion,Eat Less Of,Savoury snacks,53.93,20.95,11.86
+Pringles salt & vinegar,Eat Less Of,Savoury snacks,54.74,20.79,9.69
+Walkers ready salted,Eat Less Of,Savoury snacks,65.26,36.19,13.98
+Walkers salt & vinegar,Eat Less Of,Savoury snacks,56.29,24.67,11.4
+Walkers cheese & onion,Eat Less Of,Savoury snacks,72.69,33.81,12.93
+Walkers prawn cocktail,Eat Less Of,Savoury snacks,50.28,21.72,10.05
+Walkers roast chicken,Eat Less Of,Savoury snacks,52.36,22.98,9.52
+Walkers smoky bacon,Eat Less Of,Savoury snacks,56.86,26.57,16.18
+Walkers beef & onion,Eat Less Of,Savoury snacks,46.17,13.61,16.41
+Sweet chilli crisps,Eat Less Of,Savoury snacks,71.37,40.2,16.59
+Chipsticks,Eat Less Of,Savoury snacks,56.12,20.57,9.26
+Discos,Eat Less Of,Savoury snacks,55.38,17.7,14.75
+Doritos,Eat Less Of,Savoury snacks,57.38,30.07,17.43
+Frazzles,Eat Less Of,Savoury snacks,45.29,18.41,11.68
+Hula Hoops,Eat Less Of,Savoury snacks,64.05,31.12,19.57
+Ridge cut crisps,Eat Less Of,Savoury snacks,72.58,44.02,10.42
+Pork scratchings,Eat Less Of,Savoury snacks,32.55,9.95,7.62
+Skips,Eat Less Of,Savoury snacks,49.78,11,18.42
+Viscount,Eat Less Of,Confectionery,63.41,13.9,11.63
+Caramac,Eat Less Of,Confectionery,55.57,22.12,8.6
+Chocolate buttons,Eat Less Of,Confectionery,74.24,38.39,9.76
+Chocolate Orange,Eat Less Of,Confectionery,64.45,29.9,12.48
+Curly Wurly,Eat Less Of,Confectionery,60,20.34,11.51
+Daim,Eat Less Of,Confectionery,49,13.95,6.05
+Milk chocolate,Eat Less Of,Confectionery,85.6,59.5,13.81
+Fruit & nut chocolate,Eat Less Of,Confectionery,42.48,15.27,9.12
+Mint chocolate,Eat Less Of,Confectionery,67.24,31.71,12.91
+White chocolate,Eat Less Of,Confectionery,61,25.55,14.26
+Ferrero Rocher,Eat Less Of,Confectionery,59.73,16.48,9.61
+Flake,Eat Less Of,Confectionery,73.95,32.95,15.24
+Fudge,Eat Less Of,Confectionery,62.15,22.18,7.28
+Gold Bar,Eat Less Of,Confectionery,47.46,18.07,9.39
+After Eights,Eat Less Of,Confectionery,56.36,13.76,8.88
+Guylian Sea Shells,Eat Less Of,Confectionery,64.16,21.84,11.2
+Kinder,Eat Less Of,Confectionery,59.26,21.74,12.62
+Lion,Eat Less Of,Confectionery,59.12,22.42,7.35
+Chocolate M&Ms,Eat Less Of,Confectionery,70.93,25.49,8.49
+Peanut M&Ms,Eat Less Of,Confectionery,61.93,18.33,8.16
+Maltesers,Eat Less Of,Confectionery,79.86,24.32,11.66
+Mars,Eat Less Of,Confectionery,57.05,20.26,7.81
+Milky Way,Eat Less Of,Confectionery,52.5,20.32,11.72
+Munchies,Eat Less Of,Confectionery,70.24,18.38,7.74
+Penguin,Eat Less Of,Confectionery,55.67,19.14,13.29
+Picnic,Eat Less Of,Confectionery,56.79,22.33,8.14
+Chocolate marshmallows,Eat Less Of,Confectionery,67.51,14.61,8.15
+Reese's Cup,Eat Less Of,Confectionery,42.05,15.1,8.67
+Revels,Eat Less Of,Confectionery,62.6,24.62,5.74
+Rolo,Eat Less Of,Confectionery,69.05,16.31,6.88
+Smarties,Eat Less Of,Confectionery,67.4,19.65,5.05
+Snickers,Eat Less Of,Confectionery,57.21,24.02,12.17
+Star Bar,Eat Less Of,Confectionery,47.36,17.21,7.12
+Timeout,Eat Less Of,Confectionery,62.54,27.76,9.2
+Toffee Crisp,Eat Less Of,Confectionery,63.36,26.5,6.67
+Toffifee,Eat Less Of,Confectionery,46.91,9.7,8.35
+Topic,Eat Less Of,Confectionery,48.7,14.4,9.4
+Truffles,Eat Less Of,Confectionery,63.85,16.23,12.74
+Turkish Delight,Eat Less Of,Confectionery,35.93,10.02,7.1
+Twirl,Eat Less Of,Confectionery,71.9,37.07,10.73
+Twix,Eat Less Of,Confectionery,65.83,24.8,7.27
+Wagon Wheel,Eat Less Of,Confectionery,47.12,14.3,8.8
+Walnut Whip,Eat Less Of,Confectionery,51.19,14.69,7.69
+Wispa,Eat Less Of,Confectionery,70.22,32.95,8.07
+Rocky,Eat Less Of,Confectionery,53.64,22.67,12.71
+Club Mint,Eat Less Of,Confectionery,46.47,14.07,10.09
+Club Orange,Eat Less Of,Confectionery,57.14,23.93,11.12
+Boost,Eat Less Of,Confectionery,63.12,22.79,6.86
+Bounty,Eat Less Of,Confectionery,51,17.98,10.83
+Crunchie,Eat Less Of,Confectionery,62.77,24.98,6.35
+Foam sweets,Eat Less Of,Confectionery,39.1,20.38,8.17
+Liquorice laces,Eat Less Of,Confectionery,37,6.98,5.95
+Liquorice Allsorts,Eat Less Of,Confectionery,28.76,9.44,5.07
+Liquorice pencils,Eat Less Of,Confectionery,43.62,8.4,8.49
+Love hearts,Eat Less Of,Confectionery,38.45,8.17,7.36
+Nougat,Eat Less Of,Confectionery,33.78,3.95,5.41
+Reese's Pieces,Eat Less Of,Confectionery,38.93,9.45,11.86
+Fudge,Eat Less Of,Confectionery,56.41,18.29,6.63
+Toffee,Eat Less Of,Confectionery,54.9,14.8,4.22
+Eclairs,Eat Less Of,Confectionery,59.1,18.26,9.64
+Chewy fruits,Eat Less Of,Confectionery,49.52,17.33,7.19
+Maoam,Eat Less Of,Confectionery,47.98,12.36,4.17
+Drumstick lolly,Eat Less Of,Confectionery,46.76,9.29,8.44
+Skittles,Eat Less Of,Confectionery,42.93,12.1,5.21
+Refreshers,Eat Less Of,Confectionery,38.19,9.81,7.1
+Boiled fruit sweets,Eat Less Of,Confectionery,41.88,11.88,7.23
+Mints,Eat Less Of,Confectionery,44.45,12.32,20.02
+Lolly pop,Eat Less Of,Confectionery,33.74,3.1,8.69
+Bon bons,Eat Less Of,Confectionery,51.29,9.32,6.95
+Cola bottles,Eat Less Of,Confectionery,55,21.07,7.98
+Haribo,Eat Less Of,Confectionery,53.24,22.67,8.36
+Fruit gums,Eat Less Of,Confectionery,53.37,15.63,10.16
+Jelly babies,Eat Less Of,Confectionery,49.27,12.63,12.1
+Jelly beans,Eat Less Of,Confectionery,46.1,11.71,2.73
+Jelly Tots,Eat Less Of,Confectionery,58.02,22.05,7.98
+Sherbet,Eat Less Of,Confectionery,29.69,6.26,3.86
+Apple,Eat More Of,Fruits,68.22,31.12,92.46
+Figs,Eat More Of,Fruits,39.74,10.14,76.57
+Grapes Green,Eat More Of,Fruits,68.98,27.45,82.93
+Grapes Red,Eat More Of,Fruits,71.78,27.4,86.4
+Grapefruit,Eat More Of,Fruits,37.86,7.79,85.95
+Kiwi,Eat More Of,Fruits,62.95,19.43,88.52
+Mango,Eat More Of,Fruits,61.18,19.73,82.84
+Cantaloupe melon,Eat More Of,Fruits,60.48,21.86,80.89
+Honeydew melon,Eat More Of,Fruits,55.76,13.98,84
+Watermelon,Eat More Of,Fruits,59.35,18.82,88.65
+Nectarine,Eat More Of,Fruits,63.26,16.33,83.24
+Orange,Eat More Of,Fruits,79.37,38.85,83.93
+Apricot,Eat More Of,Fruits,52.8,14.03,85.8
+Papaya,Eat More Of,Fruits,38.3,7.02,83.35
+Passionfruit,Eat More Of,Fruits,41.68,8.22,84.93
+Peach,Eat More Of,Fruits,58.44,15.09,88.44
+Pear,Eat More Of,Fruits,57.98,20.19,85.12
+Persimmon,Eat More Of,Fruits,37.14,4.63,82.67
+Pineapple,Eat More Of,Fruits,70.98,27.88,80.8
+Plum,Eat More Of,Fruits,73.93,18.15,90.37
+Pomegranate,Eat More Of,Fruits,52.86,15.29,87.19
+Raspberries,Eat More Of,Fruits,73.22,31.2,86.98
+Redcurrants,Eat More Of,Fruits,33.9,3.36,85.98
+Banana,Eat More Of,Fruits,78.85,38.08,88.83
+Rhubarb,Eat More Of,Fruits,40.53,9.42,80.95
+Strawberries,Eat More Of,Fruits,76.7,24.77,86.75
+Blackberries,Eat More Of,Fruits,63.15,14.56,88.83
+Blueberries,Eat More Of,Fruits,74.45,29.35,90.62
+Cherries,Eat More Of,Fruits,65.25,20.38,84.25
+Clementine,Eat More Of,Fruits,83.39,35.73,89.71
+Coconut,Eat More Of,Fruits,52.19,11.4,73.43
+Cranberries,Eat More Of,Fruits,42.71,8.59,86.78
+Avocado,Eat More Of,Fruits,49.63,29.29,78.93
+Watercress,Eat More Of,Vegetables,44.17,10.53,91.45
+Beetroot,Eat More Of,Vegetables,46.55,12.33,81.76
+Bell pepper,Eat More Of,Vegetables,73.39,33,88.41
+Celery,Eat More Of,Vegetables,33.83,11.1,92.73
+Cucumber,Eat More Of,Vegetables,60.49,25.63,92.33
+Radish,Eat More Of,Vegetables,41.57,8.55,87.55
+Cherry tomatoes,Eat More Of,Vegetables,64.64,22.77,90.15
+Tomato,Eat More Of,Vegetables,75.12,36.38,92.33
+Spring onions,Eat More Of,Vegetables,62.12,13.07,84.68
+Chicory,Eat More Of,Vegetables,22.1,2.73,89.66
+Babyleaf salad,Eat More Of,Vegetables,52.46,25.24,93.46
+Mixed leaf salad,Eat More Of,Vegetables,53.38,25.6,93.95
+Iceberg lettuce,Eat More Of,Vegetables,49.8,15.86,81.86
+Lambs lettuce,Eat More Of,Vegetables,46.22,14.54,90.66
+Little gem lettuce,Eat More Of,Vegetables,53.89,15.49,94.91
+Rocket,Eat More Of,Vegetables,53.14,22.95,96.6
+Romaine hearts,Eat More Of,Vegetables,47.19,16.07,91.5
+Salad cress,Eat More Of,Vegetables,40.83,9.59,90.95
+Asparagus,Eat More Of,Vegetables,46.1,11.88,89.02
+Savoy cabbage,Eat More Of,Vegetables,50.26,7.42,89.74
+White cabbage,Eat More Of,Vegetables,53.39,11.7,89.39
+Carrot,Eat More Of,Vegetables,60.41,21.56,90.98
+Cauliflower,Eat More Of,Vegetables,53.93,18.29,93.26
+Celeriac,Eat More Of,Vegetables,26,5.66,80.98
+Courgette,Eat More Of,Vegetables,38.79,13.05,86.86
+Edamame beans,Eat More Of,Vegetables,49.45,10.62,92.5
+Fennel,Eat More Of,Vegetables,29.7,5.8,90.34
+Spring greens,Eat More Of,Vegetables,60.38,25.52,95.98
+Green beans,Eat More Of,Vegetables,52.2,18.49,94.68
+Aubergine,Eat More Of,Vegetables,41.48,6.5,88.26
+Kale,Eat More Of,Vegetables,47.36,11.19,92.17
+Leeks,Eat More Of,Vegetables,58.9,16.58,89.05
+Mangetout,Eat More Of,Vegetables,59.79,11.17,91
+Marrow,Eat More Of,Vegetables,25.36,2.95,87.43
+Okra,Eat More Of,Vegetables,24.34,3.98,86.88
+Red onion,Eat More Of,Vegetables,72.74,24.05,82.79
+White onion,Eat More Of,Vegetables,53,16.4,77.96
+Pak choi,Eat More Of,Vegetables,40.57,11.62,86.74
+Parsnip,Eat More Of,Vegetables,52.64,9.56,81.67
+Peas,Eat More Of,Vegetables,60.1,19.15,90.1
+Baby corn,Eat More Of,Vegetables,53,12.55,85.02
+Pumpkin,Eat More Of,Vegetables,31.88,4.77,82.26
+Runner beans,Eat More Of,Vegetables,51.56,17.68,92.93
+Samphire,Eat More Of,Vegetables,24.84,2.23,78.56
+Spinach,Eat More Of,Vegetables,54.7,18.44,94.42
+Shallots,Eat More Of,Vegetables,51.45,9.64,82.11
+Sugar snaps,Eat More Of,Vegetables,63.64,16.67,89.27
+Swede,Eat More Of,Vegetables,40.5,8.21,82.36
+Sweet potato,Eat More Of,Vegetables,50.37,15.71,75.02
+Sweetcorn,Eat More Of,Vegetables,63.27,18.34,85.85
+Swiss chard,Eat More Of,Vegetables,33.38,5.24,93.76
+Beansprouts,Eat More Of,Vegetables,37.37,11.44,83.24
+Turnip,Eat More Of,Vegetables,30.9,5.61,86.56
+Artichoke,Eat More Of,Vegetables,34.98,8.29,84.67
+Chestnut mushroom,Eat More Of,Vegetables,59.86,17.47,83.4
+Closed cup mushroom,Eat More Of,Vegetables,59.84,23.07,86.67
+Flat mushroom,Eat More Of,Vegetables,63.95,25.9,85.33
+Shiitake mushroom,Eat More Of,Vegetables,51.98,17.98,80.64
+Black beans,Eat More Of,Vegetables,33.41,5.39,78.41
+Black eyed beans,Eat More Of,Vegetables,32.63,6.4,73.67
+Butter beans,Eat More Of,Vegetables,40.9,9.93,73.88
+Cannellini beans,Eat More Of,Vegetables,39.4,9.69,74.98
+Broad beans,Eat More Of,Vegetables,32.67,4.1,90.26
+Kidney beans,Eat More Of,Vegetables,44.15,10.32,80.92
+Chickpeas,Eat More Of,Vegetables,44.3,11.65,84.53
+Green lentils,Eat More Of,Vegetables,32.95,7.12,85.58
+Red lentils,Eat More Of,Vegetables,53.74,13.33,86.45
+Broccoli,Eat More Of,Vegetables,60.33,24.43,93.22
+Brussel sprouts,Eat More Of,Vegetables,43.07,10.05,88.17
+Butternut squash,Eat More Of,Vegetables,47.57,12.76,79.14
+Red cabbage,Eat More Of,Vegetables,53.14,10.35,91.26
