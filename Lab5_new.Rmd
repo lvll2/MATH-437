@@ -35,8 +35,10 @@ This lab assignment is worth a total of **15 points**.
 
 Run the code in ISLR Lab 3.6.6. Put each chunk from the textbook in its own chunk.
 
-```{r}
+```{r, include = FALSE}
 library(ISLR2)
+library(tidyverse)
+library(broom)
 head(Carseats)
 ```
 
@@ -65,6 +67,8 @@ When compared to a bad shelf location, placing a child car seat in a good shelf 
 Using the RateMyProfessor dataset, fit a linear model predicting the overall rating of a professor (`overall`) from the difficulty rating (`difficulty`), chili pepper rating (`hotness`), and rank (`rank`). What are the reference levels for each categorical variable? How do you know?
 
 ```{r}
+RateMyProfessor <- read.csv("RateMyProfessor.csv")
+
 lm.fitrmp <- lm(overall ~ difficulty + hotness + rank, data = RateMyProfessor)
 
 summary(lm.fitrmp)
