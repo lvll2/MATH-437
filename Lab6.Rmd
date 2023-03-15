@@ -268,6 +268,15 @@ In this problem, we will do all of our modeling without using the `tidymodels` p
 
 We will start out by working with only the species `virginica` and `versicolor`. Create a new dataset, `iris_vv`, by filtering to only include those two species. Then, pick two of the explanatory variables and, using the `ggplot2` package, create a scatterplot showing the relationship between those two variables, color-coded based on the `Species`.
 
+```{r}
+iris_vv <- iris %>% 
+  filter(Species == "virginica" | Species == "versicolor")
+
+ggplot(iris_vv, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
+  geom_point() 
+```
+
+
 ## Part b (Code: 2 pts)
 
 Prepare your dataset for the k-nearest neighbors algorithm by doing the following:
@@ -278,13 +287,51 @@ Randomly select 20 observations to be in the holdout set. The remaining observat
 
 HINT: The easiest way to do this is to `sample` from the indices and subset accordingly.
 
+```{r}
+set.seed(1003)
+n <- nrow(iris_vv)
+test.rows <- sample(n, floor(20), replace = FALSE)
+iris.train <- iris_vv[-test.rows,]
+iris.test <- iris_vv[test.rows,]
+```
+
+
 ### Step 2: Scale the predictor variables
 
 Create two new datasets, `iris.train.X` and `iris.test.X`, containing the explanatory variables in each set. Remember that you need to scale the variables in both the training and holdout sets based on the training set!
 
+```{r}
+iris.train.X <- iris.train %>% 
+  select(-Species) %>%
+  scale()
+
+iris.test.X <- iris.test %>% 
+  select(-Species) %>% 
+  mutate(Sepal.Length = (Sepal.Length-mean(iris.train$Sepal.Length))/sd(iris.train$Sepal.Length),
+         Sepal.Width = (Sepal.Width-mean(iris.train$Sepal.Width))/sd(iris.train$Sepal.Width),
+         Petal.Length = (Petal.Length-mean(iris.train$Petal.Length))/sd(iris.train$Petal.Length),
+         Petal.Width = (Petal.Width-mean(iris.train$Petal.Width))/sd(iris.train$Petal.Width)
+         )
+```
+
+
 ## Part c (Code: 2 pts; Explanation: 0.5 pts)
 
 With the `knn` function, use 5-nearest neighbors to predict the species of each observation in the `iris.test` holdout set. Create a `table` showing the predicted and actual species in the holdout set. What is the prediction accuracy of this model?
+
+```{r}
+train_response <- iris.train %>% 
+  mutate(as.factor(Species)) %>% 
+  select(Species)
+
+
+k1 <- knn(train = iris.train.X, test = iris.test.X, k=5, cl = train_response, prob = TRUE)
+length(iris.train.X)
+
+new_name <- fit(k1, data = iris.train.X)
+
+```
+
 
 ## Part d (Code: 1 pt; Explanation: 1 pt)
 
