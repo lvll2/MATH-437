@@ -16,7 +16,7 @@ library(dplyr)
 library(ggplot2)
 library(ISLR2)
 library(DescTools)
-
+library(boot)
 ```
 
 
@@ -420,7 +420,7 @@ Produce a histogram of the lower bound of the CIs you obtained using each of the
 par(mfrow= c(2,2))
 hist(ci_normal_df4$lower)
 hist(ci_basic_df4$lower)
-hist(ci_perc_df4$lower)
+hist(ci_perc_df4$lower, xlim = c(0, 1.5))
 hist(ci_t_df4$lower)
 ```
 
@@ -428,8 +428,24 @@ hist(ci_t_df4$lower)
 Write a brief summary of what you learned from the activity. Make sure to address the following questions:
 
 - Are theory-based methods *guaranteed* to achieve the appropriate coverage? What about bootstrap-based methods?
+
+Theory-based methods are not guaranteed to achieve the appropriate coverage
+but they can achieve appropriate coverage for populations that are normally
+distributed or meet the requirements for the Central Limit Theorem. With 
+bootstrap-based methods we are not guaranteed appropriate coverage as was seen
+in the simulations where we consistently had coverage probabilities around 10%
+lower than the appropriate coverage.
+
 - Which of the four methods appear to be range-preserving even in a "worst-case scenario"? 
+
+The percentile method appears to be range-preserving even in a "worst-case scenario"
+since it does not give implausible values (< 0) for the parameter.
+
 - When and why would a bootstrap method be useful to obtain a confidence interval even if it doesn't achieve the appropriate coverage?
+
+Bootstrap method would be useful to obtain a confidence interval when the
+distribution assumed by the theory-based methods do not accurately reflect the distribution of our statistic or when we are unsure about the distribution,
+since bootstrapping allows us to estimate the distribution based on our sample.
 
 # Applied Problems
 
@@ -582,15 +598,74 @@ There is a significant difference at an alpha level of .1
 Textbook Exercise 5.4.9.
 a)
 ```{r}
-
-mu_hat <- mean(Boston$medv)
+(mu_hat <- mean(Boston$medv))
 ```
-The mean of medv in the Boston housing data set is 22.53281
+The mean of medv in the Boston housing data set is 22.53281.
+
 b) the standard error is equal to standard deviation / sqrt(n)
 ```{r}
-standard_error <- (sd(Boston$medv))/sqrt(nrow(Boston))
+(sd(Boston$medv))/sqrt(nrow(Boston))
 ```
-standard error is 0.4088612
+The standard error is 0.4088611.
+
+c)
+```{r Using Boot}
+mu.fn <- function(data, index){
+  X <- data$medv[index]
+  mean(X)
+}
+boot(Boston, statistic = mu.fn, R = 1000)
+```
+
+```{r Using fxn}
+boot_mu_hat <- bootstrap_resample(Boston$medv, B = 1000, seed = 549)
+sd(boot_mu_hat)
+```
+The standard error of $\hat\mu$ using bootstrap is very similar to the 
+standard error of the original sample mean, the bootstrapped standard error is
+just slightly higher.
+
+d)
+```{r}
+lower <- mu_hat - 2*sd(boot_mu_hat)
+upper <-  mu_hat + 2*sd(boot_mu_hat)
+(mutest <- t.test(Boston$medv)$conf.int)
+```
+A 95% confidence interval of $\hat\mu$ using bootstrap estimates is about
+[21.71, 23.36], which is very close in value to the 95% confidence interval from the t.test function, which is slightly narrower.
+
+e)
+```{r}
+median(Boston$medv)
+```
+The median value of medv in the population is 21.2.
+
+f)
+```{r}
+boot_med_hat <- bootstrap_resample(Boston$medv, B = 1000, seed = 549, summary_fn = median)
+sd(boot_med_hat)
+```
+The standard error of $\hat\mu_{med}$ is 0.3844301 which is lower than both
+the original and bootstrapped mean of medv. This implies that it is more likely that the median does a slightly better job of representing the
+distribution of the population of medv.
+
+g)
+```{r}
+(mu_0.1 <- quantile(Boston$medv, probs = .10))
+```
+h)
+```{r}
+set.seed(549)
+mu01.fn <- function(data, index){
+  X <- data$medv[index]
+  quantile(X, probs = .1)
+}
+boot(Boston, statistic = mu01.fn, R = 1000)
+```
+
+The bootstrapped estimate of standard error of $\hat\mu_{0.1}$ is higher than
+all previous estimates of standard error for other parameters, implying
+that it is a less accurate representation of $\hat\mu_{0.1}$ than previous
+bootstrapped estimates have been of their respective $\hat\mu$s.
 
 
-Conceptual problem: 2,3 Simulation problems 
