@@ -242,15 +242,19 @@ table(glm.pred, test.Y)
 ```
 
 
-
-
 ## Part b (Explanation: 1 pt)
 
-In Lab 4.7.6, both the k-nn model with `k=5` and the logistic regression model using `probs > 0.5` as the classification threshold produced a test error rate (misclassification rate) of 6.6% using the `Caravan` dataset. Explain why we would prefer to use the k-nn model.
+In Lab 4.7.6, both the k-nn model with `k = 5` and the logistic regression model using `probs > 0.5` as the classification threshold produced a test error rate (misclassification rate) of 6.6% using the `Caravan` dataset. Explain why we would prefer to use the k-nn model.
+
+We may prefer to use a nonparametric method such as KNN so we are 
+not making assumptions about the structure/distribution of our response or predictors.
 
 ## Part c (Explanation: 1 pt)
 
 If you forget to include the `family = binomial` argument when calling `glm`, what does R try to do instead of running a logistic regression? It may be useful to look up the documentation for the `glm` function, look up the part of the Logistic Regression Class Activity where we actually did this, and/or read Section 4.6.3 of the textbook.
+
+When a family is not specified, R will default to running a linear
+regression instead. 
 
 # Problem 2: Analysis of iris Dataset: virginica vs versicolor
 
