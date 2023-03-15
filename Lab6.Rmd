@@ -302,11 +302,11 @@ Create two new datasets, `iris.train.X` and `iris.test.X`, containing the explan
 
 ```{r}
 iris.train.X <- iris.train %>% 
-  select(-Species) %>%
+  dplyr::select(-Species) %>%
   scale()
 
 iris.test.X <- iris.test %>% 
-  select(-Species) %>% 
+  dplyr::select(-Species) %>% 
   mutate(Sepal.Length = (Sepal.Length-mean(iris.train$Sepal.Length))/sd(iris.train$Sepal.Length),
          Sepal.Width = (Sepal.Width-mean(iris.train$Sepal.Width))/sd(iris.train$Sepal.Width),
          Petal.Length = (Petal.Length-mean(iris.train$Petal.Length))/sd(iris.train$Petal.Length),
@@ -320,16 +320,16 @@ iris.test.X <- iris.test %>%
 With the `knn` function, use 5-nearest neighbors to predict the species of each observation in the `iris.test` holdout set. Create a `table` showing the predicted and actual species in the holdout set. What is the prediction accuracy of this model?
 
 ```{r}
-train_response <- iris.train %>% 
-  mutate(as.factor(Species)) %>% 
-  select(Species)
+train_response <- iris.train$Species
 
 
-k1 <- knn(train = iris.train.X, test = iris.test.X, k=5, cl = train_response, prob = TRUE)
-length(iris.train.X)
+k1 <- knn(train = iris.train.X, test = iris.test.X, k=5, 
+          cl = train_response)
 
-new_name <- fit(k1, data = iris.train.X)
 
+table(k1, iris.test$Species)
+
+mean(k1 == iris.test$Species)
 ```
 
 
