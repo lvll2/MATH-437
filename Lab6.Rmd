@@ -25,6 +25,7 @@ library(parsnip)
 library(recipes)
 library(rsample)
 library(broom)
+library(yardstick)
 ```
 
 This lab assignment is worth a total of **20 points**.
@@ -468,10 +469,13 @@ flights_multinom <- workflow() %>%
 In the chunk below, write code that will `fit` the model on the training set and store the result in the object `flights_multinom_fit`.
 
 ```{r fit the model}
-
+flights_multinom_fit <- fit(flights_multinom, data = flights_train)
+flights_multinom_fit
 ```
 
 What reference (baseline) level was chosen?
+Since we did not explicitly choose a baseline level the code defaults to the 
+first option alphabetically which was EWR.
 
 ## Part d (Code: 0.5 pts)
 
@@ -499,7 +503,7 @@ If we use the `multinom` function directly, then we can use the `predict` functi
 The `augment` function does away with this ridiculousness and gives us both class predictions and the predicted probability of being in each class without having the remember what argument to use for `type`. Using the `augment` function, create the tibble `flights_multinom_predictions` containing the predictions for each flight in the `flights_test` dataset. 
 
 ```{r multinom prediction}
-
+flights_multinom_predictions <- augment(flights_multinom_fit,new_data = flights_test ,type = "probs")
 ```
 
 
@@ -520,6 +524,14 @@ When we have multi-class classification problems, it is possible that no class r
 
 Using the `accuracy` function in the `yardstick` package, find the prediction accuracy of each model.
 
+```{r}
+accuracy(predictions_df, truth = origin, estimate = .pred_class)
+accuracy(flights_multinom_predictions,truth = origin, estimate = .pred_class)
+```
+
+
 ## Part f (Explanation: 1 pt)
 
 Briefly discuss the advantages of using the 3-nearest neighbors algorithm over the multinomial logistic regression model on the `flights` data, and the advantages of using the multinomial logistic regression model over the 3-nearest neighbors algorithm. Prediction accuracy is important, but not the only thing you should compare.
+
+The advantage of KNN is the fact that it better utilizes the data in the sense that we can use it greater for prediction since its' predictions are either 0 or 1. On the other hand multinomial logistic regression is good for the interpretation of slopes and intercepts but does not do as good of a job at prediction with an accuracy of only 72% compared to KNN at 98%.
