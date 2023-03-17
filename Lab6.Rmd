@@ -444,7 +444,7 @@ of the data of the proportion specified and the functions `training` and
 
 * What does the `step_dummy` function do, and why did we need to do it?
 
-The `step_dummy` function creates a set of binary dummy variables for a factor or character variable. So in our case it is creating additional columns of 0/1 data for ALL of our nominal predictors, which is only the carrier for now. We have ` r length(unique(flights$carrier))` different carriers
+The `step_dummy` function creates a set of binary dummy variables for a factor or character variable. So in our case it is creating additional columns of 0/1 data for ALL of our nominal predictors, which is only the carrier for now. We have ` r length(unique(flights$carrier))` different carriers. We have to convert this to binary because tidymodels does not like working with factors (or charachters).
 ## Part c (Code: 0.5 pts; Explanation: 0.5 pts)
 
 Now let's use multinomial logistic regression to do the same predictions. Multinomial logistic regression requires much less fuss than k-nearest neighbors when it comes to data prep. Remember, since this uses *regression* frameworks, rescaling the variables just messes with intercept and slopes! 
