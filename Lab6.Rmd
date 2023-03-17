@@ -394,7 +394,8 @@ Let's try to predict which airport a flight departed from into based on the carr
 First, we'll use 3-nearest neighbors to predict the departure airport of each observation in the `flights_test` holdout set.
 
 ```{r pre-processing and model spec}
-knn_model <- nearest_neighbor(mode = "classification", neighbors = 3, dist_power = 2)
+knn_model <- nearest_neighbor(mode = "classification", neighbors = 3,
+                              dist_power = 2)
 
 set.seed(2222)
 flights_split <- initial_split(flights2, prop = 0.8)
@@ -403,8 +404,7 @@ flights_test <- testing(flights_split)
 
 knn_prep <- recipe(
   origin ~ carrier + distance + dep_delay, # response ~ predictors
-  data = flights_train
-) %>%
+  data = flights_train) %>%
   step_dummy(all_nominal_predictors()) %>%
   step_normalize(all_numeric_predictors()) # center and scale numeric predictors
 
@@ -416,13 +416,17 @@ flights_knn <- workflow() %>%
 In the chunk below, write code that will `fit` the model on the training set. (If your model runs for ~3 seconds without an error message, start on part (b) while you wait for the chunk to churn.)
 
 ```{r fitting k-nn}
-
+logr_fit <- fit(flights_knn, data = flights_train)
 ```
 
 Next, use the `augment` function to create the tibble `flights_knn_predictions` containing the predictions for each flight in the `flights_test` dataset. 
 
 ```{r predicting with broom::augment}
-
+predictions_df <- broom::augment(logr_fit, new_data = flights_test,
+                                 type = "prob")
+summary(predictions_df)
+predictions_df %>% 
+  dplyr::select(origin, .pred_class)
 ```
 
 ## Part b (Explanation: 1 pt)
@@ -431,8 +435,15 @@ While you wait for your code to run, as best you can, answer the following quest
 
 * How did we ensure that roughly 20% of the data was in the holdout set, even though we didn't know the exact size of my dataset?
 
+We ensured roughly 20% of the data was in the holdout set by specifying a
+proportion of 0.8 for the training set and putting the remaining data in the
+holdout set. The tidymodels function `initial_split` retains a random selection
+of the data of the proportion specified and the functions `training` and
+`testing` subset by this selection.
+
 * What does the `step_dummy` function do, and why did we need to do it?
 
+The `step_dummy` function creates a set of binary dummy variables for a factor or character variable. So in our case it is creating additional columns of 0/1 data for ALL of our nominal predictors, which is only the carrier for now. We have ` r length(unique(flights$carrier))` different carriers
 ## Part c (Code: 0.5 pts; Explanation: 0.5 pts)
 
 Now let's use multinomial logistic regression to do the same predictions. Multinomial logistic regression requires much less fuss than k-nearest neighbors when it comes to data prep. Remember, since this uses *regression* frameworks, rescaling the variables just messes with intercept and slopes! 
