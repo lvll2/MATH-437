@@ -275,6 +275,13 @@ iris_vv <- iris %>%
 ggplot(iris_vv, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) +
   geom_point() 
 ```
+```{r include = FALSE}
+iris_vv <- iris_vv %>% 
+  droplevels(exclude = "setosa")
+
+# I added this because the setosa level kept showing up in the knn prediction
+# table
+```
 
 
 ## Part b (Code: 2 pts)
@@ -291,6 +298,7 @@ HINT: The easiest way to do this is to `sample` from the indices and subset acco
 set.seed(1003)
 n <- nrow(iris_vv)
 test.rows <- sample(n, floor(20), replace = FALSE)
+iris_vv$Species <- relevel(iris_vv$Species, ref = "virginica")
 iris.train <- iris_vv[-test.rows,]
 iris.test <- iris_vv[test.rows,]
 ```
@@ -331,7 +339,7 @@ table(k1, iris.test$Species)
 
 mean(k1 == iris.test$Species)
 ```
-
+The prediction accuracy of this model is 95%.
 
 ## Part d (Code: 1 pt; Explanation: 1 pt)
 
@@ -339,11 +347,31 @@ Fit a logistic regression model on the training set predicting `Species` from th
 
 Use the `summary` or `coef` function to obtain the coefficient estimates, and write out the equation of the fitted logistic regression model.
 
+```{r}
+lr1 <- glm(Species ~ ., data = iris.train, family = "binomial")
+summary(lr1)
+```
+logit(p) = 498.12 + 131.53(Sepal.Length) + 10.01(Sepal.Width) - 218.3(Petal.Length) - 174.46(Petal.Width)
+
+where p = probability of being a versicolor iris
+
+
 ## Part e (Code: 2 pts; Explanation: 0.5 pts)
 
 Use the `predict` function to obtain predictions for the `iris.test` holdout set. Remember to include the argument `type = "response"` to output predictions as probabilities!
 
 Predict the class of each flower in the holdout set using a decision boundary of 0.5 (i.e., if the predicted probability of being in *versicolor* vs. *virginica* is above 0.5, predict the flower to be in *versicolor*). Create a `table` showing the predicted and actual species in the holdout set. What is the prediction accuracy of this model on the holdout set?
+
+```{r}
+lr1_pred <- predict(lr1, newdata = iris.test, type = "response")
+
+logtbl <- rep("Virginica", 20)
+logtbl[lr1_pred > .5] = "Versicolor"
+
+table(logtbl, iris.test$Species)
+
+```
+The prediction accuracy of this model is `r 17/20`.
 
 # Problem 3: Analysis of flights Dataset
 
