@@ -31,6 +31,45 @@ This lab assignment is worth a total of **25 points**.
 
 Run the code in ISLR Lab 4.7.5.
 
+```{r}
+attach(Smarket)
+train <- (Smarket$Year <2005)
+Smarket.2005 <- Smarket[!train,]
+Direction.2005 <- Direction[!train]
+library(e1071)
+```
+
+
+```{r}
+nb.fit <- naiveBayes(Direction ~ Lag1 + Lag2, data = Smarket, subset = train)
+
+
+nb.fit
+```
+
+
+```{r}
+mean(Lag1[train][Direction[train] == "Down"])
+
+sd(Lag1[train][Direction[train] == "Down"])
+```
+
+
+```{r}
+nb.class <- predict(nb.fit,Smarket.2005)
+
+table(nb.class, Direction.2005)
+
+mean(nb.class == Direction.2005)
+```
+
+```{r}
+nb.preds <- predict(nb.fit, Smarket.2005, type = "raw")
+nb.preds[1:5,]
+```
+
+
+
 ## Part b (Code: 1 pt)
 
 Recall that in Lab 6 we filtered the flights to only the United, American, and Delta carriers. Here we add another variable, `arr_ontime`, to represent whether the flight arrived on time or not.
