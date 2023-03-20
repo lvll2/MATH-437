@@ -171,7 +171,7 @@ mean(qda.class == Direction.2005)
 Fit a LDA model on the training set predicting whether a flight will be delayed (`arr_ontime` = "no") based on the departure delay (`dep_delay`), `carrier`, `distance` traveled, and `origin`.
 
 ```{r}
-
+lda.flit.fit <- lda(data = )
 ```
 
 
