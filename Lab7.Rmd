@@ -314,17 +314,66 @@ flights_lda_predictions <- flights_lda_predictions %>%
 
 flights_qda_predictions <- flights_qda_predictions %>% 
   mutate(prob_not_aot = qda.flit.pred$posterior[,2])
-
-
 ```
+
+```{r Brier Scores}
+brier_nb <- flights_nb_predictions %>% 
+  mutate(squared_error = case_when(
+    predicted == "yes" ~ (prob_not_aot)^2,
+    predicted == "no" ~ (1 - prob_not_aot)^2))
+
+brs_nb <- mean(brier_nb$squared_error)
+
+brier_lda <- flights_lda_predictions %>% 
+  mutate(squared_error = case_when(
+    predicted == "yes" ~ (prob_not_aot)^2,
+    predicted == "no" ~ (1 - prob_not_aot)^2))
+
+brs_lda <- mean(brier_lda$squared_error)
+
+brier_qda <- flights_qda_predictions %>% 
+  mutate(squared_error = case_when(
+    predicted == "yes" ~ (prob_not_aot)^2,
+    predicted == "no" ~ (1 - prob_not_aot)^2))
+
+brs_qda <- mean(brier_qda$squared_error)
+```
+
 
 ## Part b (Code: 1 pt)
 
 Using the `mn_log_loss` function, obtain the cross-entropy/log loss for each of the three models.
 
+```{r}
+lgl_nb <- mn_log_loss(flights_nb_predictions,
+            truth = actual,
+            prob_not_aot,
+            event_level = "second")
+
+lgl_lda <- mn_log_loss(flights_lda_predictions,
+            truth = actual,
+            prob_not_aot,
+            event_level = "second")
+
+lgl_qda <- mn_log_loss(flights_qda_predictions,
+            truth = actual,
+            prob_not_aot,
+            event_level = "second")
+```
+
+
 ## Part c (Code: 1 pt)
 
 Using the `mcc` function, obtain the Matthews Correlation Coefficient for each of the three models. 
+
+```{r}
+mcc_nb <- mcc(flights_nb_predictions, actual, predicted)
+
+mcc_lda <- mcc(flights_lda_predictions, actual, predicted)
+
+mcc_qda <- mcc(flights_qda_predictions, actual, predicted)
+```
+
 
 ## Part d (Explanation: 1.5 pts)
 
@@ -332,12 +381,18 @@ Compare the Brier score, log loss, and Matthews correlation coefficient for the 
 
 | Model | Brier | log loss | MCC |
 |:---:|---:|---:|---:|
-| Naive Bayes |  |  |  |
-| LDA |  |  |  |
-| QDA |  |   |  |
+| Naive Bayes | `r round(brs_nb, 3)` | `r round(lgl_nb$.estimate, 3)` | `r round(mcc_nb$.estimate, 3)` |
+| LDA | `r round(brs_lda, 3)` | `r round(lgl_lda$.estimate, 3)` | `r round(mcc_lda$.estimate, 3)` |
+| QDA | `r round(brs_qda, 3)` | `r round(lgl_qda$.estimate, 3)` | `r round(mcc_qda$.estimate, 3)` |
 
 Which of the three models performs the best on this test set by each measure?
+
+By Brier Scores, the Naive Bayes and QDA model are tied for best.
+By log loss, the LDA model performs best.
+By MCC, the QDA model performs best.
 
 ## Part e (Explanation: 1.5 pts)
 
 If you had to recommend one of the three models to use to predict whether a flight would be delayed, would you use the Naive Bayes, LDA, or QDA model? Explain.
+
+I would use the QDA model since it is performing well by the measures of two accuracy tests.
