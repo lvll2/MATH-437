@@ -184,9 +184,19 @@ Having regular gas will increase our highway mpg by .5254 but with a p-value of 
 
 Using the code in the Multiple Linear Regression Examples file as a guide, create an interaction plot showing city gas mileage on the x-axis and using `fl` as the `trace.factor`. What does the interaction plot reveal about the relationship between `cty` and `fl` that helps explain your results from part (b)?
 
+```{r}
+interact_plot <- ggplot(mpg_new, aes(x = cty, y = hwy)) +
+  geom_point(aes(color = fl)) +  # color-code points
+  geom_smooth(aes(color = fl), method = "lm", se = FALSE)  # add a regression line for each group
+print(interact_plot)
+```
+This interaction plot reveals that the difference between premium and regular gas is substantial as premium gas is maxing out at approximately 29 whereas regular gas climbs all the way up to roughly 37 highway mpg.
+
 ### Part d (Explanation: 1 pt)
 
 Argue that the error terms in this model are not independent. (HINT: actually view the dataset and see what cars are in it.)
+
+The error terms of this model are not independent as there are 22 entries in the data but only a total of 5 different car variations meaning there are many data points that are looking at the same car thus having dependent errors.
 
 ## Applied Problem 2 (15 pts total)
 
@@ -209,10 +219,56 @@ The researchers proposed a causal model in which `sexual_motivation` (mediator M
 Perform an exploratory data analysis on this dataset. You should be able to answer the following questions:
 
 * What does each variable in the dataset mean? How was it measured? (It would be a good idea to read the *Experiment 1 Procedure and materials* section of the linked paper.)
+
+Beautification is a factor variable. Yes implies that they were instructed to bring an outfit that they found attractive and no implied they were requested to bring a comfortable outfit, or one they would wear to see family or friends. 
+
+Sexual motivation was a self assessment of how seductive they felt they looked, other terms such as promiscuous and flirtatious were used and the average score was taken. 
+
+Assertive behavior was measured based on 2 individual people scoring how assertive these women were on a scale from 1-7
+
+
 * Is there any missing data? If so, is there an obvious explanation for any of the missingness?
+
+```{r}
+sum(is.na(neccessary_data$beautification))
+sum(is.na(neccessary_data$sexual_motivation))
+sum(is.na(neccessary_data$assertive_behavior))
+
+sum((neccessary_data$beautification) == 0)
+sum((neccessary_data$sexual_motivation) == 0)
+sum((neccessary_data$assertive_behavior) == 0)
+```
+There is no missing data in our data frame however the paper did talk about a few pieces of missing data that were removed as a result of incomplete results.
+
 * What is the (univariate) distribution of each variable?
+
+```{r}
+neccessary_data %>% 
+  ggplot(aes(x=beautification)) +
+  geom_bar()
+  
+neccessary_data %>% 
+  ggplot(aes(x = sexual_motivation)) +
+  geom_histogram()
+
+
+
+neccessary_data %>% 
+  ggplot(aes(x=assertive_behavior)) + 
+  geom_histogram()
+```
+
 * Which pairs of variables appear to be related? Can you create a plot that shows potential relationships between all three variables?
+```{r}
+ggplot(neccessary_data, aes(x = assertive_behavior, y = sexual_motivation)) +
+  geom_point(aes(color = beautification)) +  
+  geom_smooth(aes(color = beautification), method = "lm", se = TRUE)  
+```
+
+
 * Do any women appear to be particularly unusual (i.e., are there any outliers or women outside the range of sensible values for one or more variables)?
+
+
 
 ### Part b (Code: 2 pts)
 
