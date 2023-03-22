@@ -151,8 +151,6 @@ summary(cmtrx)
 Run the code in ISLR Lab 4.7.3.
 
 ```{r}
-library(MASS)
-
 lda.fit <- lda(Direction ~ Lag1 + Lag2, data = Smarket, subset = train)
 lda.fit
 
@@ -229,8 +227,14 @@ First, make class predictions on the `flights_test` dataset using similar code t
 ```{r}
 lda.flit.pred <- predict(lda.flit.fit, flights_test)
 
-#I gotta figure out how to do this next part
 
+flights_lda_predictions <- data.frame(
+  predicted = lda.flit.pred$class,
+  actual = flights_test$arr_ontime
+)
+
+(cnfsnm <- conf_mat(flights_lda_predictions, truth = actual,
+         estimate = predicted))
 ```
 
 
@@ -238,11 +242,57 @@ lda.flit.pred <- predict(lda.flit.fit, flights_test)
 
 Without running any additional code, use the confusion matrix from part (d) to estimate the sensitivity, specificity, positive predictive value, and negative predictive value for the model. Express all answers as fractions and then convert to decimals rounded to the thousandths place (3 decimal places). 
 
+Sensitivity = 13377/13449 `r round(13377/13449, 3)`
+
+Specificity = 2541/9249 `r round(2541/9249, 3)`
+
+Positive Predictive Value = 13377/20085 `r round(13377/20085, 3)`
+
+Negative Predictive Value = 2541/2613 `r round(2541/2613, 3)`
+
 Then, using the `summary` function on your confusion matrix, check your answers. Remember that we are trying to predict that a flight will be delayed (`arr_ontime` = "no").
+
+```{r}
+summary(cnfsnm)
+```
+
 
 ## Part f (Code: 3 pts; Explanation: 2 pts)
 
 Repeat parts (c) through (e) for the QDA model. (Obviously, call your new data frame/tibble `flights_qda_predictions` instead.)
+
+(c)
+```{r}
+qda.flit.fit <-qda(arr_ontime ~ dep_delay + carrier + distance + origin, data = flights_training)
+```
+
+
+(d)
+```{r}
+qda.flit.pred <- predict(qda.flit.fit, flights_test)
+
+
+flights_qda_predictions <- data.frame(
+  predicted = qda.flit.pred$class,
+  actual = flights_test$arr_ontime
+)
+
+(cnfsnmq <- conf_mat(flights_qda_predictions, truth = actual,
+         estimate = predicted))
+```
+
+Sensitivity = 12801/13449 `r round(12801/13449, 3)`
+
+Specificity = 4327/9249 `r round(4327/9249, 3)`
+
+Positive Predictive Value = 12801/17723 `r round(12801/17723, 3)`
+
+Negative Predictive Value = 4327/4975 `r round(4327/4975, 3)`
+
+```{r}
+summary(cnfsnmq)
+```
+
 
 # Problem 3: Model Selection
 
