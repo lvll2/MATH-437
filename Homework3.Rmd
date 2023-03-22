@@ -35,18 +35,45 @@ Answer: Holding all else constant, for every increase in the variable, newspaper
 
 4. Give two statistics that measure the fit (or lack thereof) of a multiple linear regression model. For each statistic, as it increases, does the F-statistic for an ANOVA test with $H_0: \beta_1 = \ldots = \beta_p = 0$ increase or decrease?
 
-INCOMPLETE: Two statistics that measure fit of a multiple linear regression model include the RSE(residual standard error) and R^2 values. 
+Two statistics that measure fit of a multiple linear regression model include the RSE(residual standard error) and R^2 values. As RSE increases we are seeing a worse fit for a model meaning its' ANOVA F-statistic will decrease (RSE measures lack of fit so larger values imply larger lack of fit). As $R^2$ increases though we are seeing a greater amount of variance in the model be explained by X implying that as $R^2$ increases the F-statistic will increase as there is now greater evidence that at least one of the betas are not equal to another.
 
 5. Explain how to turn a factor variable into one or more *dummy variables* (indicator variables).
+
+Answer: Turning a factor variable into a dummy variable is the process of changing the factor to 0 or 1, (can also use -1 or 1) and then fitting the model based on if they are in class 0 or class 1 which in return will change our slope and intercept based on those factors.
+
 6. Refer to the model whose coefficient estimates are given in Table 3.8. If the *baseline* (reference level) changed to West, what would be the equation of the new least-squares regression plane? 
+
+I NEED TO ANSWER THIS ONE : balance = 518.5 
+
+
+
 7. What is the difference between a *main effect* and an *interaction effect*?
+
+Answer: The difference between a main effect and an interaction effect is that a main effect is the direct relationship between some variable $X_1$ and the response, Y, whereas the interaction effect is the relationship between the synergy between two predictors $X_1$ and $X_2$ and how their own interaction is related to the response, Y.
+
 8. What kind of patterns should you look for in the *residual plot* to identify non-linear relationships between the predictors and the response? What kind of patterns should you look for to identify heteroscedasticity?
+
+Answer: You should look for no relationship in the residual plot. If there is a relationship you would see a u-shape, indication of non-linearity. In order to see heteroscedasticity, a fan shape in the residuals versus fitted would need to be seen in order to confirm non constant variances.
+
 9. With what kind of data would you expect to see correlation of error terms when fitting a linear regression model? Why?
+
+It is often time series data in which we would see correlation of errors when fitting a linear regression model. This is because there is often correlated data since our collection is from the same place just at different time points.
+
 10. Give a rule of thumb for guessing that a point has an *outlier* residual. Give a rule of thumb for guessing that a point is a *high leverage* point.  
+
+Answer: A genreal rule of thumb for determining whether or not a point is an outlier is calculating their studentized residual and if the $|studentized.residual| > 3$ the point is a potential outlier. For high leverage points, if the leverage statistic is far greater than $\frac{p+1}{n}$ this is indication of a high leverage point.
 11. Explain why creating a scatterplot matrix of the response variable $y$ and all predictor variables is insufficient for detecting outliers and high leverage points.
 12. Can *collinearity* be suspected based on inspecting the scatterplot matrix and correlation matrix? What about *multicollinearity*? Explain why/why not. 
+
+Answer: Collinearity can be suspected based on the scatterplot and correlation matrix. Multicollinearity on the other hand is sometimes not as easily sniffed out and in that situation we would turn to the variance inflation factor.
+
 13. What is the *variance inflation factor*? When/why do we use it? How is it computed?
+
+The variance inflation factor is the is the ratio of variance from the model fitted about the full model and the variance from the model fitted just around $\hat{\beta}_j$. We use it to determine whether or not variables have multicollinearity.
+
 14. Briefly explain how *k-nearest neighbors regression* works. What are its advantages and disadvantages compared to linear regression?
+
+x
 
 # Conceptual Problems
 
