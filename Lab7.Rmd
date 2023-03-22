@@ -2,7 +2,9 @@
 title: 'Lab Assignment #7'
 author: "Math 437 - Modern Data Analysis"
 date: "Due March 24, 2023"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 # Instructions
@@ -118,7 +120,8 @@ flights_nb_predictions <- data.frame(
   actual = flights_test$arr_ontime
 )
 
-table(flights_nb_predictions)
+(cmtrx <- conf_mat(flights_nb_predictions, truth = actual,
+         estimate = predicted))
 
 ```
 
@@ -127,7 +130,21 @@ table(flights_nb_predictions)
 
 Without running any additional code, use the confusion matrix from part (c) to estimate the sensitivity, specificity, positive predictive value, and negative predictive value for the model. Express all answers as fractions and then convert to decimals rounded to the thousandths place (3 decimal places). 
 
+Sensitivity = 12787/13449  `r round(12787/13449, 3)`
+
+Specificity = 4206/9249 `r round(4206/9249, 3)`
+
+Positive Predictive Value = 12787/17830 `r round(12787/17830, 3)`
+
+Negative Preidctive Value = 4206/4868 `r round(4206/4868, 3)`
+
 Then, using the `summary` function on your confusion matrix, check your answers. Remember that we are trying to predict that a flight will be delayed (`arr_ontime` = "no").
+
+```{r}
+summary(cmtrx)
+```
+
+
 
 # Problem 2: Discriminant Analysis
 
