@@ -395,4 +395,4 @@ By MCC, the QDA model performs best.
 
 If you had to recommend one of the three models to use to predict whether a flight would be delayed, would you use the Naive Bayes, LDA, or QDA model? Explain.
 
-I would use the QDA model since it is performing well by the measures of two accuracy tests.
+If we can reasonably assume that our predictors are independent, I would use the Naive Bayes model since it is performing almost as well as the QDA model and is less computationally demanding. If we could not make this assumption, or we were working with small data, I would use the QDA model.
