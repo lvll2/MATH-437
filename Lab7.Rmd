@@ -302,6 +302,22 @@ Add a column to the `flights_nb_predictions`, `flights_lda_predictions`, and `fl
 
 Then, compute the Brier scores for each model. As shown in the class activity, it is easiest to use the `mutate` function to obtain the "squared error" for each observation and then average the squared error.
 
+```{r}
+nb.flassprob <- predict(nb.flit, flights_test, type = "raw")
+
+flights_nb_predictions <- flights_nb_predictions %>% 
+  mutate(prob_not_aot = nb.flassprob[,"no"])
+
+
+flights_lda_predictions <- flights_lda_predictions %>% 
+  mutate(prob_not_aot = lda.flit.pred$posterior[,2])
+
+flights_qda_predictions <- flights_qda_predictions %>% 
+  mutate(prob_not_aot = qda.flit.pred$posterior[,2])
+
+
+```
+
 ## Part b (Code: 1 pt)
 
 Using the `mn_log_loss` function, obtain the cross-entropy/log loss for each of the three models.
