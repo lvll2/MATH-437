@@ -296,7 +296,8 @@ Negative Predictive Value = 12801/17723 = `r round(12801/17723, 3)`
 ```{r}
 summary(cnfsnmq, event_level = "second")
 ```
-
+Looking at the summary, 
+the sens row estimate matches our sensitivity, the spec row estimate matches our specificity, the ppv row estimate matches our positive predictive value, the npv row estimate matches our negative predictive value. :)
 
 # Problem 3: Model Selection
 
@@ -391,9 +392,11 @@ Compare the Brier score, log loss, and Matthews correlation coefficient for the 
 
 Which of the three models performs the best on this test set by each measure?
 
-By Brier Scores, the Naive Bayes and QDA model are tied for best.
-By log loss, the LDA model performs best.
-By MCC, the QDA model performs best.
+By Brier Scores, the Naive Bayes and QDA model are tied for best since we want lower Brier Scores.
+
+By log loss, the LDA model performs best since we want a lower log loss.
+
+By MCC, the QDA model performs best since we are looking for a higher correlation coefficient.
 
 ## Part e (Explanation: 1.5 pts)
 
