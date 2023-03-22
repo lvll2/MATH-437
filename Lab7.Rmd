@@ -143,6 +143,8 @@ Then, using the `summary` function on your confusion matrix, check your answers.
 summary(cmtrx)
 ```
 
+Looking at the summary, 
+the sens row estimate matches our sensitivity, the spec row estimate matches our specificity, the ppv row estimate matches our positive predictive value, the npv row estimate matches our negative predictive value. :)
 
 # Problem 2: Discriminant Analysis
 
@@ -242,13 +244,13 @@ flights_lda_predictions <- data.frame(
 
 Without running any additional code, use the confusion matrix from part (d) to estimate the sensitivity, specificity, positive predictive value, and negative predictive value for the model. Express all answers as fractions and then convert to decimals rounded to the thousandths place (3 decimal places). 
 
-Sensitivity = 13377/13449 `r round(13377/13449, 3)`
+Sensitivity = 13377/13449 = `r round(13377/13449, 3)`
 
-Specificity = 2541/9249 `r round(2541/9249, 3)`
+Specificity = 2541/9249 = `r round(2541/9249, 3)`
 
-Positive Predictive Value = 13377/20085 `r round(13377/20085, 3)`
+Positive Predictive Value = 13377/20085 = `r round(13377/20085, 3)`
 
-Negative Predictive Value = 2541/2613 `r round(2541/2613, 3)`
+Negative Predictive Value = 2541/2613 = `r round(2541/2613, 3)`
 
 Then, using the `summary` function on your confusion matrix, check your answers. Remember that we are trying to predict that a flight will be delayed (`arr_ontime` = "no").
 
@@ -256,6 +258,8 @@ Then, using the `summary` function on your confusion matrix, check your answers.
 summary(cnfsnm)
 ```
 
+Looking at the summary, 
+the sens row estimate matches our sensitivity, the spec row estimate matches our specificity, the ppv row estimate matches our positive predictive value, the npv row estimate matches our negative predictive value. :)
 
 ## Part f (Code: 3 pts; Explanation: 2 pts)
 
@@ -281,13 +285,13 @@ flights_qda_predictions <- data.frame(
          estimate = predicted))
 ```
 
-Sensitivity = 12801/13449 `r round(12801/13449, 3)`
+Sensitivity = 12801/13449 = `r round(12801/13449, 3)`
 
-Specificity = 4327/9249 `r round(4327/9249, 3)`
+Specificity = 4327/9249 = `r round(4327/9249, 3)`
 
-Positive Predictive Value = 12801/17723 `r round(12801/17723, 3)`
+Positive Predictive Value = 12801/17723 = `r round(12801/17723, 3)`
 
-Negative Predictive Value = 4327/4975 `r round(4327/4975, 3)`
+Negative Predictive Value = 4327/4975 = `r round(4327/4975, 3)`
 
 ```{r}
 summary(cnfsnmq)
