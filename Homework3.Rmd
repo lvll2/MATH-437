@@ -81,6 +81,16 @@ x
 
 Textbook Exercise 3.7.3.
 
+$ starting \space salary = 50 + 20(GPA)+.07(IQ) +35(College?) + .01(GPA:IQ) - 10(GPA:College?) $
+
+(a): iv) For a fixed GPA and IQ someone who went to college will have a higher predicted starting salary than high school graduates provided their GPA is high enough. This is true and not ii since the interaction term decreases the overall starting salary, so long as the interaction between GPA and our factor is a value less than 3.5.
+
+(b) $ starting \space salary = 50 + 20(4.0)+.07(110) +35(1) + .01(4.0:110) - 10(4.0:1) $
+
+= SOMETHING
+
+(c) IDK MAN ASK THE MAN
+
 ## Conceptual Problem 2 (4 pts total)
 
 ## Part a (3 pts)
@@ -150,9 +160,25 @@ mpg_new <- mpg %>%
 
 Fit a simple linear regression model predicting highway gas mileage (`hwy`) from the fuel type `fl` (r = regular gas, p = premium gas). Interpret the `flr` coefficient in the summary. Is this coefficient significant (at the 5% significance level)?
 
+```{r}
+simple_LR_model <- lm(hwy ~ fl, data = mpg_new)
+summary(simple_LR_model)
+```
+the "flr" variable implies that having regular gas will increase our highway mpg by 2.7179 gallons and with a p-value of .0369 is considered significant.
+
+
 ### Part b (Code: 1 pt; Explanation: 1 pt)
 
 Fit a multiple linear regression model predicting highway gas mileage from the fuel type and the city gas mileage. Interpret the `flr` coefficient in the summary. Is this coefficient significant (at the 5% significance level)?
+
+```{r}
+View(mpg_new)
+multiple_LR_model <- lm(hwy ~ fl+ cty, data = mpg_new)
+summary(multiple_LR_model)
+```
+
+Having regular gas will increase our highway mpg by .5254 but with a p-value of .4469 cannot be considered significant at $\alpha = 0.05$
+
 
 ### Part c (Code: 1 pt; Explanation: 1 pt)
 
