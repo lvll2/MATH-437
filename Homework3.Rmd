@@ -274,6 +274,17 @@ ggplot(neccessary_data, aes(x = assertive_behavior, y = sexual_motivation)) +
 
 Create the three regression models (as defined in the problem introduction) in R and obtain point estimates of the direct and indirect effect of `beautification` on `assertive_behavior`.
 
+```{r}
+# 1. Propose a causal model explicitly naming the predictor variable X, response variable Y, and mediator M. The causal model proposes that the predictor variable causes changes in *both* the mediator and the response, and that the response variable is caused by changes in *both* the predictor and the mediator.
+# 2. Fit a simple linear regression model predicting Y from X, $Y = c_0 + c_1 X$.
+# 3. Fit a simple linear regression model predicting M from X, $M = b_0 + b_1 X$.
+# 4. Fit a multiple linear regression model predicting Y from *both* M and X, $Y = c_0' + c_1'X + c_2'M$.
+# 5. Compute the estimated *direct* effect of X on Y, $c_1$.
+# 6. Compute the estimated *indirect* effect of X on Y through the mediator M. We can calculate this as either $c_1 - c_1'$ or $(b_1)(c_2')$.
+# 7. Obtain bootstrap confidence intervals for the direct and indirect effects.
+```
+
+
 ### Part c (Code: 2 pts)
 
 Create a function, `assertive_indirect_effect`, that takes in a data frame `df`, runs the three regression models from Part b using the data frame `df`, and returns the indirect effect.
