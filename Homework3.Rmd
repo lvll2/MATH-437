@@ -268,6 +268,12 @@ ggplot(neccessary_data, aes(x = assertive_behavior, y = sexual_motivation)) +
 
 * Do any women appear to be particularly unusual (i.e., are there any outliers or women outside the range of sensible values for one or more variables)?
 
+```{r}
+summary(neccessary_data$assertive_behavior)
+
+```
+
+
 
 
 ### Part b (Code: 2 pts)
@@ -275,13 +281,31 @@ ggplot(neccessary_data, aes(x = assertive_behavior, y = sexual_motivation)) +
 Create the three regression models (as defined in the problem introduction) in R and obtain point estimates of the direct and indirect effect of `beautification` on `assertive_behavior`.
 
 ```{r}
+library(boot)
 # 1. Propose a causal model explicitly naming the predictor variable X, response variable Y, and mediator M. The causal model proposes that the predictor variable causes changes in *both* the mediator and the response, and that the response variable is caused by changes in *both* the predictor and the mediator.
+
+#x = beautification
+#y = assertive behavior
+#m = sexual motivation
+
 # 2. Fit a simple linear regression model predicting Y from X, $Y = c_0 + c_1 X$.
+first_lm <-lm(assertive_behavior ~ beautification, data = neccessary_data)
 # 3. Fit a simple linear regression model predicting M from X, $M = b_0 + b_1 X$.
+second_lm <-lm(sexual_motivation ~ beautification,
+               data = neccessary_data)
 # 4. Fit a multiple linear regression model predicting Y from *both* M and X, $Y = c_0' + c_1'X + c_2'M$.
+third_lm <- lm(assertive_behavior ~ beautification + sexual_motivation,
+               data = neccessary_data)
 # 5. Compute the estimated *direct* effect of X on Y, $c_1$.
+print(first_lm$coefficients["beautificationyes"])
+direct_effect = 0.268711
 # 6. Compute the estimated *indirect* effect of X on Y through the mediator M. We can calculate this as either $c_1 - c_1'$ or $(b_1)(c_2')$.
+c_1.1 = 0.07803
+
+indirect_effect = direct_effect - c_1.1
+print(indirect_effect)
 # 7. Obtain bootstrap confidence intervals for the direct and indirect effects.
+
 ```
 
 
