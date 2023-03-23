@@ -129,18 +129,18 @@ flights_nb_predictions <- data.frame(
 
 Without running any additional code, use the confusion matrix from part (c) to estimate the sensitivity, specificity, positive predictive value, and negative predictive value for the model. Express all answers as fractions and then convert to decimals rounded to the thousandths place (3 decimal places). 
 
-Sensitivity = 12787/13449  `r round(12787/13449, 3)`
+Sensitivity = 4206/9249 `r round(4206/9249, 3)`
 
-Specificity = 4206/9249 `r round(4206/9249, 3)`
+Specificity = 12787/13449  `r round(12787/13449, 3)`
 
-Positive Predictive Value = 12787/17830 `r round(12787/17830, 3)`
+Positive Predictive Value = 4206/4868 `r round(4206/4868, 3)` 
 
-Negative Predictive Value = 4206/4868 `r round(4206/4868, 3)`
+Negative Predictive Value = 12787/17830 `r round(12787/17830, 3)`
 
 Then, using the `summary` function on your confusion matrix, check your answers. Remember that we are trying to predict that a flight will be delayed (`arr_ontime` = "no").
 
 ```{r}
-summary(cmtrx)
+summary(cmtrx, event_level = "second")
 ```
 
 Looking at the summary, 
@@ -244,18 +244,18 @@ flights_lda_predictions <- data.frame(
 
 Without running any additional code, use the confusion matrix from part (d) to estimate the sensitivity, specificity, positive predictive value, and negative predictive value for the model. Express all answers as fractions and then convert to decimals rounded to the thousandths place (3 decimal places). 
 
-Sensitivity = 13377/13449 = `r round(13377/13449, 3)`
+Sensitivity = 2541/9249 = `r round(2541/9249, 3)`
 
-Specificity = 2541/9249 = `r round(2541/9249, 3)`
+Specificity = 13377/13449 = `r round(13377/13449, 3)`
 
-Positive Predictive Value = 13377/20085 = `r round(13377/20085, 3)`
+Positive Predictive Value = 2541/2613 = `r round(2541/2613, 3)`
 
-Negative Predictive Value = 2541/2613 = `r round(2541/2613, 3)`
+Negative Predictive Value = 13377/20085 = `r round(13377/20085, 3)`
 
 Then, using the `summary` function on your confusion matrix, check your answers. Remember that we are trying to predict that a flight will be delayed (`arr_ontime` = "no").
 
 ```{r}
-summary(cnfsnm)
+summary(cnfsnm, event_level = "second")
 ```
 
 Looking at the summary, 
@@ -285,18 +285,19 @@ flights_qda_predictions <- data.frame(
          estimate = predicted))
 ```
 
-Sensitivity = 12801/13449 = `r round(12801/13449, 3)`
+Sensitivity = 4327/9249 = `r round(4327/9249, 3)` 
 
-Specificity = 4327/9249 = `r round(4327/9249, 3)`
+Specificity = 12801/13449 = `r round(12801/13449, 3)`
 
-Positive Predictive Value = 12801/17723 = `r round(12801/17723, 3)`
+Positive Predictive Value = 4327/4975 = `r round(4327/4975, 3)`
 
-Negative Predictive Value = 4327/4975 = `r round(4327/4975, 3)`
+Negative Predictive Value = 12801/17723 = `r round(12801/17723, 3)`
 
 ```{r}
-summary(cnfsnmq)
+summary(cnfsnmq, event_level = "second")
 ```
-
+Looking at the summary, 
+the sens row estimate matches our sensitivity, the spec row estimate matches our specificity, the ppv row estimate matches our positive predictive value, the npv row estimate matches our negative predictive value. :)
 
 # Problem 3: Model Selection
 
@@ -391,12 +392,14 @@ Compare the Brier score, log loss, and Matthews correlation coefficient for the 
 
 Which of the three models performs the best on this test set by each measure?
 
-By Brier Scores, the Naive Bayes and QDA model are tied for best.
-By log loss, the LDA model performs best.
-By MCC, the QDA model performs best.
+By Brier Scores, the Naive Bayes and QDA model are tied for best since we want lower Brier Scores.
+
+By log loss, the LDA model performs best since we want a lower log loss.
+
+By MCC, the QDA model performs best since we are looking for a higher correlation coefficient.
 
 ## Part e (Explanation: 1.5 pts)
 
 If you had to recommend one of the three models to use to predict whether a flight would be delayed, would you use the Naive Bayes, LDA, or QDA model? Explain.
 
-If we can reasonably assume that our predictors are independent, I would use the Naive Bayes model since it is performing almost as well as the QDA model and is less computationally demanding. If we could not make this assumption, or we were working with small data, I would use the QDA model.
+If we can reasonably assume that our predictors are independent, I would use the Naive Bayes model since it is performing almost as well as the QDA model when measuring accuracy with Brier Scores and MCC and Naive Bayes is less computationally demanding. If we could not make this assumption, or we were working with small data, I would use the QDA model since it performs best according to both measures of accuracy, Brier Scores and MCC.
