@@ -85,11 +85,10 @@ $ starting \space salary = 50 + 20(GPA)+.07(IQ) +35(College?) + .01(GPA:IQ) - 10
 
 (a): iv) For a fixed GPA and IQ someone who went to college will have a higher predicted starting salary than high school graduates provided their GPA is high enough. This is true and not ii since the interaction term decreases the overall starting salary, so long as the interaction between GPA and our factor is a value less than 3.5.
 
-(b) $ starting \space salary = 50 + 20(4.0)+.07(110) +35(1) + .01(4.0:110) - 10(4.0:1) $
+(b) $ starting \space salary = 50 + 20(4.0)+.07(110) +35(1) + .01(4.0()110) - 10(4.0)(1) = 137.1$
+The predicted starting salary would be $137,100$ dollars.
 
-= SOMETHING
-
-(c) IDK MAN ASK THE MAN
+(c) Just because we have a small interaction term this does not mean that the interaction between our variables is insignificant. The coefficient is based on the interaction as well as the standard deviations of both x and y. Thus the scaling of GPA and IQ can influence the size of the coefficient regardless of whether or not the coefficient is significant making the entire statement false.
 
 ## Conceptual Problem 2 (4 pts total)
 
@@ -130,6 +129,33 @@ For 1 pt extra credit: Show that under the additional assumption that $\hat{\bet
 ## Simulation Problem 1 (5 pts)
 
 Textbook Exercise 3.7.13 parts (a)-(f).
+
+(a)
+```{r}
+set.seed(1)
+x <- rnorm(100,0,1)
+```
+
+(b)
+```{r}
+eps <- rnorm(100, 0, 0.25)
+```
+
+(c)
+```{r}
+x_with_variance <- c(x,eps)
+length(x_with_variance)
+y = -1 + .05*x_with_variance
+length(y)
+```
+y has a length of 200 with $\beta_0 = -1$ and $\beta_1 = .05$
+
+(d)
+```{r}
+plot(x_with_variance,y)
+```
+
+
 
 ## Simulation Problem 2 (4 pts total)
 
