@@ -163,6 +163,42 @@ plot(x_with_variance,y)
 
 Textbook Exercise 3.7.14 parts (a)-(c).
 
+(a)
+```{r}
+set.seed(1)
+x1 <- runif(100)
+x2 <- 0.5 *x1 + rnorm(100) / 10
+y <- 2 + 2*x1 + 0.3*x2 + rnorm(100)
+
+plot(x1,y)
+
+```
+
+
+(b)
+```{r}
+plot(x1,x2)
+cor(x1,x2)
+```
+The correlation between x1 and x2 is 0.8351212. 
+
+(c)
+```{r}
+data <- data.frame(y,x1,x2)
+
+linear_model <- lm(y ~ x1 + x2, data = data)
+
+y_hat = 2.13 + 1.44*x1 + 1.01*x2
+
+plot(y,y_hat)
+
+
+```
+$\hat{y} = 2.13 + 1.44(x_1) + 1.01(x_2)$
+
+
+
+
 ### Part b (Code: 0.5 pts; Explanation: 0.5 pts)
 
 Center `x1`, `x2`, and `y` to have mean 0 (the slopes should remain the same after centering the data). What are the values of $\hat{\beta_1}$ and $\hat{\beta_2}$ that minimize MSE/RSS? Compare these values to the true $\beta_1$ and $\beta_2$ as well as the $\hat{\beta_1}$ and $\hat{\beta_2}$ obtained in 3.7.14c.
