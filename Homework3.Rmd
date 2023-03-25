@@ -143,17 +143,34 @@ eps <- rnorm(100, 0, 0.25)
 
 (c)
 ```{r}
-x_with_variance <- c(x,eps)
-length(x_with_variance)
-y = -1 + .05*x_with_variance
+
+y = -1 + .05*x + eps
 length(y)
 ```
-y has a length of 200 with $\beta_0 = -1$ and $\beta_1 = .05$
+y has a length of 100 with $\beta_0 = -1$ and $\beta_1 = .05$
 
 (d)
 ```{r}
-plot(x_with_variance,y)
+plot(x,y)
 ```
+The relationship between the two variables is not too strong, this is due to the impact our variable eps had on the y. 
+
+(e and f)
+```{r}
+required_data <- as.data.frame(x,y)
+our_model <- lm(y ~ x, data = required_data)
+summary(our_model)
+ggplot(data = required_data, aes(x=x,y=y))+
+  geom_point()+
+  geom_abline(slope=0.04973, intercept = -1.00942, color = "blue") + 
+  geom_abline(slope = 0.05, intercept = -1) +
+  labs(caption = "The black line represents the true, 'simulated' values while the blue line represents the linear model's approximations",
+       title = "Population versus Approximated Relationship")
+```
+(Note I was not sure how to make a custom legend in ggplot)
+
+
+our $\hat{\beta}_0 = -1.00942$ and our $\hat{\beta}_1 = 0.04973$. These results are very close to the true $\beta_0=-1$ and $\beta_1 = 0.05$ so our model did well in that regard despite the included variance. It should be noted though that our model does not do that well at capturing the data with both a low R-squared value as well as p-value larger than 0.05.
 
 
 
