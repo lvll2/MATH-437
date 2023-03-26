@@ -21,30 +21,33 @@ Read Chapter 3 of Introduction to Statistical Learning, Second Edition. Based on
 
 1. What is the difference between the *population regression line* and the *least-squares regression line*? When do we use the notation $\beta_1$ vs. $\hat{\beta}_1$?
 
-Answer: The difference between the population regression line and the least squares regression line is that the population is the theoretical best fitting line for a model and uses the $\beta_1$ notation to be the true slope of the population. In practice, this value is rarely known and thus we give it our best estimate which we denote $\hat{\beta}_1$.
+Answer: The difference between the population regression line and the least squares regression line is that the population is the theoretical best fitting line for a model and uses the $\beta_1$ notation to be the true slope of the population. In practice, this value is unknown and thus we give it our best estimate which we denote $\hat{\beta}_1$.
 
 
 2. What is a *residual*? Why are the residuals important in finding the $\hat{\beta}_j$?
 
-Answer: A residual is the vertical distance between the observed value and the regression line. The sum of those residuals is then minimized to determine the least squares regression line which in turn helps us find $\hat{\beta}_j$.
+Answer: A residual is the vertical distance between the observed value and the regression line which represents the difference between an observed response value and its corresponding predicted value. The sum of those squared residuals is then minimized to determine the least squares regression line which in turn helps us find $\hat{\beta}_j$.
 
 
-3. Write a sentence to interpret what $\beta_3$ means in the model given by Equation (3.20). (Make sure to use appropriate units!)
+*3. Write a sentence to interpret what $\beta_3$ means in the model given by Equation (3.20). (Make sure to use appropriate units!)
 
 Answer: Holding all else constant, for every increase in the variable, newspaper, we expect to see a 0.055 thousand increase in the sales.
 
+$\beta_3$ is the estimate for how much we expect sales to be affected for every $1,000 increase in spending on newspaper advertising, if we hold TV and radio advertising constant.
+
 4. Give two statistics that measure the fit (or lack thereof) of a multiple linear regression model. For each statistic, as it increases, does the F-statistic for an ANOVA test with $H_0: \beta_1 = \ldots = \beta_p = 0$ increase or decrease?
 
-Two statistics that measure fit of a multiple linear regression model include the RSE(residual standard error) and R^2 values. As RSE increases we are seeing a worse fit for a model meaning its' ANOVA F-statistic will decrease (RSE measures lack of fit so larger values imply larger lack of fit). As $R^2$ increases though we are seeing a greater amount of variance in the model be explained by X implying that as $R^2$ increases the F-statistic will increase as there is now greater evidence that at least one of the betas are not equal to another.
+Two statistics that measure fit of a multiple linear regression model include the RSE (residual standard error) and R^2 values. As RSE increases we are seeing a worse fit for a model meaning its ANOVA F-statistic will decrease (RSE measures lack of fit so larger values imply larger lack of fit). As $R^2$ increases though we are seeing a greater amount of variance in the model be explained by X implying that as $R^2$ increases the F-statistic will increase as there is now greater evidence that at least one of the betas are not equal to another.
 
-5. Explain how to turn a factor variable into one or more *dummy variables* (indicator variables).
+* 5. Explain how to turn a factor variable into one or more *dummy variables* (indicator variables).
 
 Answer: Turning a factor variable into a dummy variable is the process of changing the factor to 0 or 1, (can also use -1 or 1) and then fitting the model based on if they are in class 0 or class 1 which in return will change our slope and intercept based on those factors.
 
+To turn a factor variable with k classes into a dummy variables we must choose a baseline class which we will assign the value 0 to and create new variables for the remaining k - 1 classes that are assigned the value 1 (or we can use -1 and 1 rather than 0 and 1).
+
 6. Refer to the model whose coefficient estimates are given in Table 3.8. If the *baseline* (reference level) changed to West, what would be the equation of the new least-squares regression plane? 
 
-I NEED TO ANSWER THIS ONE : balance = 518.5 
-
+$balance = 518.50 - 6.19(South) + 12.50(East)$
 
 
 7. What is the difference between a *main effect* and an *interaction effect*?
