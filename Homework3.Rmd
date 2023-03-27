@@ -37,7 +37,7 @@ Answer:$\beta_3$ is the estimate for how much we expect sales to be affected for
 
 Answer: Two statistics that measure fit of a multiple linear regression model include the RSE (residual standard error) and R^2 values. As RSE increases we are seeing a worse fit for a model meaning its ANOVA F-statistic will decrease (RSE measures lack of fit so larger values imply larger lack of fit). As $R^2$ increases though we are seeing a greater amount of variance in the model be explained by X implying that as $R^2$ increases the F-statistic will increase as there is now greater evidence that at least one of the betas are not equal to another.
 
-*5. Explain how to turn a factor variable into one or more *dummy variables* (indicator variables).
+5. Explain how to turn a factor variable into one or more *dummy variables* (indicator variables).
 
 Answer: To turn a factor variable with k classes into a dummy variables we must choose a baseline class which we will assign the value 0 to and create new variables for the remaining k - 1 classes that are assigned the value 1 (or we can use -1 and 1 rather than 0 and 1).
 
@@ -125,9 +125,16 @@ $$
 r_{xy} = \frac{1}{n-1}\sum_{i=1}^n \left(\frac{x_i}{s_x}\right)\left(\frac{y_i}{s_y}\right)
 $$
 
+$$
+\hat{\beta} = (\frac{s_y(r_{x_1 y} - r_{x_2 y}r_{x_1 x_2})}{s_{x_1}(1 - r_{x_1 x_2}^2)}, \frac{s_y(r_{x_2 y} - r_{x_1 y}r_{x_1 x_2})}{s_{x_2}(1 - r_{x_1 x_2}^2)})
+$$
+
 ### Part b (1 pt)
 
 In Math 338 you likely learned that in simple linear regression, the slope estimate $b_1 = \hat{\beta_1} = r \frac{s_y}{s_x}$. Show that for $j = 1, 2$, if  $x_1$ and $x_2$ are uncorrelated, then $\hat{\beta_j} = r_{x_j y} \frac{s_y}{s_{x_j}}$ ($j = 1, 2$).
+
+If $x_1$ and $x_2$ are uncorrelated, then $r_{x_1 x_2} = 0$ so when we make this substitution in our $\hat{\beta}$ that we derived above, we obtain $\beta_1 = r_{x_1 y} \frac{s_y}{s_{x_1}}$ and $\beta_2 = r_{x_2 y} \frac{s_y}{s_{x_2}}$, which generalizes to $\hat{\beta_j} = r_{x_j y} \frac{s_y}{s_{x_j}}$ ($j = 1, 2$). The actual algebra is in the attached pdf onenote file.
+
 
 For 1 pt extra credit: Show that under the additional assumption that $\hat{\beta}_1 \neq 0$ and $\hat{\beta_2} \neq 0$, the converse also holds; that is, if $\hat{\beta_j} = r_{x_j y} \frac{s_y}{s_{x_j}} \neq 0$ ($j = 1, 2$), then $r_{x_1 x_2} = 0$.
 
@@ -195,8 +202,17 @@ x2 <- 0.5 *x1 + rnorm(100) / 10
 y <- 2 + 2*x1 + 0.3*x2 + rnorm(100)
 
 plot(x1,y)
-
 ```
+
+```{r to find beta0, include = FALSE}
+set.seed(1)
+runif(100)
+sum(rnorm(100))
+sum(rnorm(100)) + 2
+```
+
+
+$Y = (2 + rnorm(100)) + 2X_1 + 0.3X_2)$ where the regression coefficients $\beta_0 = 4.277879$, $\beta_1 = 2$ and $\beta_2 = 0.3$.
 
 
 (b)
@@ -211,16 +227,17 @@ The correlation between x1 and x2 is 0.8351212.
 data <- data.frame(y,x1,x2)
 
 linear_model <- lm(y ~ x1 + x2, data = data)
+summary(linear_model)
 
 y_hat = 2.13 + 1.44*x1 + 1.01*x2
 
-plot(y,y_hat)
+plot(y, y_hat)
 
 
 ```
 $\hat{y} = 2.13 + 1.44(x_1) + 1.01(x_2)$
 
-
+The results show $\hat{\beta_0} = 2.13$ which is lower than our original intercept, $\hat{\beta_1} = 1.44$ which is 0.6 less than our original $\beta_1$, and $\hat{\beta_2} = 1.01$ which is 0.71 higher than our original $\beta_2$. At an $\alpha = 0.05$ significance level you could reject the null hypothesis $H_0: \beta_1 = 0$ but you could not reject the null hypothesis $H_0: \beta_2 = 0$.
 
 
 ### Part b (Code: 0.5 pts; Explanation: 0.5 pts)
@@ -228,6 +245,23 @@ $\hat{y} = 2.13 + 1.44(x_1) + 1.01(x_2)$
 Center `x1`, `x2`, and `y` to have mean 0 (the slopes should remain the same after centering the data). What are the values of $\hat{\beta_1}$ and $\hat{\beta_2}$ that minimize MSE/RSS? Compare these values to the true $\beta_1$ and $\beta_2$ as well as the $\hat{\beta_1}$ and $\hat{\beta_2}$ obtained in 3.7.14c.
 
 HINT: you should have derived a formula in Conceptual Problem 2, so all you have to do is find the right values based on your simulated data and plug them into the formula.
+
+```{r}
+data <- data.frame(scale(data, scale = FALSE))
+
+sy <- sd(data$y)
+sx1 <- sd(data$x1)
+sx2 <- sd(data$x2)
+
+rx1y <- cor(x1, y)
+rx2y <- cor(x2, y)
+rx1x2 <- cor(x1,x2)
+
+(betahat1 <- sy*(rx1y - rx2y*rx1x2)/(sx1*(1 - rx1x2^2)))
+
+(betahat2 <- sy*(rx2y - rx1y*rx1x2)/(sx2*(1 - rx1x2^2)))
+```
+The results for the values of $\hat{\beta_1}$ and $\hat{\beta_2}$ that minimize RSS are the same values given by the linear model in part c above, so their comparison holds and $\hat{\beta_1}$ is lower than our original $\beta_1$, and $\hat{\beta_2}$ is higher than our original $\beta_2$.
 
 # Applied Problems
 
