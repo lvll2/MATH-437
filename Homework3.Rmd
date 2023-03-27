@@ -37,7 +37,7 @@ Answer:$\beta_3$ is the estimate for how much we expect sales to be affected for
 
 Answer: Two statistics that measure fit of a multiple linear regression model include the RSE (residual standard error) and R^2 values. As RSE increases we are seeing a worse fit for a model meaning its ANOVA F-statistic will decrease (RSE measures lack of fit so larger values imply larger lack of fit). As $R^2$ increases though we are seeing a greater amount of variance in the model be explained by X implying that as $R^2$ increases the F-statistic will increase as there is now greater evidence that at least one of the betas are not equal to another.
 
-*5. Explain how to turn a factor variable into one or more *dummy variables* (indicator variables).
+5. Explain how to turn a factor variable into one or more *dummy variables* (indicator variables).
 
 Answer: To turn a factor variable with k classes into a dummy variables we must choose a baseline class which we will assign the value 0 to and create new variables for the remaining k - 1 classes that are assigned the value 1 (or we can use -1 and 1 rather than 0 and 1).
 
@@ -132,6 +132,9 @@ $$
 ### Part b (1 pt)
 
 In Math 338 you likely learned that in simple linear regression, the slope estimate $b_1 = \hat{\beta_1} = r \frac{s_y}{s_x}$. Show that for $j = 1, 2$, if  $x_1$ and $x_2$ are uncorrelated, then $\hat{\beta_j} = r_{x_j y} \frac{s_y}{s_{x_j}}$ ($j = 1, 2$).
+
+If $x_1$ and $x_2$ are uncorrelated, then $r_{x_1 x_2} = 0$ so when we make this substitution in our $\hat{\beta}$ that we derived above, we obtain $\beta_1 = r_{x_1 y} \frac{s_y}{s_{x_1}}$ and $\beta_2 = r_{x_2 y} \frac{s_y}{s_{x_2}}$, which generalizes to $\hat{\beta_j} = r_{x_j y} \frac{s_y}{s_{x_j}}$ ($j = 1, 2$). The actual algebra is in the attached pdf onenote file.
+
 
 For 1 pt extra credit: Show that under the additional assumption that $\hat{\beta}_1 \neq 0$ and $\hat{\beta_2} \neq 0$, the converse also holds; that is, if $\hat{\beta_j} = r_{x_j y} \frac{s_y}{s_{x_j}} \neq 0$ ($j = 1, 2$), then $r_{x_1 x_2} = 0$.
 
