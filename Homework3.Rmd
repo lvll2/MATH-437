@@ -202,8 +202,17 @@ x2 <- 0.5 *x1 + rnorm(100) / 10
 y <- 2 + 2*x1 + 0.3*x2 + rnorm(100)
 
 plot(x1,y)
-
 ```
+
+```{r to find beta0, include = FALSE}
+set.seed(1)
+runif(100)
+sum(rnorm(100))
+sum(rnorm(100)) + 2
+```
+
+
+$Y = (2 + rnorm(100)) + 2X_1 + 0.3X_2)$ where the regression coefficients $\beta_0 = 4.277879$, $\beta_1 = 2$ and $\beta_2 = 0.3$.
 
 
 (b)
@@ -218,16 +227,17 @@ The correlation between x1 and x2 is 0.8351212.
 data <- data.frame(y,x1,x2)
 
 linear_model <- lm(y ~ x1 + x2, data = data)
+summary(linear_model)
 
 y_hat = 2.13 + 1.44*x1 + 1.01*x2
 
-plot(y,y_hat)
+plot(y, y_hat)
 
 
 ```
 $\hat{y} = 2.13 + 1.44(x_1) + 1.01(x_2)$
 
-
+The results show $\hat{\beta_0} = 2.13$ which is lower than our original intercept, $\hat{\beta_1} = 1.44$ which is 0.6 less than our original $\beta_1$, and $\hat{\beta_2} = 1.01$ which is 0.71 higher than our original $\beta_2$. At an $\alpha = 0.05$ significance level you could reject the null hypothesis $H_0: \beta_1 = 0$ but you could not reject the null hypothesis $H_0: \beta_2 = 0$.
 
 
 ### Part b (Code: 0.5 pts; Explanation: 0.5 pts)
@@ -235,6 +245,23 @@ $\hat{y} = 2.13 + 1.44(x_1) + 1.01(x_2)$
 Center `x1`, `x2`, and `y` to have mean 0 (the slopes should remain the same after centering the data). What are the values of $\hat{\beta_1}$ and $\hat{\beta_2}$ that minimize MSE/RSS? Compare these values to the true $\beta_1$ and $\beta_2$ as well as the $\hat{\beta_1}$ and $\hat{\beta_2}$ obtained in 3.7.14c.
 
 HINT: you should have derived a formula in Conceptual Problem 2, so all you have to do is find the right values based on your simulated data and plug them into the formula.
+
+```{r}
+data <- data.frame(scale(data, scale = FALSE))
+
+sy <- sd(data$y)
+sx1 <- sd(data$x1)
+sx2 <- sd(data$x2)
+
+rx1y <- cor(x1, y)
+rx2y <- cor(x2, y)
+rx1x2 <- cor(x1,x2)
+
+(betahat1 <- sy*(rx1y - rx2y*rx1x2)/(sx1*(1 - rx1x2^2)))
+
+(betahat2 <- sy*(rx2y - rx1y*rx1x2)/(sx2*(1 - rx1x2^2)))
+```
+The results for the values of $\hat{\beta_1}$ and $\hat{\beta_2}$ that minimize RSS are the same values given by the linear model in part c above, so their comparison holds and $\hat{\beta_1}$ is lower than our original $\beta_1$, and $\hat{\beta_2}$ is higher than our original $\beta_2$.
 
 # Applied Problems
 
