@@ -355,6 +355,20 @@ ggplot(neccessary_data, aes(x = assertive_behavior, y = sexual_motivation)) +
 
 
 * Do any women appear to be particularly unusual (i.e., are there any outliers or women outside the range of sensible values for one or more variables)?
+```{r}
+summary(neccessary_data$sexual_motivation)
+lb = 2.2-1.5*(3.8-2.2)
+ub= 3.8+1.5*(3.8-2.2)
+sum(neccessary_data$sexual_motivation > ub)
+sum(neccessary_data$sexual_motivation < lb)
+
+summary(neccessary_data$assertive_behavior)
+lb = 4.125-1.5*(5.750-4.125)
+ub= 5.750+1.5*(5.750-4.125)
+sum(neccessary_data$assertive_behavior > ub)
+sum(neccessary_data$assertive_behavior < lb)
+```
+Based on our above results there do not appear to be any woman outside of the reasonable range in our sample.
 
 ```{r}
 summary(neccessary_data$assertive_behavior)
@@ -395,6 +409,7 @@ print(indirect_effect)
 # 7. Obtain bootstrap confidence intervals for the direct and indirect effects.
 
 ```
+
 direct_effect = 0.268711
 
 indirect_effect= 0.190681
