@@ -258,7 +258,6 @@ the "flr" variable implies that having regular gas will increase our highway mpg
 Fit a multiple linear regression model predicting highway gas mileage from the fuel type and the city gas mileage. Interpret the `flr` coefficient in the summary. Is this coefficient significant (at the 5% significance level)?
 
 ```{r}
-View(mpg_new)
 multiple_LR_model <- lm(hwy ~ fl+ cty, data = mpg_new)
 summary(multiple_LR_model)
 ```
@@ -316,6 +315,9 @@ Assertive behavior was measured based on 2 individual people scoring how asserti
 * Is there any missing data? If so, is there an obvious explanation for any of the missingness?
 
 ```{r}
+library(readr)
+neccessary_data <- read_csv("assertive_woman.csv")
+
 sum(is.na(neccessary_data$beautification))
 sum(is.na(neccessary_data$sexual_motivation))
 sum(is.na(neccessary_data$assertive_behavior))
@@ -393,7 +395,9 @@ print(indirect_effect)
 # 7. Obtain bootstrap confidence intervals for the direct and indirect effects.
 
 ```
+direct_effect = 0.268711
 
+indirect_effect= 0.190681
 
 ### Part c (Code: 2 pts)
 
@@ -401,6 +405,31 @@ Create a function, `assertive_indirect_effect`, that takes in a data frame `df`,
 
 Then, obtain a bootstrap 95% confidence interval for the indirect effect. It is probably easiest to use the `boot` and `boot.ci` functions in the `boot` package, but you can code your own bootstrapping if you really want to. The researchers used 95% BCa confidence intervals, but you do not need to replicate their work.
 
+```{r}
+assertive_indirect_effect <- function(df, indices){
+  d <- df[indices,]
+  first_lm <-lm(assertive_behavior ~ beautification, 
+                data = d)
+  second_lm <-lm(sexual_motivation ~ beautification,
+               data = d)
+  third_lm <- lm(assertive_behavior ~ beautification + sexual_motivation,
+               data = d)
+  b_1 <- second_lm$coefficients["beautificationyes"]
+  c_2 <- third_lm$coefficients["sexual_motivation"]
+  ind_eff <- b_1*c_2
+  return(ind_eff)
+}
+
+boot_assert <- boot(data = neccessary_data, statistic = assertive_indirect_effect, R = 1000)
+
+boot.ci(boot_assert, type = "bca")
+
+```
+
+
+
 ### Part d (Explanation: 2 pts)
 
 Based on your bootstrap confidence interval, do you find sufficient evidence to reject $H_0:$ there is no indirect effect of beautification on assertiveness as mediated via sexual motivation in favor of $H_a:$ there is such an indirect effect? Explain your reasoning.
+
+Since our bootstrapped confidence interval does not contain the value 0, we can therefore reject H0 since a score of 0 would imply no indirect effect.
