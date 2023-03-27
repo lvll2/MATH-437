@@ -1,9 +1,14 @@
 ---
 title: 'Homework Assignment #3'
-author: "Math 437 - Modern Data Analysis"
+author: "Lissette Villa, Nicholas Noel"
 date: "Due March 20, 2023"
 output: pdf_document
 ---
+
+```{r}
+library(ggplot2)
+```
+
 
 # Instructions
 
