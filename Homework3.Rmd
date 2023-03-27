@@ -29,7 +29,7 @@ Answer: The difference between the population regression line and the least squa
 Answer: A residual is the vertical distance between the observed value and the regression line which represents the difference between an observed response value and its corresponding predicted value. The sum of those squared residuals is then minimized to determine the least squares regression line which in turn helps us find $\hat{\beta}_j$.
 
 
-*3. Write a sentence to interpret what $\beta_3$ means in the model given by Equation (3.20). (Make sure to use appropriate units!)
+3. Write a sentence to interpret what $\beta_3$ means in the model given by Equation (3.20). (Make sure to use appropriate units!)
 
 Answer:$\beta_3$ is the estimate for how much we expect sales to be affected for every $1,000 increase in spending on newspaper advertising, if we hold TV and radio advertising constant.
 
@@ -37,11 +37,9 @@ Answer:$\beta_3$ is the estimate for how much we expect sales to be affected for
 
 Answer: Two statistics that measure fit of a multiple linear regression model include the RSE (residual standard error) and R^2 values. As RSE increases we are seeing a worse fit for a model meaning its ANOVA F-statistic will decrease (RSE measures lack of fit so larger values imply larger lack of fit). As $R^2$ increases though we are seeing a greater amount of variance in the model be explained by X implying that as $R^2$ increases the F-statistic will increase as there is now greater evidence that at least one of the betas are not equal to another.
 
-* 5. Explain how to turn a factor variable into one or more *dummy variables* (indicator variables).
+*5. Explain how to turn a factor variable into one or more *dummy variables* (indicator variables).
 
-Answer: Turning a factor variable into a dummy variable is the process of changing the factor to 0 or 1, (can also use -1 or 1) and then fitting the model based on if they are in class 0 or class 1 which in return will change our slope and intercept based on those factors.
-
-To turn a factor variable with k classes into a dummy variables we must choose a baseline class which we will assign the value 0 to and create new variables for the remaining k - 1 classes that are assigned the value 1 (or we can use -1 and 1 rather than 0 and 1).
+Answer: To turn a factor variable with k classes into a dummy variables we must choose a baseline class which we will assign the value 0 to and create new variables for the remaining k - 1 classes that are assigned the value 1 (or we can use -1 and 1 rather than 0 and 1).
 
 6. Refer to the model whose coefficient estimates are given in Table 3.8. If the *baseline* (reference level) changed to West, what would be the equation of the new least-squares regression plane? 
 
@@ -53,7 +51,7 @@ $balance = 518.50 - 6.19(South) + 12.50(East)$
 Answer: The difference between a main effect and an interaction effect is that a main effect is the direct relationship between some variable $X_1$ and the response, Y, whereas the interaction effect is the relationship between the synergy between two predictors $X_1$ and $X_2$ and how their own interaction is related to the response, Y.
 
 
-* 8. What kind of patterns should you look for in the *residual plot* to identify non-linear relationships between the predictors and the response? What kind of patterns should you look for to identify heteroscedasticity?
+8. What kind of patterns should you look for in the *residual plot* to identify non-linear relationships between the predictors and the response? What kind of patterns should you look for to identify heteroscedasticity?
 
 Answer: Residual plots would show systematic patterns such as curves if there was a non-linear relationship between the predictors and response. A fan or funnel shape in the residuals versus fitted values plot would indicate heteroscedasticity.
 
@@ -264,7 +262,6 @@ the "flr" variable implies that having regular gas will increase our highway mpg
 Fit a multiple linear regression model predicting highway gas mileage from the fuel type and the city gas mileage. Interpret the `flr` coefficient in the summary. Is this coefficient significant (at the 5% significance level)?
 
 ```{r}
-View(mpg_new)
 multiple_LR_model <- lm(hwy ~ fl+ cty, data = mpg_new)
 summary(multiple_LR_model)
 ```
@@ -322,6 +319,9 @@ Assertive behavior was measured based on 2 individual people scoring how asserti
 * Is there any missing data? If so, is there an obvious explanation for any of the missingness?
 
 ```{r}
+library(readr)
+neccessary_data <- read_csv("assertive_woman.csv")
+
 sum(is.na(neccessary_data$beautification))
 sum(is.na(neccessary_data$sexual_motivation))
 sum(is.na(neccessary_data$assertive_behavior))
@@ -399,7 +399,9 @@ print(indirect_effect)
 # 7. Obtain bootstrap confidence intervals for the direct and indirect effects.
 
 ```
+direct_effect = 0.268711
 
+indirect_effect= 0.190681
 
 ### Part c (Code: 2 pts)
 
@@ -407,6 +409,31 @@ Create a function, `assertive_indirect_effect`, that takes in a data frame `df`,
 
 Then, obtain a bootstrap 95% confidence interval for the indirect effect. It is probably easiest to use the `boot` and `boot.ci` functions in the `boot` package, but you can code your own bootstrapping if you really want to. The researchers used 95% BCa confidence intervals, but you do not need to replicate their work.
 
+```{r}
+assertive_indirect_effect <- function(df, indices){
+  d <- df[indices,]
+  first_lm <-lm(assertive_behavior ~ beautification, 
+                data = d)
+  second_lm <-lm(sexual_motivation ~ beautification,
+               data = d)
+  third_lm <- lm(assertive_behavior ~ beautification + sexual_motivation,
+               data = d)
+  b_1 <- second_lm$coefficients["beautificationyes"]
+  c_2 <- third_lm$coefficients["sexual_motivation"]
+  ind_eff <- b_1*c_2
+  return(ind_eff)
+}
+
+boot_assert <- boot(data = neccessary_data, statistic = assertive_indirect_effect, R = 1000)
+
+boot.ci(boot_assert, type = "bca")
+
+```
+
+
+
 ### Part d (Explanation: 2 pts)
 
 Based on your bootstrap confidence interval, do you find sufficient evidence to reject $H_0:$ there is no indirect effect of beautification on assertiveness as mediated via sexual motivation in favor of $H_a:$ there is such an indirect effect? Explain your reasoning.
+
+Since our bootstrapped confidence interval does not contain the value 0, we can therefore reject H0 since a score of 0 would imply no indirect effect.
