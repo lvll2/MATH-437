@@ -31,13 +31,11 @@ Answer: A residual is the vertical distance between the observed value and the r
 
 *3. Write a sentence to interpret what $\beta_3$ means in the model given by Equation (3.20). (Make sure to use appropriate units!)
 
-Answer: Holding all else constant, for every increase in the variable, newspaper, we expect to see a 0.055 thousand increase in the sales.
-
-$\beta_3$ is the estimate for how much we expect sales to be affected for every $1,000 increase in spending on newspaper advertising, if we hold TV and radio advertising constant.
+Answer:$\beta_3$ is the estimate for how much we expect sales to be affected for every $1,000 increase in spending on newspaper advertising, if we hold TV and radio advertising constant.
 
 4. Give two statistics that measure the fit (or lack thereof) of a multiple linear regression model. For each statistic, as it increases, does the F-statistic for an ANOVA test with $H_0: \beta_1 = \ldots = \beta_p = 0$ increase or decrease?
 
-Two statistics that measure fit of a multiple linear regression model include the RSE (residual standard error) and R^2 values. As RSE increases we are seeing a worse fit for a model meaning its ANOVA F-statistic will decrease (RSE measures lack of fit so larger values imply larger lack of fit). As $R^2$ increases though we are seeing a greater amount of variance in the model be explained by X implying that as $R^2$ increases the F-statistic will increase as there is now greater evidence that at least one of the betas are not equal to another.
+Answer: Two statistics that measure fit of a multiple linear regression model include the RSE (residual standard error) and R^2 values. As RSE increases we are seeing a worse fit for a model meaning its ANOVA F-statistic will decrease (RSE measures lack of fit so larger values imply larger lack of fit). As $R^2$ increases though we are seeing a greater amount of variance in the model be explained by X implying that as $R^2$ increases the F-statistic will increase as there is now greater evidence that at least one of the betas are not equal to another.
 
 * 5. Explain how to turn a factor variable into one or more *dummy variables* (indicator variables).
 
