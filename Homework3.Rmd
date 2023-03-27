@@ -54,29 +54,37 @@ $balance = 518.50 - 6.19(South) + 12.50(East)$
 
 Answer: The difference between a main effect and an interaction effect is that a main effect is the direct relationship between some variable $X_1$ and the response, Y, whereas the interaction effect is the relationship between the synergy between two predictors $X_1$ and $X_2$ and how their own interaction is related to the response, Y.
 
-8. What kind of patterns should you look for in the *residual plot* to identify non-linear relationships between the predictors and the response? What kind of patterns should you look for to identify heteroscedasticity?
 
-Answer: You should look for no relationship in the residual plot. If there is a relationship you would see a u-shape, indication of non-linearity. In order to see heteroscedasticity, a fan shape in the residuals versus fitted would need to be seen in order to confirm non constant variances.
+* 8. What kind of patterns should you look for in the *residual plot* to identify non-linear relationships between the predictors and the response? What kind of patterns should you look for to identify heteroscedasticity?
+
+Answer: Residual plots would show systematic patterns such as curves if there was a non-linear relationship between the predictors and response. A fan or funnel shape in the residuals versus fitted values plot would indicate heteroscedasticity.
 
 9. With what kind of data would you expect to see correlation of error terms when fitting a linear regression model? Why?
 
 It is often time series data in which we would see correlation of errors when fitting a linear regression model. This is because there is often correlated data since our collection is from the same place just at different time points.
 
+
 10. Give a rule of thumb for guessing that a point has an *outlier* residual. Give a rule of thumb for guessing that a point is a *high leverage* point.  
 
-Answer: A genreal rule of thumb for determining whether or not a point is an outlier is calculating their studentized residual and if the $|studentized.residual| > 3$ the point is a potential outlier. For high leverage points, if the leverage statistic is far greater than $\frac{p+1}{n}$ this is indication of a high leverage point.
+Answer: A general rule of thumb for determining whether or not a point is an outlier is calculating their studentized residual and if the $|studentized.residual| > 3$ the point is a potential outlier. For high leverage points, if the leverage statistic is far greater than $\frac{p+1}{n}$ this is indication of a high leverage point.
+
+
 11. Explain why creating a scatterplot matrix of the response variable $y$ and all predictor variables is insufficient for detecting outliers and high leverage points.
+
+A scatterplot matrix of the response variable and all predictor variables is insufficient because for it is sometimes difficult to determine if a point is an outlier simply by looking at the plot and for high leverage points it is possible to have an observation that is within the normal range of values for individual predictors but unusual for the full set of predictors and when there is more than two predictors, all the dimesions of the data cannot be plotted simultaneously.
+
 12. Can *collinearity* be suspected based on inspecting the scatterplot matrix and correlation matrix? What about *multicollinearity*? Explain why/why not. 
 
-Answer: Collinearity can be suspected based on the scatterplot and correlation matrix. Multicollinearity on the other hand is sometimes not as easily sniffed out and in that situation we would turn to the variance inflation factor.
+Answer: Collinearity can be suspected based on the scatterplot and correlation matrix. Multicollinearity on the other hand is sometimes not as easily sniffed out because it is possible for collinearity to exist between 3+ variables even if there isn't high correlation between any two pairs, and in that situation we would turn to the variance inflation factor.
 
 13. What is the *variance inflation factor*? When/why do we use it? How is it computed?
 
-The variance inflation factor is the is the ratio of variance from the model fitted about the full model and the variance from the model fitted just around $\hat{\beta}_j$. We use it to determine whether or not variables have multicollinearity.
+The variance inflation factor of $\beta_j$ is a measure of how much the variance of $\beta_j$ is affected by multicollinearity. We use it to determine whether or not multicollinearity exists and how significant it is for each predictor. It is computed by calculating the ratio of variance from the model fitted about the full model to the variance from the model fitted just around $\hat{\beta}_j$.
 
 14. Briefly explain how *k-nearest neighbors regression* works. What are its advantages and disadvantages compared to linear regression?
 
-x
+KNN regression works by identifying the K training observations closest to a given prediction point, $x_0$ and estimating $f(x_0)$ by averaging all the responses of those K observations. The advantages of KNN regression are that it is a non-parametric method and therefore works better than linear regression when there is a non-linear relationship between $X$ and $Y$. However, when there is more than one predictor and a small number of observations per predictor, the "curse of dimensionality" begins to take effect since as the number of predictors, hence dimensions, grows, the "neighbors" of $x_0$ become increasingly spaced out leading to poor estimates of the response. Linear regression is also more easily interpreted.
+
 
 # Conceptual Problems
 
