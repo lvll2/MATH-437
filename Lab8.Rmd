@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r libraries and data, message = FALSE, warning = FALSE}
+library(tidyverse)
 library(ISLR2)
 library(ggplot2)
 library(dplyr)
@@ -54,9 +55,99 @@ For the model you selected in part (b), re-fit the model on the entire `Auto` da
 
 Run the code in ISLR Lab 6.5.1, "Best Subset Selection" and "Forward and Backward Stepwise Selection" subsections. (Do not run the "Choosing Among Models Using the Validation-Set Approach and Cross-Validation" section.)
 
+```{r}
+library(ISLR2)
+names(Hitters)
+
+dim(Hitters)
+sum(is.na(Hitters$Salary))
+```
+
+```{r}
+Hitters <- na.omit(Hitters)
+dim(Hitters)
+sum(is.na(Hitters))
+```
+
+```{r}
+library(leaps)
+regfit.full <- regsubsets(Salary ~ ., Hitters)
+summary(regfit.full)
+```
+
+```{r}
+regfit.full <- regsubsets(Salary ~ ., data = Hitters, nvmax = 19)
+reg.summary <- summary(regfit.full)
+```
+
+```{r}
+names(reg.summary)
+```
+
+```{r}
+reg.summary$rsq
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(reg.summary$rss, xlab = "Number of Variables", ylab = "RSS", type = "l")
+plot(reg.summary$adjr2, xlab = "Number of Variables", ylab = "Adjusted RSq", type = "l")
+```
+
+```{r eval=FALSE, include=FALSE}
+which.max(reg.summary$adjr2)
+```
+
+
+```{r eval=FALSE, include=FALSE}
+points(11, reg.summary$adjr2[11], col = "red", cex = 2, pch =20)
+```
+
+```{r}
+plot(reg.summary$cp, xlab = "Number of Variables", ylab = "Cp", type = "l")
+which.min(reg.summary$cp)
+points(10, reg.summary$cp[10], col="red", cex = 2, pch = 20)
+which.min(reg.summary$bic)
+plot(reg.summary$bic, xlab = "Number of Variables", ylab = "bic", type = "l" )
+points(6, reg.summary$bic[6],col="red", cex = 2, pch = 20 )
+```
+
+
+```{r}
+plot(regfit.full, scale = "r2")
+plot(regfit.full, scale = "adjr2")
+plot(regfit.full, scale = "Cp")
+plot(regfit.full, scale = "bic")
+```
+
+```{r}
+coef(regfit.full,6)
+```
+
+
+# Forward and Backward Stepwise Selection
+
+```{r}
+regfit.fwd <- regsubsets(Salary~., data = Hitters, nvmax = 19, method = "forward")
+summary(regfit.fwd)
+regfit.bwd <-  regsubsets(Salary ~ ., data = Hitters, nvmax = 19, method = "backward")
+summary(regfit.bwd)
+```
+
+```{r}
+coef(regfit.full, 7)
+coef(regfit.fwd, 7)
+coef(regfit.bwd, 7)
+```
+
+
+
+
 ### Part b (Explanation: 1 pt)
 
 Briefly explain how to interpret the plots created by `plot(regfit.full, scale = "some metric")` at the end of the Best Subset Selection section.
+
+To interpret the plots you are looking for either the highest ($R^2$ and $adjustedR^2$) or lowest (Cp and bic) values. These will be colored black on the plot which tells us what predictors are the most useful in terms of prediction. Thus for bic the best model will be the one with the 6 variables that are at the top of the plot and colored black.
 
 ### Part c (Code: 1 pt; Explanation: 1 pt)
 
@@ -66,12 +157,63 @@ The madden17_QB dataset contains the overall rating (`OVR`) and individual skill
 
 Perform best subset selection on this dataset, using `nvmax = 10`. You may have to remove the categorical variables (`Name` and `Team`) in the formula or the dataset used to fit the model.
 
+```{r}
+the_big_game <- madden17_QB %>% 
+  select(-"Name", -"Team")
+
+big_game_full_model <- regsubsets(OVR ~ ., data = the_big_game, nvmax = 10)
+big_game_summary <- summary(big_game_full_model)
+plot(big_game_full_model, scale = "bic")
+
+coef(big_game_full_model,10)
+
+```
+
 Did the algorithm correctly identify the 10 important variables in the model? If not, which variables were incorrectly left out, and which were incorrectly included?
+
+SFA from literature was not significant but was chosen in our model removing what we expected to be significant, ACC.
 
 ### Part d (Code: 1 pt; Explanation: 1 pt)
 
 Perform forward selection on this dataset, using `nvmax = 20`. How many variables are in the "best" model using BIC as a selection criterion? What about Cp? For the "best" model (using one of the criteria), which variables were incorrectly left out, and which were incorrectly included?
 
+```{r}
+the_big_game.fwd <- regsubsets(OVR~., data = the_big_game, nvmax = 20, method = "forward")
+big_summary_fwd <- summary(the_big_game.fwd)
+plot(big_summary_fwd$cp, xlab = "Number of Variables", ylab = "Cp", type = "l")
+which.min(big_summary_fwd$cp)
+points(15, big_summary_fwd$cp[15], col="red", cex = 2, pch = 20)
+
+coef(the_big_game.fwd, 15)
+
+plot(big_summary_fwd$bic, xlab = "Number of Variables", ylab = "bic", type = "l")
+which.min(big_summary_fwd$bic)
+points(12, big_summary_fwd$bic[12], col="red", cex = 2, pch = 20)
+
+coef(the_big_game.fwd, 12)
+```
+BIC had 12 significant variables and cp had 15 variables. Both BIC and cp had all 10 variables that previous literature mentioned but BIC also included SFA and PBK and cp also included SFA, CTH, SPC, RLS, PBK
+
 ## Part e (Code: 1 pt; Explanation: 1 pt)
 
 Perform backward selection on this dataset, using `nvmax = 20`. How many variables are in the "best" model using BIC as a selection criterion? What about Cp? For the "best" model (using one of the criteria), which variables were incorrectly left out, and which were incorrectly included?
+
+```{r}
+the_big_game.bwd <- regsubsets(OVR~., data = the_big_game, nvmax = 20, method = "backward")
+big_summary_bwd <- summary(the_big_game.bwd)
+plot(big_summary_bwd$cp, xlab = "Number of Variables", ylab = "Cp", type = "l")
+which.min(big_summary_bwd$cp)
+points(19, big_summary_bwd$cp[19], col="red", cex = 2, pch = 20)
+
+coef(the_big_game.bwd, 19)
+
+plot(big_summary_bwd$bic, xlab = "Number of Variables", ylab = "bic", type = "l")
+which.min(big_summary_bwd$bic)
+points(10, big_summary_bwd$bic[10], col="red", cex = 2, pch = 20)
+
+coef(the_big_game.fwd, 10)
+
+```
+
+
+The model that used cp as a measures had 19 variables and BIC had 10 variables. Both measurements failed to include ACC which we would expect to be in the model based on previous literature. cp also had the additional variables ELU, BCV, SFA, CTH, RLS, POW, KPW, KAC, RBK, and PBK. For Bic since it did not have ACC but still had 10 variables the additional one was SFA.
