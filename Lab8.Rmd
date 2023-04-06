@@ -1,6 +1,6 @@
 ---
 title: 'Lab Assignment #8'
-author: "Math 437 - Modern Data Analysis"
+author: "Nick Noel and Liz Villa"
 date: "Due April 5, 2023"
 output: pdf_document
 ---
@@ -261,7 +261,7 @@ coef(regfit.bwd, 7)
 
 Briefly explain how to interpret the plots created by `plot(regfit.full, scale = "some metric")` at the end of the Best Subset Selection section.
 
-To interpret the plots you are looking for either the highest ($R^2$ and $adjustedR^2$) or lowest (Cp and bic) values. These will be colored black on the plot which tells us what predictors are the most useful in terms of prediction. Thus for bic the best model will be the one with the 6 variables that are at the top of the plot and colored black.
+To interpret the plots you are looking for either the highest ($R^2$ and $adjustedR^2$) or lowest (Cp and BIC) values. These will be colored black on the plot which tells us what predictors are the most useful in terms of prediction. Thus for BIC the best model will be the one with the 6 variables that are at the top of the plot and colored black.
 
 ### Part c (Code: 1 pt; Explanation: 1 pt)
 
@@ -285,7 +285,7 @@ coef(big_game_full_model,10)
 
 Did the algorithm correctly identify the 10 important variables in the model? If not, which variables were incorrectly left out, and which were incorrectly included?
 
-SFA from literature was not significant but was chosen in our model removing what we expected to be significant, ACC.
+SFA from literature was not significant but was chosen in our model, the algorithm also removed the variable we expected to be significant, ACC.
 
 ### Part d (Code: 1 pt; Explanation: 1 pt)
 
@@ -306,7 +306,7 @@ points(12, big_summary_fwd$bic[12], col="red", cex = 2, pch = 20)
 
 coef(the_big_game.fwd, 12)
 ```
-BIC had 12 significant variables and cp had 15 variables. Both BIC and cp had all 10 variables that previous literature mentioned but BIC also included SFA and PBK and cp also included SFA, CTH, SPC, RLS, PBK
+BIC had 12 significant variables and cp had 15 variables. Both BIC and cp had all 10 variables that previous literature mentioned but BIC also incorrectly included SFA and PBK and cp also incorrectly included SFA, CTH, SPC, RLS, PBK.
 
 ## Part e (Code: 1 pt; Explanation: 1 pt)
 
@@ -330,4 +330,4 @@ coef(the_big_game.fwd, 10)
 ```
 
 
-The model that used cp as a measures had 19 variables and BIC had 10 variables. Both measurements failed to include ACC which we would expect to be in the model based on previous literature. cp also had the additional variables ELU, BCV, SFA, CTH, RLS, POW, KPW, KAC, RBK, and PBK. For Bic since it did not have ACC but still had 10 variables the additional one was SFA.
+The model that used Cp as a measures had 19 variables and BIC had 10 variables. Both measurements failed to include ACC which we would expect to be in the model based on previous literature. Cp also had the additional variables ELU, BCV, SFA, CTH, RLS, POW, KPW, KAC, RBK, and PBK. For BIC, it had the predictor SFA incorrectly included and ACC incorrectly left out.
