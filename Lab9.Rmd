@@ -34,14 +34,19 @@ Run the code in ISLR Lab 6.5.2.
 
 Which variables in the original Hitters dataset are *not* in the matrix `x`? What happened to them?
 
+The response variable, Salary, is not in the matrix `x`. The categorical variables have been converted to dummy variables.
+
 ## Part c (Explanation: 1 pt)
 
 Explain how to "force" R to fit an intercept-only model using the `glmnet` function.
+
+We can force R to fit an intercept-only model by setting the argument `lambda` equal to a very large number, for example $10^{10}$.
 
 ## Part d (Explanation: 1 pt)
 
 Given an optimal cross-validated value of $\lambda$, does ridge regression or LASSO tend to produce simpler models? Explain your reasoning.
 
+LASSO tends to produce simpler models because of its variable selection 
 # Problem 2: Auto Insurance Claims
 
 The `AutoBi` dataset in the `insuranceData` package contains information about a sample of 1,340 automobile insurance claims from 2002.
