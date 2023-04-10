@@ -71,15 +71,65 @@ AutoBi2 <- AutoBi %>% transmute(
 
 Divide the `AutoBi2` dataset into a training set and a test set. The test set should contain approximately 25% of the original dataset.
 
+```{r}
+# with tidymodels
+set.seed(1880)
+auto_split <- initial_split(AutoBi2, prop = 0.75) 
+
+auto_train <- training(auto_split)
+auto_test <- testing(auto_split)
+```
+
+
 ## Part b (Code: 2 pts)
 
 Using tidymodels, set up a workflow for a ridge regression model predicting `log_loss` from the other variables (`attorney`, `gender`, `marital`, `driver_insured`, `seatbelt`, and `age`) including both the appropriate `model` and `recipe`.  In part (c) you will tune the model, so make sure to include `penalty = tune()`.
 
+```{r}
+ridge_model <- linear_reg(mode = "regression", engine = "glmnet",
+                          penalty = tune(), # let's tune the lambda penalty term
+                          mixture = 0) # mixture = 0 specifies pure ridge regression
+
+ridge_wflow <- workflow() %>%
+  add_model(ridge_model)
+
+ridge_recipe <- recipe(
+  log_loss ~ attorney + gender + marital + driver_insured + seatbelt + age, # response ~ predictors
+  data = auto_train
+) %>%
+  step_normalize(all_numeric_predictors()) %>% # don't scale the response
+  step_dummy(all_nominal_predictors())
+
+ridge_wflow <- ridge_wflow %>%
+  add_recipe(ridge_recipe)
+```
+
+
 ## Part c (Code: 2 pts)
 
 Use 10-fold cross-validation with 2 repeats to determine the optimal value of $\lambda$ using the 1-standard error rule and the RMSE metric. It turns out that not a lot of shrinkage is necessary here; use a grid from 0 to 0.5 in increments of 0.05 (i.e., use the `expand.grid` function to manually set up your $\lambda$ grid rather than using `grid_regular`).
+```{r}
+set.seed(1332)
+auto_kfold <- vfold_cv(auto_train, v = 10, repeats = 2) 
+
+ridge_grid <- expand.grid(penalty = seq(0, 0.5, by = 0.05))
+
+ridge_tune1 <- tune_grid(ridge_model, 
+                      ridge_recipe, 
+                      resamples = auto_kfold, 
+                      grid = ridge_grid)
+
+ridge_best <- select_by_one_std_err(
+  ridge_tune1,
+  metric = "rmse",
+  desc(penalty) # order penalty from largest (highest bias = simplest model) to smallest
+)
+ridge_best
+```
 
 What is the optimal value of $\lambda$ according to your cross-validation?
+
+Th optimal value is $\lambda = 1.58$.
 
 ## Part d (Code: 2 pts)
 
@@ -87,6 +137,72 @@ Finalize your ridge regression workflow to use this value of $\lambda$, then fit
 
 Use the model to make predictions on the test set and obtain the estimate of test RMSE. 
 
+```{r fit ridge-tidy model}
+ridge_wflow_final <- finalize_workflow(ridge_wflow, parameters = ridge_best) 
+
+ridge_fit <- fit(ridge_wflow_final, data = auto_train)
+ridge_fit
+```
+
+```{r augment ridge fit}
+predictions_ridge <- broom::augment(ridge_fit, new_data = auto_test)
+predictions_ridge %>% dplyr::select(log_loss, .pred
+)
+rmse(predictions_ridge, truth = log_loss, estimate = .pred)
+```
+
+```{r ridge plot check}
+ggplot(predictions_ridge, aes(x = .pred, y = log_loss)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "blue")
+```
+
 ## Part e (Code: 3 pts)
 
 Repeat parts (b)-(d) for the LASSO model.
+
+```{r Lasso-tidy model}
+lasso_model <- linear_reg(mode = "regression", engine = "glmnet",
+                          penalty = tune(), # let's tune the lambda penalty term
+                          mixture = 1) # mixture = 1 specifies pure LASSO
+
+lasso_wflow <- workflow() %>%
+  add_model(lasso_model) %>%
+  add_recipe(ridge_recipe) # same recipe is needed, no need to reinvent the wheel
+```
+
+```{r tune model kfold lasso}
+lasso_tune1 <- tune_grid(lasso_model, 
+                      ridge_recipe, 
+                      resamples = auto_kfold, 
+                      grid = ridge_grid)
+```
+
+```{r select best lasso}
+lasso_best <- select_by_one_std_err(
+  lasso_tune1,
+  metric = "rmse",
+  desc(penalty) # order penalty from largest (highest bias = simplest model) to smallest
+)
+lasso_best
+```
+
+```{r fit lasso-tidy model}
+lasso_wflow_final <- finalize_workflow(lasso_wflow, parameters = lasso_best) 
+
+lasso_fit <- fit(lasso_wflow_final, data = auto_train)
+lasso_fit
+```
+
+```{r augment lasso fit}
+predictions_lasso <- broom::augment(lasso_fit, new_data = auto_test)
+predictions_lasso %>% dplyr::select(log_loss, .pred
+)
+rmse(predictions_lasso, truth = log_loss, estimate = .pred)
+```
+
+```{r lasso plot check}
+ggplot(predictions_lasso, aes(x = .pred, y = log_loss)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "blue")
+```
