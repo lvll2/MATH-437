@@ -1,6 +1,6 @@
 ---
 title: 'Lab Assignment #9'
-author: "Math 437 - Modern Data Analysis"
+author: "Nick Noel, Liz Villa, & Cadee Pinkerton"
 date: "Due April 12, 2023"
 output: pdf_document
 ---
@@ -27,20 +27,132 @@ This lab assignment is worth a total of **15 points**.
 # Problem 1: Book Code
 
 ## Part a (Code: 2 pts)
-
 Run the code in ISLR Lab 6.5.2.
+
+```{r}
+Hitters <- na.omit(Hitters)
+dim(Hitters)
+sum(is.na(Hitters))
+```
+
+```{r}
+x <- model.matrix(Salary ~ ., Hitters)[,-1]
+
+y <- Hitters$Salary
+```
+
+```{r}
+grid <- 10^seq(10, -2, length = 100)
+ridge.mod <- glmnet(x,y,alpha = 0, lambda = grid)
+```
+
+```{r}
+dim(coef(ridge.mod))
+```
+
+```{r}
+ridge.mod$lambda[50]
+coef(ridge.mod)[,50]
+sqrt(sum(coef(ridge.mod)[-1,50]^2))
+```
+
+```{r}
+ridge.mod$lambda[60]
+coef(ridge.mod)[,60]
+sqrt(sum(coef(ridge.mod)[-1,60]^2))
+```
+
+```{r}
+predict(ridge.mod, s=50, type = "coefficients")[1:20,]
+```
+
+```{r}
+set.seed(1)
+train <- sample(1:nrow(x), nrow(x)/2)
+test <- (-train)
+y.test <- y[test]
+```
+
+```{r}
+ridge.mod <- glmnet(x[train,], y[train], alpha = 0, lambda = grid, thresh = 1e-12)
+ridge.pred <- predict(ridge.mod, s=4, newx = x[test,])
+mean((ridge.pred-y.test)^2)
+```
+
+```{r}
+mean((mean(y[train])-y.test)^2)
+```
+
+```{r}
+ridge.pred <- predict(ridge.mod, s=1e10, newx = x[test, ])
+mean((ridge.pred - y.test)^2)
+```
+
+```{r}
+ridge.pred <- predict(ridge.mod, s=0, newx = x[test,], exact = T, x = x[train,], y = y[train])
+mean((ridge.pred - y.test)^2)
+
+lm(y~x, subset = train)
+predict(ridge.mod, s=0, exact = T, type = "coefficients", x = x[train, ], y = y[train])[1:20,]
+```
+
+```{r}
+set.seed(1)
+cv.out <- cv.glmnet(x[train, ], y[train], alpha = 0)
+plot(cv.out)
+bestlam <- cv.out$lambda.min
+bestlam
+```
+
+```{r}
+ridge.pred <- predict(ridge.mod, s= bestlam, newx = x[test,])
+mean((ridge.pred - y.test)^2)
+```
+
+```{r}
+out <- glmnet(x,y,alpha = 0)
+predict(out, type = "coefficients", s = bestlam)[1:20,]
+```
+
+```{r}
+lasso.mod <- glmnet(x[train,], y[train], alpha = 1, lambda = grid)
+plot(lasso.mod)
+```
+
+```{r}
+set.seed(1)
+cv.out <- cv.glmnet(x[train,], y[train], alpha = 1)
+plot(cv.out)
+bestlam <- cv.out$lambda.min
+lasso.pred <- predict(lasso.mod, s=bestlam, newx = x[test,])
+mean((lasso.pred - y.test)^2)
+```
+
+```{r}
+out <- glmnet(x,y,alpha = 1, lambda = grid)
+lasso.coef <- predict(out, type = "coefficients", s = bestlam)[1:20,]
+lasso.coef
+lasso.coef[lasso.coef!=0]
+```
 
 ## Part b (Explanation: 1 pt)
 
 Which variables in the original Hitters dataset are *not* in the matrix `x`? What happened to them?
 
+The response variable, Salary, is not in the matrix `x`. The categorical variables have been converted to dummy variables.
+
 ## Part c (Explanation: 1 pt)
 
 Explain how to "force" R to fit an intercept-only model using the `glmnet` function.
 
+We can force R to fit an intercept-only model by setting the argument `lambda` equal to a very large number, for example $10^{10}$.
+
 ## Part d (Explanation: 1 pt)
 
 Given an optimal cross-validated value of $\lambda$, does ridge regression or LASSO tend to produce simpler models? Explain your reasoning.
+
+LASSO tends to produce simpler models since it performs variable selection based on the optimal value of $\lambda$.
+
 
 # Problem 2: Auto Insurance Claims
 
