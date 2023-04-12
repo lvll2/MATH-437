@@ -9,11 +9,11 @@ output: pdf_document
 
 The purpose of this lab is to introduce ridge regression and LASSO.
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r libraries and data, message = FALSE, warning = FALSE}
+```{r libraries and data, include = FALSE}
 library(ISLR2)
 library(ggplot2)
 library(dplyr)
