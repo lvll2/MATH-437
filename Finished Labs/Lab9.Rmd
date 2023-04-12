@@ -27,6 +27,7 @@ This lab assignment is worth a total of **15 points**.
 # Problem 1: Book Code
 
 ## Part a (Code: 2 pts)
+Run the code in ISLR Lab 6.5.2.
 
 ```{r}
 Hitters <- na.omit(Hitters)
@@ -151,6 +152,7 @@ We can force R to fit an intercept-only model by setting the argument `lambda` e
 Given an optimal cross-validated value of $\lambda$, does ridge regression or LASSO tend to produce simpler models? Explain your reasoning.
 
 LASSO tends to produce simpler models since it performs variable selection based on the optimal value of $\lambda$.
+
 
 # Problem 2: Auto Insurance Claims
 
