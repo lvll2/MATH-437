@@ -139,15 +139,80 @@ The researchers who analyzed this data believed that people who thought that COV
 
 Randomly divide the `misinformation2` dataset into a holdout set with 20-25% of the data (anywhere from 130 to 170 observations is fine) and a training set with the remaining observations. I used seed `222` in my split, but you do not need to replicate my results. Either the "Base R" or the tidymodels (using `rsample`) way of doing the split is acceptable.
 
+```{r}
+set.seed(222)
+misinfo_split <- initial_split(misinformation2, prop = 0.75)
+misinfo_train <- training(misinfo_split)
+misinfo_test <- testing(misinfo_split)
+```
+
+
 ### Part b (Code: 4 pts; Explanation: 1 pt)
 
 Use K-nearest neighbors with a Euclidean distance (`dist_power = 2`) metric to predict whether someone will get the COVID-19 vaccine. Use repeated 5-fold cross-validation to find the optimal value of k, and explain why you chose that value of k. Remember to do all the necessary preparation work and fit the model on the entire training set afterwards. It is probably easiest to use a tidymodels workflow to do this part.
+
+```{r workflow, message = F, warning = F}
+library(workflows) 
+library(parsnip) 
+
+set.seed(1002)
+fv_kfold_tidy <- vfold_cv(misinfo_train, v = 5, repeats = 3)
+fv_kfold_tidy
+
+knn_model <- nearest_neighbor(mode = "classification", neighbors = tune(), dist_power = 2)
+
+knn_wflow <- workflow() %>%
+  add_model(knn_model)
+```
+
+```{r}
+knn_param_grid <- expand.grid(neighbors = seq(1, 10))
+```
+
+```{r preprocess knn}
+knn_recipe <- recipe(
+  Vaccine ~ COVID_Risk + Trust_in_Scientists + Misinformation, # response ~ predictors
+  data = misinfo_train
+) %>%
+  step_normalize(all_numeric_predictors()) # center and scale numeric predictors
+```
+
+```{r tune model loocv}
+knn_tune <- tune_grid(knn_model, 
+                      knn_recipe, 
+                      resamples = fv_kfold_tidy, 
+                      grid = knn_param_grid)
+```
+
+```{r}
+autoplot(knn_tune)
+```
+k = 6. 
+
 
 ### Part c (Code:  1.5 pts; Computation: 1 pt)
 
 Make your predictions on the holdout set. Then, obtain the confusion matrix for this model on the holdout set. Using the confusion matrix, estimate the accuracy, sensitivity (recall), specificity, positive predictive value (precision), and negative predictive value for the K-nearest neighbors model with your optimal value of K.
 
 Confirm your estimates by getting the `summary` of the confusion matrix. Remember to use the argument `event_level = "second"` in the summary function because we want to predict whether someone *will* get a vaccine.
+
+```{r knn optimized}
+knn_model_final <- nearest_neighbor(mode = "classification", neighbors = 6, dist_power = 2)
+
+knn_wflow <- workflow() %>%
+  add_model(knn_model_final) %>%
+  add_recipe(knn_recipe)
+
+
+knn_fit <- fit(knn_wflow, data = misinfo_train)
+
+predictions_knn_df <- broom::augment(knn_fit, new_data = misinfo_test)
+
+misinfo_conf_mat <- conf_mat(predictions_knn_df, truth = Vaccine, estimate = .pred_class)
+misinfo_conf_mat
+summary(misinfo_conf_mat, event_level = "second")
+```
+
 
 ### Part d (Code: 1 pt; Explanation: 1 pt)
 
@@ -157,6 +222,13 @@ Fit a logistic regression model on the training set predicting `Vaccine` from `C
 
 Use the `summary` or `coef` function to obtain the coefficient estimates, and write out the equation of the fitted logistic regression model. You can use either the log-odds formulation or the probability formulation, but please make sure you are describing what you are finding the log-odds or probability of.
 
+```{r}
+logr_misinfo <- glm(Vaccine ~ COVID_Risk + Trust_in_Scientists + Misinformation, 
+                  data = misinfo_train, family = "binomial")
+summary(logr_misinfo)
+```
+
+
 ### Part e (Explanation: 2 pts)
 
 Write a sentence interpreting the coefficient corresponding to `Trust_in_Scientists` in the logistic regression model. It is easiest to exponentiate the coefficient and discuss a *multiplicative* increase in odds.
@@ -164,6 +236,11 @@ Write a sentence interpreting the coefficient corresponding to `Trust_in_Scienti
 ### Part f (Code: 0.5 pt; Explanation: 2 pts)
 
 Using the `confint` function, obtain 95% confidence intervals for the parameters of the population logistic regression model. Based on the confidence intervals, which of the researchers' suspicions about the relationship between `Vaccine` and the three predictors can you conclude are true?
+
+```{r}
+confint(logr_misinfo, level = 0.95)
+```
+
 
 ### Part g (Code: 2 pts; Computation: 1 pt)
 
@@ -176,6 +253,23 @@ Using similar code to Lab 4.7.2 or an `if_else` statement, classify each respond
 Use the `table` function to obtain the confusion matrix for this model on the holdout set. Based on the confusion matrix, estimate the accuracy, sensitivity (recall), specificity, positive predictive value (precision), and negative predictive value for the logistic regression model.
 
 Confirm your estimates using the `conf_mat` and `summary` functions in the `yardstick` package. Remember to use the argument `event_level = "second"` in the summary function because we want to predict whether someone *will* get a vaccine.
+
+```{r predictions}
+predicted_probs <- predict(logr_misinfo, newdata = misinfo_test, type = "response")
+logr_predictions <- tibble(Misinformation = misinfo_test$Misinformation, Trust_in_Scientists = misinfo_test$Trust_in_Scientists, COVID_Risk = misinfo_test$COVID_Risk, Vaccine = misinfo_test$Vaccine, Prediction = predicted_probs)
+
+p.threshold <- 0.5
+
+predicted_category <- if_else(predicted_probs > p.threshold, "Yes", "No")
+
+logr_prediction <- tibble(Misinformation = misinfo_test$Misinformation, Trust_in_Scientists = misinfo_test$Trust_in_Scientists, COVID_Risk = misinfo_test$COVID_Risk, Vaccine = misinfo_test$Vaccine, 
+                          pred_prob = predicted_probs, pred_class = predicted_category)
+
+table(logr_prediction$pred_class, logr_prediction$Vaccine, 
+      dnn = c("Predicted","Actual"))
+```
+
+
 
 ### Part h (Code: 2.5 pts; Computation: 1 pt)
 
