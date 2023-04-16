@@ -41,13 +41,21 @@ To convert probabilities to odds, we manipulate the logistic function $p(X) = e^
 
 2. Write a sentence to interpret each Coefficient in Table 4.3.
 
-For every $\$100$ increase in balance, the log odds of default increases by 0.57%. For every $\$1,000$ increase in income, the log odds of default increases by 0.003%. Compared to non-students, being a student decreases the log odds of default by 0.468%.
+For every $\$1$ increase in balance, we expect the log odds of default to increase by 0.0057%. For every $\$1,000$ increase in income, we expect the log odds of default to increase by 0.003%. Compared to non-students, we expect the log odds of default to decrease by 0.468% for students.
 
 3. Why is the choice of a *baseline* (or *reference level*) for the response variable critical when interpreting slopes in multinomial logistic regression, but not so much in (standard) logistic regression?
 
+In multinomial regression, the choice of baseline affects how we interpret the log odds, since for each predictors coefficient, we are interpreting them relative to the chosen baseline. In standard logistic regression we only have two classes in our response so when we change our baseline, only the sign of the coefficients change rather than the value and our interpretation remains the same except for the direction of change.
+
+
 4. In *Bayes' Theorem* (Equation 4.15), what does $\pi_k$ represent about class $k$? What does $f_k(x)$ represent?
 
+$\pi_k$ represents the prior probability that a randomly chosen observation comes from class k. $f_k(x)$ is the density function of X for an observation that comes from the kth class. In other words, for qualitative random variables, it is the probability that an observation $X \approx x$ given that the observation comes from the kth class; for quantitative random variables it is the probability that $X$ falls into a small region $dx$ around $x$.
+
+
 5. Compare and contrast the assumptions about the predictor(s) in *linear discriminant analysis* vs. *quadratic discriminant analysis*. Which approach leads to more complex/flexible models?
+
+In linear discriminant analysis (LDA) we are assuming that within each class the distributions of our observations are approximately normal and that there's a common variance across classes. Quadratic discriminant analysis leads to more complex/flexible models.
 
 6. Use the *confusion matrix* in Table 4.5 to find the *sensitivity*, *specificity*,  *positive predictive value* and *negative predictive value* for this algorithm. It's okay to keep your answers as fractions.
 
