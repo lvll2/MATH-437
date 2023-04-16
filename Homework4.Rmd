@@ -36,14 +36,27 @@ misinformation1 <- readr::read_csv("misinformation1.csv")
 Read Chapter 4 of Introduction to Statistical Learning, Second Edition. Based on your reading, answer the following questions.
 
 1. Explain how to convert probabilities to *odds* and to *logits*.
+
+To convert probabilities to odds, we manipulate the logistic function $p(X) = e^{\beta_0 + \beta_1X}/(1 + e^{\beta_0 + \beta_1X})$ to solve for $e^{\beta_0 + \beta_1X}$. To obtain logits, we take the logarithm of the manipulated equation to obtain $log(\frac{p(X)}{1 - p(X)})$.
+
 2. Write a sentence to interpret each Coefficient in Table 4.3.
+
+For every $\$100$ increase in balance, the log odds of default increases by 0.57%. For every $\$1,000$ increase in income, the log odds of default increases by 0.003%. Compared to non-students, being a student decreases the log odds of default by 0.468%.
+
 3. Why is the choice of a *baseline* (or *reference level*) for the response variable critical when interpreting slopes in multinomial logistic regression, but not so much in (standard) logistic regression?
+
 4. In *Bayes' Theorem* (Equation 4.15), what does $\pi_k$ represent about class $k$? What does $f_k(x)$ represent?
+
 5. Compare and contrast the assumptions about the predictor(s) in *linear discriminant analysis* vs. *quadratic discriminant analysis*. Which approach leads to more complex/flexible models?
+
 6. Use the *confusion matrix* in Table 4.5 to find the *sensitivity*, *specificity*,  *positive predictive value* and *negative predictive value* for this algorithm. It's okay to keep your answers as fractions.
+
 7. What do the x-axis and y-axis on a *receiver operating characteristic* (ROC) curve represent? What is the curve actually a function of? 
+
 8. Compare and contrast the assumptions about the predictors in *linear discriminant analysis* vs. *Naive Bayes*. When are they equivalent?
+
 9. Consider the five methods compared in Section 4.5.2: LDA, QDA, Naive Bayes, Logistic Regression, K-Nearest Neighbors. Which methods would you guess to perform best when you suspect the decision boundary to be (a) linear, (b) moderately nonlinear, (c) highly complex?
+
 10. How does "regression" work in a *generalized linear model*?
 
 # Conceptual Problems
