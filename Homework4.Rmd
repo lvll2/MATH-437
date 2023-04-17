@@ -187,7 +187,7 @@ knn_tune <- tune_grid(knn_model,
 ```{r}
 autoplot(knn_tune)
 ```
-k = 6. 
+The optimal value I chose is k = 6 because it has the highest accuracy. 
 
 
 ### Part c (Code:  1.5 pts; Computation: 1 pt)
@@ -210,9 +210,20 @@ predictions_knn_df <- broom::augment(knn_fit, new_data = misinfo_test)
 
 knn_conf_mat <- conf_mat(predictions_knn_df, truth = Vaccine, estimate = .pred_class)
 knn_conf_mat
+```
+accuracy: 133/169 = 0.79
+
+sensitivity: TP/TP+FN = 106/124 = 0.85
+
+specificity: TN/TN+FP = 27/45 = 0.6
+
+ppv: TP/TP+FP = 106/124 = 0.85
+
+npv: TN/TN+FN = 27/46 = 0.6
+
+```{r}
 summary(knn_conf_mat, event_level = "second")
 ```
-
 
 ### Part d (Code: 1 pt; Explanation: 1 pt)
 
@@ -227,7 +238,7 @@ logr_misinfo <- glm(Vaccine ~ COVID_Risk + Trust_in_Scientists + Misinformation,
                   data = misinfo_train, family = "binomial")
 summary(logr_misinfo)
 ```
-
+logit(Someone will get a Vaccine) = -3.12 + 0.92(`COVID_Risk`) + 0.43(`Trust_in_Scientists`) - 0.398(`Misinformation`)
 
 ### Part e (Explanation: 2 pts)
 
@@ -268,6 +279,15 @@ logr_prediction <- tibble(Misinformation = misinfo_test$Misinformation, Trust_in
 table(logr_prediction$pred_class, logr_prediction$Vaccine, 
       dnn = c("Predicted","Actual"))
 ```
+accuracy: 135/169 = 0.799
+
+sensitivity: TP/TP+FN = 114/124 = 0.92
+
+specificity: TN/TN+FP = 21/46 = 0.46
+
+ppv: TP/TP+FP = 114/138 = 0.83
+
+npv: TN/TN+FN = 21/31 = 0.68
 
 ```{r}
 logr_prediction$pred_class<-as.factor(logr_prediction$pred_class)
@@ -321,9 +341,20 @@ predictions_nb_df %>% dplyr::select(
 
 nb_conf_mat <- conf_mat(predictions_nb_df, truth = Vaccine, estimate = .pred_class)
 nb_conf_mat
+```
+accuracy: 136/169 = 0.80
+
+sensitivity: TP/TP+FN = 109/124 = 0.88
+
+specificity: TN/TN+FP = 27/45 = 0.6
+
+ppv: TP/TP+FP = 109/127 = 0.86
+
+npv: TN/TN+FN = 27/42 = 0.64
+
+```{r}
 summary(nb_conf_mat, event_level = "second")
 ```
-
 ### Part i (Code: 0.5 pts; Explanation: 1 pt)
 
 Obtain the correlation matrix and vif for the predictors in the logistic regression model. Using your results, argue that the major assumption of naive Bayes is reasonably justified with these predictors.
@@ -369,9 +400,20 @@ predictions_lda_df %>% dplyr::select(
 
 lda_conf_mat <- conf_mat(predictions_lda_df, truth = Vaccine, estimate = .pred_class)
 lda_conf_mat
+```
+accuracy: 134/169 = 0.79
+
+sensitivity: TP/TP+FN = 113/124 = 0.91
+
+specificity: TN/TN+FP = 21/45 = 0.47
+
+ppv: TP/TP+FP = 113/137 = 0.82
+
+npv: TN/TN+FN = 21/32 = 0.66
+
+```{r}
 summary(lda_conf_mat, event_level = "second")
 ```
-
 
 ### Part k (Code: 3 pts)
 
@@ -498,3 +540,5 @@ roc_auc(predictions_lda_df, truth = Vaccine, .pred_No)
 ### Part m (Explanation: 1.5 pts)
 
 Which of the four models you fit (k-nn, logistic regression, naive Bayes, or LDA) would you argue is the "best" model for predicting whether or not someone would get a COVID-19 vaccine? Justify your answer based on a metric *other* than accuracy.
+
+Based on the Brier score for each model, the naive Bayes model is the "best" model. This model has the lowest Brier score compared to the others at 0.049.
