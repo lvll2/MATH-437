@@ -23,7 +23,12 @@ knitr::opts_chunk$set(echo = TRUE)
 library(ISLR2)
 library(ggplot2)
 library(dplyr)
-library(tidymodels) 
+library(tidymodels)
+library(workflows) 
+library(parsnip) 
+library(car)
+library(discrim)
+library(klaR)
 
 # You will need other packages to fit models in the Applied Problem
 # List them here or as you encounter the need for them
@@ -41,7 +46,7 @@ To convert probabilities to odds, we manipulate the logistic function $p(X) = e^
 
 2. Write a sentence to interpret each Coefficient in Table 4.3.
 
-For every $\$1$ increase in balance, we expect the log odds of default to increase by 0.0057%. For every $\$1,000$ increase in income, we expect the log odds of default to increase by 0.003%. Compared to non-students, we expect the log odds of default to decrease by 0.468% for students.
+Holding all other predictors constant, for every $\$1$ increase in balance, we expect the log odds of default to increase by 0.0057%. Holding all other predictors constant, for every $\$1,000$ increase in income, we expect the log odds of default to increase by 0.003%. Holding all other predictors constant, when compared to non-students, we expect the log odds of default to decrease by 0.468% for students.
 
 3. Why is the choice of a *baseline* (or *reference level*) for the response variable critical when interpreting slopes in multinomial logistic regression, but not so much in (standard) logistic regression?
 
@@ -55,17 +60,38 @@ $\pi_k$ represents the prior probability that a randomly chosen observation come
 
 5. Compare and contrast the assumptions about the predictor(s) in *linear discriminant analysis* vs. *quadratic discriminant analysis*. Which approach leads to more complex/flexible models?
 
-In linear discriminant analysis (LDA) we are assuming that within each class the distributions of our observations are approximately normal and that there's a common variance across classes. Quadratic discriminant analysis leads to more complex/flexible models.
+In linear discriminant analysis (LDA) we are assuming that within each class, our observations come from multivariate normal distributions and that there's a common variance and covariance across classes. In quadratic discriminant analysis (QDA), we are making the same assumptions about normality, but we are not assuming that there's a common covariance matrix across classes. Quadratic discriminant analysis leads to more complex/flexible models since it is estimating a separate covariance matrix for each class.
+
 
 6. Use the *confusion matrix* in Table 4.5 to find the *sensitivity*, *specificity*,  *positive predictive value* and *negative predictive value* for this algorithm. It's okay to keep your answers as fractions.
 
+Sensitivity = 195/333
+Specificity = 9432/9667
+positive predictive value = 195/430
+negative predictive value = 9432/9570
+
+
 7. What do the x-axis and y-axis on a *receiver operating characteristic* (ROC) curve represent? What is the curve actually a function of? 
+
+The x-axis represents the false positive rate, and the y-axis represents the true positive rate. The curve is a function of our threshold value and how it affects sensitivity and the false positive rate. 
+
 
 8. Compare and contrast the assumptions about the predictors in *linear discriminant analysis* vs. *Naive Bayes*. When are they equivalent?
 
+In Naive Bayes, we assume the predictors are independent. They are equivalent when in Naive Bayes, we assume our observations for each predictor come from normal/Gaussian distributions similar to LDA.
+
 9. Consider the five methods compared in Section 4.5.2: LDA, QDA, Naive Bayes, Logistic Regression, K-Nearest Neighbors. Which methods would you guess to perform best when you suspect the decision boundary to be (a) linear, (b) moderately nonlinear, (c) highly complex?
 
+(a) LDA and logistic regression would likely perform best for linear decision boundaries with logisitic regression outperforming LDA when assumptions of normality are not met.
+
+(b) Naive Bayes and QDA would perform best for moderately non-linear decision boundaries with Naive Bayes outperforming QDA when there are only a small number of observations.
+
+(c) K-Nearest Neighbors would perform best for highly complex decision boundaries given that the appropriate value for K is chosen.
+
 10. How does "regression" work in a *generalized linear model*?
+
+Regression works by modeling the response, which is assumed to come from a distribution from the exponential family, and then transforming the expected value of the response so that this transformed mean is a linear function of predictors. 
+
 
 # Conceptual Problems
 
@@ -111,11 +137,11 @@ Using R, create the `S_setosa`, `S_versicolor`, and `S_overall` matrices.
 head(iris_sv)
 S_setosa <-  (cov(iris_sv %>% 
                          filter(Species == "setosa") %>% 
-                         select(-Species))*(50-1))
+                         dplyr::select(-Species))*(50-1))
 
 S_versicolor <-  (cov(iris_sv %>% 
                          filter(Species == "versicolor") %>% 
-                         select(-Species))*(50-1))
+                         dplyr::select(-Species))*(50-1))
 
 S_overall <-  S_setosa + S_versicolor
 
@@ -178,8 +204,8 @@ iris_sv %>%
 
 Explain how to use your results to classify a *new* iris flower to either *setosa* or *versicolor*. (Hint: think about where the decision boundary is...)
 
-In order to classify a new iris flower we would calculate its' discriminat and if that value is less than 0 
-we would predict it to be veriscolor and if that value were greater than 0 it would be classified as setosa. (I am assuming that the descision boundary is zero but I am not 100% positive)
+In order to classify a new iris flower we would calculate its' discriminant and if that value is less than 0 
+we would predict it to be veriscolor and if that value were greater than 0 it would be classified as setosa. (I am assuming that the decision boundary is zero but I am not 100% positive)
 
 # Applied Problems
 
@@ -214,9 +240,6 @@ misinfo_test <- testing(misinfo_split)
 Use K-nearest neighbors with a Euclidean distance (`dist_power = 2`) metric to predict whether someone will get the COVID-19 vaccine. Use repeated 5-fold cross-validation to find the optimal value of k, and explain why you chose that value of k. Remember to do all the necessary preparation work and fit the model on the entire training set afterwards. It is probably easiest to use a tidymodels workflow to do this part.
 
 ```{r workflow, message = F, warning = F}
-library(workflows) 
-library(parsnip) 
-
 set.seed(1002)
 fv_kfold_tidy <- vfold_cv(misinfo_train, v = 5, repeats = 3)
 fv_kfold_tidy
@@ -371,11 +394,6 @@ Obtain the confusion matrix for this model on the holdout set. Using the confusi
 
 Confirm your estimates by summarizing the confusion matrix again. Remember to use the argument `event_level = "second"` in the summary function because we want to predict whether someone *will* get a vaccine.
 
-```{r nb-tidy-new packages, message = FALSE, warning = FALSE}
-library(discrim)
-library(klaR) # default package to fit naive Bayes with tidymodels
-```
-
 ```{r add nb-tidy model}
 nb_model <- naive_Bayes(mode = "classification", engine = "klaR")
 
@@ -426,11 +444,12 @@ summary(nb_conf_mat, event_level = "second")
 Obtain the correlation matrix and vif for the predictors in the logistic regression model. Using your results, argue that the major assumption of naive Bayes is reasonably justified with these predictors.
 
 ```{r}
-library(car)
 vif(logr_misinfo)
-cor(misinformation2 %>% select(Misinformation,COVID_Risk,Trust_in_Scientists))
+misinformation2 %>% 
+  dplyr::select(Misinformation, Trust_in_Scientists, COVID_Risk) %>% 
+  cor()
 ```
-Based on these results, within each group we can assume `Trust_in_Scientists`, `COVID_Risk`, and `Misinformation` are independent.
+Since our VIF is below 5 and there are not high amounts of correlation between each group we can reasonably assume `Trust_in_Scientists`, `COVID_Risk`, and `Misinformation` are independent.
 
 ### Part j (Code: 2.5 pts; Computation: 1 pt)
 
