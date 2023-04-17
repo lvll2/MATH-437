@@ -72,12 +72,15 @@ In linear discriminant analysis (LDA) we are assuming that within each class the
 ## Conceptual Problem 1 (2 pts) 
 
 Textbook Exercise 4.8.1.
+    
 
 ## Conceptual Problem 2 (4 pts)
 
 ### Part a (1 pt)
 
 Textbook Exercise 4.8.2.
+
+
 
 ### Part b (3 pts)
 
@@ -101,7 +104,28 @@ Specifically, he wants to project this four-dimensional predictor space into a s
 
 Fisher starts by computing a "sum of squares and products" matrix S in each group. The S matrices can be found more easily in R by obtaining the variance-covariance matrix for the numerical predictors (e.g., using the `cov` function) and multiplying the entries by (n-1). Finally, Fisher adds the S matrices for each group to get the overall within-class variation.
 
+
 Using R, create the `S_setosa`, `S_versicolor`, and `S_overall` matrices.
+
+```{r}
+head(iris_sv)
+S_setosa <-  (cov(iris_sv %>% 
+                         filter(Species == "setosa") %>% 
+                         select(-Species))*(50-1))
+
+S_versicolor <-  (cov(iris_sv %>% 
+                         filter(Species == "versicolor") %>% 
+                         select(-Species))*(50-1))
+
+S_overall <-  S_setosa + S_versicolor
+
+print(S_setosa)
+print(S_versicolor) 
+print(S_overall)
+
+
+```
+
 
 ### Part b (Code: 1 pt; Explanation: 0.5 pts)
 
@@ -111,13 +135,45 @@ The discriminant function is then the inner product of $\lambda$ and $x$. This s
 
 Using R, solve the matrix equation (`%*%` does matrix multiplication and `solve` does matrix inversion) and perform Fisher's suggested scaling, then write out the discriminant function as a linear function of $x_1$, $x_2$, $x_3$, $x_4$.
 
+$x_1$ be Sepal Length, $x_2$ be Sepal Width, $x_3$ be Petal Length, and $x_4$ be Petal Width.
+
+```{r}
+D = matrix(data = c(mean(iris_sv_s$Sepal.Length) - mean(iris_sv_v$Sepal.Length),
+                    mean(iris_sv_s$Sepal.Width) - mean(iris_sv_v$Sepal.Width),
+                    mean(iris_sv_s$Petal.Length) - mean(iris_sv_v$Petal.Length),
+                    mean(iris_sv_s$Petal.Width) - mean(iris_sv_v$Petal.Width)))
+
+lambda = solve(S_overall, D)
+
+
+#Use Sepal Length as our reference level
+fisher_scaling = lambda * 1/lambda[1,1]
+```
+$ Discriminant \space Function = Sepal.Length*1 + Sepal.Width * 5.9038 - Petal.Length*7.1299 -Petal.Width*10.1037  $
+
 ### Part c (Code: 1 pt)
 
 Add a new variable to the `iris_sv` data frame, `discrim`, containing the values of the discriminant function for each flower. Create a dot plot showing the Species (response) vs. the discriminant function value (predictor). You may also want to color-code by Species.
 
+```{r}
+iris_sv <- iris_sv %>% 
+  mutate(discrim = Sepal.Length*1 + Sepal.Width * 5.9038 - Petal.Length*7.1299 -Petal.Width*10.1037)
+```
+
+```{r}
+iris_sv %>% 
+  ggplot(aes(x = discrim, y = Species, color = Species)) +
+  geom_point() 
+```
+
+
+
 ### Part d (Code and/or Explanation: 2 pts)
 
 Explain how to use your results to classify a *new* iris flower to either *setosa* or *versicolor*. (Hint: think about where the decision boundary is...)
+
+In order to classify a new iris flower we would calculate its' discriminat and if that value is less than 0 
+we would predict it to be veriscolor and if that value were greater than 0 it would be classified as setosa. (I am assuming that the descision boundary is zero but I am not 100% positive)
 
 # Applied Problems
 
