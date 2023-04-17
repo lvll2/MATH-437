@@ -138,10 +138,16 @@ Using R, solve the matrix equation (`%*%` does matrix multiplication and `solve`
 $x_1$ be Sepal Length, $x_2$ be Sepal Width, $x_3$ be Petal Length, and $x_4$ be Petal Width.
 
 ```{r}
-D = matrix(data = c(mean(iris_sv_s$Sepal.Length) - mean(iris_sv_v$Sepal.Length),
-                    mean(iris_sv_s$Sepal.Width) - mean(iris_sv_v$Sepal.Width),
-                    mean(iris_sv_s$Petal.Length) - mean(iris_sv_v$Petal.Length),
-                    mean(iris_sv_s$Petal.Width) - mean(iris_sv_v$Petal.Width)))
+iris_s <- iris_sv %>% 
+  filter(Species == "setosa")
+
+iris_v <- iris_sv %>% 
+  filter(Species == "versicolor")
+
+D = matrix(data = c(mean(iris_s$Sepal.Length) - mean(iris_v$Sepal.Length),
+                    mean(iris_s$Sepal.Width) - mean(iris_v$Sepal.Width),
+                    mean(iris_s$Petal.Length) - mean(iris_v$Petal.Length),
+                    mean(iris_s$Petal.Width) - mean(iris_v$Petal.Width)))
 
 lambda = solve(S_overall, D)
 
