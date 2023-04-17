@@ -36,14 +36,35 @@ misinformation1 <- readr::read_csv("misinformation1.csv")
 Read Chapter 4 of Introduction to Statistical Learning, Second Edition. Based on your reading, answer the following questions.
 
 1. Explain how to convert probabilities to *odds* and to *logits*.
+
+To convert probabilities to odds, we manipulate the logistic function $p(X) = e^{\beta_0 + \beta_1X}/(1 + e^{\beta_0 + \beta_1X})$ to solve for $e^{\beta_0 + \beta_1X}$. To obtain logits, we take the logarithm of the manipulated equation to obtain $log(\frac{p(X)}{1 - p(X)})$.
+
 2. Write a sentence to interpret each Coefficient in Table 4.3.
+
+For every $\$1$ increase in balance, we expect the log odds of default to increase by 0.0057%. For every $\$1,000$ increase in income, we expect the log odds of default to increase by 0.003%. Compared to non-students, we expect the log odds of default to decrease by 0.468% for students.
+
 3. Why is the choice of a *baseline* (or *reference level*) for the response variable critical when interpreting slopes in multinomial logistic regression, but not so much in (standard) logistic regression?
+
+In multinomial regression, the choice of baseline affects how we interpret the log odds, since for each predictors coefficient, we are interpreting them relative to the chosen baseline. In standard logistic regression we only have two classes in our response so when we change our baseline, only the sign of the coefficients change rather than the value and our interpretation remains the same except for the direction of change.
+
+
 4. In *Bayes' Theorem* (Equation 4.15), what does $\pi_k$ represent about class $k$? What does $f_k(x)$ represent?
+
+$\pi_k$ represents the prior probability that a randomly chosen observation comes from class k. $f_k(x)$ is the density function of X for an observation that comes from the kth class. In other words, for qualitative random variables, it is the probability that an observation $X \approx x$ given that the observation comes from the kth class; for quantitative random variables it is the probability that $X$ falls into a small region $dx$ around $x$.
+
+
 5. Compare and contrast the assumptions about the predictor(s) in *linear discriminant analysis* vs. *quadratic discriminant analysis*. Which approach leads to more complex/flexible models?
+
+In linear discriminant analysis (LDA) we are assuming that within each class the distributions of our observations are approximately normal and that there's a common variance across classes. Quadratic discriminant analysis leads to more complex/flexible models.
+
 6. Use the *confusion matrix* in Table 4.5 to find the *sensitivity*, *specificity*,  *positive predictive value* and *negative predictive value* for this algorithm. It's okay to keep your answers as fractions.
+
 7. What do the x-axis and y-axis on a *receiver operating characteristic* (ROC) curve represent? What is the curve actually a function of? 
+
 8. Compare and contrast the assumptions about the predictors in *linear discriminant analysis* vs. *Naive Bayes*. When are they equivalent?
+
 9. Consider the five methods compared in Section 4.5.2: LDA, QDA, Naive Bayes, Logistic Regression, K-Nearest Neighbors. Which methods would you guess to perform best when you suspect the decision boundary to be (a) linear, (b) moderately nonlinear, (c) highly complex?
+
 10. How does "regression" work in a *generalized linear model*?
 
 # Conceptual Problems
@@ -118,15 +139,80 @@ The researchers who analyzed this data believed that people who thought that COV
 
 Randomly divide the `misinformation2` dataset into a holdout set with 20-25% of the data (anywhere from 130 to 170 observations is fine) and a training set with the remaining observations. I used seed `222` in my split, but you do not need to replicate my results. Either the "Base R" or the tidymodels (using `rsample`) way of doing the split is acceptable.
 
+```{r}
+set.seed(222)
+misinfo_split <- initial_split(misinformation2, prop = 0.75)
+misinfo_train <- training(misinfo_split)
+misinfo_test <- testing(misinfo_split)
+```
+
+
 ### Part b (Code: 4 pts; Explanation: 1 pt)
 
 Use K-nearest neighbors with a Euclidean distance (`dist_power = 2`) metric to predict whether someone will get the COVID-19 vaccine. Use repeated 5-fold cross-validation to find the optimal value of k, and explain why you chose that value of k. Remember to do all the necessary preparation work and fit the model on the entire training set afterwards. It is probably easiest to use a tidymodels workflow to do this part.
+
+```{r workflow, message = F, warning = F}
+library(workflows) 
+library(parsnip) 
+
+set.seed(1002)
+fv_kfold_tidy <- vfold_cv(misinfo_train, v = 5, repeats = 3)
+fv_kfold_tidy
+
+knn_model <- nearest_neighbor(mode = "classification", neighbors = tune(), dist_power = 2)
+
+knn_wflow <- workflow() %>%
+  add_model(knn_model)
+```
+
+```{r}
+knn_param_grid <- expand.grid(neighbors = seq(1, 10))
+```
+
+```{r preprocess knn}
+knn_recipe <- recipe(
+  Vaccine ~ COVID_Risk + Trust_in_Scientists + Misinformation, # response ~ predictors
+  data = misinfo_train
+) %>%
+  step_normalize(all_numeric_predictors()) # center and scale numeric predictors
+```
+
+```{r tune model loocv}
+knn_tune <- tune_grid(knn_model, 
+                      knn_recipe, 
+                      resamples = fv_kfold_tidy, 
+                      grid = knn_param_grid)
+```
+
+```{r}
+autoplot(knn_tune)
+```
+k = 6. 
+
 
 ### Part c (Code:  1.5 pts; Computation: 1 pt)
 
 Make your predictions on the holdout set. Then, obtain the confusion matrix for this model on the holdout set. Using the confusion matrix, estimate the accuracy, sensitivity (recall), specificity, positive predictive value (precision), and negative predictive value for the K-nearest neighbors model with your optimal value of K.
 
 Confirm your estimates by getting the `summary` of the confusion matrix. Remember to use the argument `event_level = "second"` in the summary function because we want to predict whether someone *will* get a vaccine.
+
+```{r knn optimized}
+knn_model_final <- nearest_neighbor(mode = "classification", neighbors = 6, dist_power = 2)
+
+knn_wflow <- workflow() %>%
+  add_model(knn_model_final) %>%
+  add_recipe(knn_recipe)
+
+
+knn_fit <- fit(knn_wflow, data = misinfo_train)
+
+predictions_knn_df <- broom::augment(knn_fit, new_data = misinfo_test)
+
+knn_conf_mat <- conf_mat(predictions_knn_df, truth = Vaccine, estimate = .pred_class)
+knn_conf_mat
+summary(knn_conf_mat, event_level = "second")
+```
+
 
 ### Part d (Code: 1 pt; Explanation: 1 pt)
 
@@ -136,6 +222,13 @@ Fit a logistic regression model on the training set predicting `Vaccine` from `C
 
 Use the `summary` or `coef` function to obtain the coefficient estimates, and write out the equation of the fitted logistic regression model. You can use either the log-odds formulation or the probability formulation, but please make sure you are describing what you are finding the log-odds or probability of.
 
+```{r}
+logr_misinfo <- glm(Vaccine ~ COVID_Risk + Trust_in_Scientists + Misinformation, 
+                  data = misinfo_train, family = "binomial")
+summary(logr_misinfo)
+```
+
+
 ### Part e (Explanation: 2 pts)
 
 Write a sentence interpreting the coefficient corresponding to `Trust_in_Scientists` in the logistic regression model. It is easiest to exponentiate the coefficient and discuss a *multiplicative* increase in odds.
@@ -143,6 +236,11 @@ Write a sentence interpreting the coefficient corresponding to `Trust_in_Scienti
 ### Part f (Code: 0.5 pt; Explanation: 2 pts)
 
 Using the `confint` function, obtain 95% confidence intervals for the parameters of the population logistic regression model. Based on the confidence intervals, which of the researchers' suspicions about the relationship between `Vaccine` and the three predictors can you conclude are true?
+
+```{r}
+confint(logr_misinfo, level = 0.95)
+```
+
 
 ### Part g (Code: 2 pts; Computation: 1 pt)
 
@@ -156,6 +254,29 @@ Use the `table` function to obtain the confusion matrix for this model on the ho
 
 Confirm your estimates using the `conf_mat` and `summary` functions in the `yardstick` package. Remember to use the argument `event_level = "second"` in the summary function because we want to predict whether someone *will* get a vaccine.
 
+```{r predictions}
+predicted_probs <- predict(logr_misinfo, newdata = misinfo_test, type = "response")
+logr_predictions <- tibble(Misinformation = misinfo_test$Misinformation, Trust_in_Scientists = misinfo_test$Trust_in_Scientists, COVID_Risk = misinfo_test$COVID_Risk, Vaccine = misinfo_test$Vaccine, Prediction = predicted_probs)
+
+p.threshold <- 0.5
+
+predicted_category <- if_else(predicted_probs > p.threshold, "Yes", "No")
+
+logr_prediction <- tibble(Misinformation = misinfo_test$Misinformation, Trust_in_Scientists = misinfo_test$Trust_in_Scientists, COVID_Risk = misinfo_test$COVID_Risk, Vaccine = misinfo_test$Vaccine, 
+                          pred_prob = predicted_probs, pred_class = predicted_category)
+
+table(logr_prediction$pred_class, logr_prediction$Vaccine, 
+      dnn = c("Predicted","Actual"))
+```
+
+```{r}
+logr_prediction$pred_class<-as.factor(logr_prediction$pred_class)
+logr_conf_mat <- conf_mat(logr_prediction, truth = Vaccine, estimate = pred_class)
+logr_conf_mat
+summary(logr_conf_mat, event_level = "second")
+```
+
+
 ### Part h (Code: 2.5 pts; Computation: 1 pt)
 
 Fit a naive Bayes model on the training set predicting `Vaccine` from `COVID_Risk`, `Trust_in_Scientists`, and `Misinformation` and obtain predictions for the holdout set. You can use either version from lab (using the `naiveBayes` function in the e1071 package) or the tidymodels version (using the klaR and discrim packages).
@@ -164,9 +285,55 @@ Obtain the confusion matrix for this model on the holdout set. Using the confusi
 
 Confirm your estimates by summarizing the confusion matrix again. Remember to use the argument `event_level = "second"` in the summary function because we want to predict whether someone *will* get a vaccine.
 
+```{r nb-tidy-new packages, message = FALSE, warning = FALSE}
+library(discrim)
+library(klaR) # default package to fit naive Bayes with tidymodels
+```
+
+```{r add nb-tidy model}
+nb_model <- naive_Bayes(mode = "classification", engine = "klaR")
+
+nb_wflow <- workflow() %>%
+  add_model(nb_model)
+```
+
+```{r add nb-tidy recipe}
+nb_recipe <- recipe(
+  Vaccine ~ Misinformation + Trust_in_Scientists + COVID_Risk, 
+  data = misinfo_train
+)
+
+nb_wflow <- nb_wflow %>%
+  add_recipe(nb_recipe)
+```
+
+```{r fit nb-tidy model}
+nb_fit <- fit(nb_wflow, data = misinfo_train)
+```
+
+```{r nb-tidy augment}
+predictions_nb_df <- broom::augment(nb_fit, new_data = misinfo_test)
+predictions_nb_df %>% dplyr::select(
+  Vaccine, 
+  .pred_class, 
+  .pred_Yes, 
+  .pred_No)
+
+nb_conf_mat <- conf_mat(predictions_nb_df, truth = Vaccine, estimate = .pred_class)
+nb_conf_mat
+summary(nb_conf_mat, event_level = "second")
+```
+
 ### Part i (Code: 0.5 pts; Explanation: 1 pt)
 
 Obtain the correlation matrix and vif for the predictors in the logistic regression model. Using your results, argue that the major assumption of naive Bayes is reasonably justified with these predictors.
+
+```{r}
+library(car)
+vif(logr_misinfo)
+cor(misinformation2 %>% select(Misinformation,COVID_Risk,Trust_in_Scientists))
+```
+
 
 ### Part j (Code: 2.5 pts; Computation: 1 pt)
 
@@ -176,13 +343,157 @@ Obtain the confusion matrix for this model on the holdout set. Using the confusi
 
 Confirm your estimates by summarizing the confusion matrix again. Remember to use the argument `event_level = "second"` in the summary function because we want to predict whether someone *will* get a vaccine.
 
+```{r add lda-tidy model}
+lda_model <- discrim_linear(mode = "classification", engine = "MASS")
+
+lda_wflow <- workflow() %>%
+  add_model(lda_model)
+```
+
+```{r add lda-tidy recipe}
+lda_wflow <- lda_wflow %>%
+  add_recipe(nb_recipe)
+```
+
+```{r fit lda-tidy model}
+lda_fit <- fit(lda_wflow, data = misinfo_train)
+```
+
+```{r lda-tidy augment}
+predictions_lda_df <- broom::augment(lda_fit, new_data = misinfo_test)
+predictions_lda_df %>% dplyr::select(
+  Vaccine, 
+  .pred_class, 
+  .pred_Yes, 
+  .pred_No)
+
+lda_conf_mat <- conf_mat(predictions_lda_df, truth = Vaccine, estimate = .pred_class)
+lda_conf_mat
+summary(lda_conf_mat, event_level = "second")
+```
+
+
 ### Part k (Code: 3 pts)
 
 For each of the four models, obtain the Matthews Correlation Coefficient, (mean) log-loss, and Brier score.
 
+```{r Brier score for knn}
+summary(knn_conf_mat, event_level = "second") %>% filter(.metric == "mcc")
+
+brier_knn <- predictions_knn_df %>% mutate(
+  squared_error = case_when(
+    .pred_class == "Yes" ~ (1 - .pred_Yes)^2,
+    .pred_class == "No" ~ (1 - .pred_No)^2
+  )
+)
+mean(brier_knn$squared_error)
+
+mn_log_loss(predictions_knn_df,
+            truth = Vaccine,
+            .pred_Yes,
+            event_level = "second"
+)
+```
+
+```{r Brier score for logr}
+summary(logr_conf_mat, event_level = "second") %>% filter(.metric == "mcc")
+
+logr_predictions <- logr_predictions %>% mutate(pred_Class = predicted_category)
+brier_nb <- logr_predictions %>% mutate(
+  squared_error = case_when(
+    pred_Class == "Yes" ~ (1 - Prediction)^2,
+    pred_Class == "No" ~ (1 - pred_No)^2
+  )
+)
+mean(brier_nb$squared_error)
+
+mn_log_loss(logr_predictions,
+            truth = Vaccine,
+            Prediction,
+            event_level = "second"
+)
+```
+
+```{r Brier score for naive Bayes}
+summary(nb_conf_mat, event_level = "second") %>% filter(.metric == "mcc")
+
+brier_nb <- predictions_nb_df %>% mutate(
+  squared_error = case_when(
+    .pred_class == "Yes" ~ (1 - .pred_Yes)^2,
+    .pred_class == "No" ~ (1 - .pred_No)^2
+  )
+)
+mean(brier_nb$squared_error)
+
+mn_log_loss(predictions_nb_df,
+            truth = Vaccine,
+            .pred_Yes,
+            event_level = "second"
+)
+```
+
+```{r Brier score for lda}
+summary(lda_conf_mat, event_level = "second") %>% filter(.metric == "mcc")
+
+brier_lda <- predictions_lda_df %>% mutate(
+  squared_error = case_when(
+    .pred_class == "Yes" ~ (1 - .pred_Yes)^2,
+    .pred_class == "No" ~ (1 - .pred_No)^2
+  )
+)
+mean(brier_lda$squared_error)
+
+mn_log_loss(predictions_lda_df,
+            truth = Vaccine,
+            .pred_Yes,
+            event_level = "second"
+)
+```
+
 ### Part l (Code: 2 pts)
 
 For each of the four models, produce a plot of the receiver operating characteristic (ROC) curve, and obtain the area under the curve (AUC).
+
+```{r ROC curve - knn}
+# Construct the ROC curve
+roc_tibble_knn <- roc_curve(predictions_knn_df, truth = Vaccine, .pred_No)
+
+# Plot the ROC curve
+autoplot(roc_tibble_knn) + labs(title = "ROC Curve for Test Set")
+
+roc_auc(predictions_knn_df, truth = Vaccine, .pred_No)
+```
+
+```{r ROC curve - logr}
+# Construct the ROC curve
+logr_predictions <- logr_predictions %>% mutate(pred_No = 1-Prediction)
+roc_tibble_logr <- roc_curve(logr_predictions, truth = Vaccine, pred_No)
+
+# Plot the ROC curve
+autoplot(roc_tibble_logr) + labs(title = "ROC Curve for Test Set")
+
+roc_auc(logr_predictions, truth = Vaccine, pred_No)
+```
+
+```{r ROC curve - nb}
+# Construct the ROC curve
+roc_tibble_nb <- roc_curve(predictions_nb_df, truth = Vaccine, .pred_No)
+
+# Plot the ROC curve
+autoplot(roc_tibble_nb) + labs(title = "ROC Curve for Test Set")
+
+roc_auc(predictions_nb_df, truth = Vaccine, .pred_No)
+```
+
+```{r ROC curve - lda}
+# Construct the ROC curve
+roc_tibble_lda <- roc_curve(predictions_lda_df, truth = Vaccine, .pred_No)
+
+# Plot the ROC curve
+autoplot(roc_tibble_lda) + labs(title = "ROC Curve for Test Set")
+
+roc_auc(predictions_lda_df, truth = Vaccine, .pred_No)
+```
 
 ### Part m (Explanation: 1.5 pts)
 
