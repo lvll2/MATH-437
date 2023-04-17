@@ -50,11 +50,15 @@ text(tree.carseats, pretty = 0)
 
 1. Briefly explain how to interpret this tree.
 
+If the condition at the root is met we go to the left, if not we go to the right down the tree and repeat for subsequent conditions until we reach the terminal node which will be our prediction for that observation. So for example, in this case, if the shelving location is good, we go to the right and if the price is greater than or equal to 142, we predict No.
+
 ```{r print tree}
 tree.carseats
 ```
 
 2. What do the numbers in the parentheses mean? What do the stars mean?
+
+The stars mean that that branch leads to a terminal node. The numbers in the parentheses represent the probabilities of being in each class (Yes No) for that branch.
 
 ```{r tree model}
 set.seed(2)
@@ -66,6 +70,7 @@ names(tree.carseats)
 ```
 
 3. What does the argument `xval = 10` mean?
+The argument means we want 10 cross-validations to be performed.
 
 ```{r tree prediction}
 tree.pred <- predict(tree.carseats, Carseats.test, type = "class")
@@ -85,6 +90,7 @@ text(tree.boston, pretty = 0)
 ```
 
 4. Briefly explain how to interpret this tree.
+We are interperting this tree in the same fashion as the earlier tree so for example, if our observation has rm < 6.96 we go to the left of the root and if lstat >= 14.4 we go left again and if crim < 11.49 we go right down the tree and if age >= 93.95 we predict the median value to be 14.43.
 
 ```{r Boston prediction}
 yhat <- predict(tree.boston, Boston[-train,])
@@ -95,6 +101,7 @@ mean((yhat - boston.test)^2)
 ```
 
 5. Why do we get this pattern - a bunch of vertical lines?
+We get this pattern because we only have 7 possible values of $y$ that correspond to the 7 terminal nodes of our decision tree.
 
 ### Part b (Code: 1 pt)
 
