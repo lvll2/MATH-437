@@ -16,7 +16,7 @@ You should submit either two or three files:
 This homework assignment is worth a total of **50 points**.
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 ```
 
 ```{r libraries and data, message = FALSE, warning = FALSE}
