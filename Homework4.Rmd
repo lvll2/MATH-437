@@ -300,6 +300,8 @@ logit(Someone will get a Vaccine) = -3.12 + 0.92(`COVID_Risk`) + 0.43(`Trust_in_
 
 Write a sentence interpreting the coefficient corresponding to `Trust_in_Scientists` in the logistic regression model. It is easiest to exponentiate the coefficient and discuss a *multiplicative* increase in odds.
 
+When `Trust_in_Scientists` increases by one unit, holding all other predictors in the model constant, the multiplicative increase in odds of someone saying they will get a vaccine increases by 1.5.
+
 ### Part f (Code: 0.5 pt; Explanation: 2 pts)
 
 Using the `confint` function, obtain 95% confidence intervals for the parameters of the population logistic regression model. Based on the confidence intervals, which of the researchers' suspicions about the relationship between `Vaccine` and the three predictors can you conclude are true?
@@ -308,6 +310,7 @@ Using the `confint` function, obtain 95% confidence intervals for the parameters
 confint(logr_misinfo, level = 0.95)
 ```
 
+Based on the confidence intervals, we can conclude both of the scientists suspicions are true. People we thought that COVID-19 was a higher public risk and people who had higher trust in scientists would be more likely to say they would get a vaccine. Those who were more susceptible to believing misinformation about the vaccine would be less likely to say they would get the vaccine. 
 
 ### Part g (Code: 2 pts; Computation: 1 pt)
 
@@ -347,6 +350,7 @@ npv: TN/TN+FN = 21/31 = 0.68
 
 ```{r}
 logr_prediction$pred_class<-as.factor(logr_prediction$pred_class)
+logr_predictions <- logr_predictions %>% mutate(pred_No = 1-Prediction)
 logr_conf_mat <- conf_mat(logr_prediction, truth = Vaccine, estimate = pred_class)
 logr_conf_mat
 summary(logr_conf_mat, event_level = "second")
@@ -377,7 +381,7 @@ nb_wflow <- workflow() %>%
 nb_recipe <- recipe(
   Vaccine ~ Misinformation + Trust_in_Scientists + COVID_Risk, 
   data = misinfo_train
-)
+) %>% step_dummy(all_nominal_predictors())
 
 nb_wflow <- nb_wflow %>%
   add_recipe(nb_recipe)
@@ -420,7 +424,7 @@ library(car)
 vif(logr_misinfo)
 cor(misinformation2 %>% select(Misinformation,COVID_Risk,Trust_in_Scientists))
 ```
-
+Based on these results, within each group we can assume `Trust_in_Scientists`, `COVID_Risk`, and `Misinformation` are independent.
 
 ### Part j (Code: 2.5 pts; Computation: 1 pt)
 
@@ -564,7 +568,6 @@ roc_auc(predictions_knn_df, truth = Vaccine, .pred_No)
 
 ```{r ROC curve - logr}
 # Construct the ROC curve
-logr_predictions <- logr_predictions %>% mutate(pred_No = 1-Prediction)
 roc_tibble_logr <- roc_curve(logr_predictions, truth = Vaccine, pred_No)
 
 # Plot the ROC curve
