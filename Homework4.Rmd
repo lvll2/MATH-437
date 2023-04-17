@@ -41,7 +41,7 @@ To convert probabilities to odds, we manipulate the logistic function $p(X) = e^
 
 2. Write a sentence to interpret each Coefficient in Table 4.3.
 
-For every $\$1$ increase in balance, we expect the log odds of default to increase by 0.0057%. For every $\$1,000$ increase in income, we expect the log odds of default to increase by 0.003%. Compared to non-students, we expect the log odds of default to decrease by 0.468% for students.
+Holding all other predictors constant, for every $\$1$ increase in balance, we expect the log odds of default to increase by 0.0057%. Holding all other predictors constant, for every $\$1,000$ increase in income, we expect the log odds of default to increase by 0.003%. Holding all other predictors constant, when compared to non-students, we expect the log odds of default to decrease by 0.468% for students.
 
 3. Why is the choice of a *baseline* (or *reference level*) for the response variable critical when interpreting slopes in multinomial logistic regression, but not so much in (standard) logistic regression?
 
@@ -55,17 +55,38 @@ $\pi_k$ represents the prior probability that a randomly chosen observation come
 
 5. Compare and contrast the assumptions about the predictor(s) in *linear discriminant analysis* vs. *quadratic discriminant analysis*. Which approach leads to more complex/flexible models?
 
-In linear discriminant analysis (LDA) we are assuming that within each class the distributions of our observations are approximately normal and that there's a common variance across classes. Quadratic discriminant analysis leads to more complex/flexible models.
+In linear discriminant analysis (LDA) we are assuming that within each class, our observations come from multivariate normal distributions and that there's a common variance and covariance across classes. In quadratic discriminant analysis (QDA), we are making the same assumptions about normality, but we are not assuming that there's a common covariance matrix across classes. Quadratic discriminant analysis leads to more complex/flexible models since it is estimating a separate covariance matrix for each class.
+
 
 6. Use the *confusion matrix* in Table 4.5 to find the *sensitivity*, *specificity*,  *positive predictive value* and *negative predictive value* for this algorithm. It's okay to keep your answers as fractions.
 
+Sensitivity = 195/333
+Specificity = 9432/9667
+positive predictive value = 195/430
+negative predictive value = 9432/9570
+
+
 7. What do the x-axis and y-axis on a *receiver operating characteristic* (ROC) curve represent? What is the curve actually a function of? 
+
+The x-axis represents the false positive rate, and the y-axis represents the true positive rate. The curve is a function of our threshold value and how it affects sensitivity and the false positive rate. 
+
 
 8. Compare and contrast the assumptions about the predictors in *linear discriminant analysis* vs. *Naive Bayes*. When are they equivalent?
 
+In Naive Bayes, we assume the predictors are independent. They are equivalent when in Naive Bayes, we assume our observations for each predictor come from normal/Gaussian distributions similar to LDA.
+
 9. Consider the five methods compared in Section 4.5.2: LDA, QDA, Naive Bayes, Logistic Regression, K-Nearest Neighbors. Which methods would you guess to perform best when you suspect the decision boundary to be (a) linear, (b) moderately nonlinear, (c) highly complex?
 
+(a) LDA and logistic regression would likely perform best for linear decision boundaries with logisitic regression outperforming LDA when assumptions of normality are not met.
+
+(b) Naive Bayes and QDA would perform best for moderately non-linear decision boundaries with Naive Bayes outperforming QDA when there are only a small number of observations.
+
+(c) K-Nearest Neighbors would perform best for highly complex decision boundaries given that the appropriate value for K is chosen.
+
 10. How does "regression" work in a *generalized linear model*?
+
+Regression works by modeling the response, which is assumed to come from a distribution from the exponential family, and then transforming the expected value of the response so that this transformed mean is a linear function of predictors. 
+
 
 # Conceptual Problems
 
