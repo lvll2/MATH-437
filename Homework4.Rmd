@@ -449,7 +449,7 @@ misinformation2 %>%
   dplyr::select(Misinformation, Trust_in_Scientists, COVID_Risk) %>% 
   cor()
 ```
-Based on these results, within each group we can assume `Trust_in_Scientists`, `COVID_Risk`, and `Misinformation` are independent.
+Since our VIF is below 5 and there are not high amounts of correlation between each group we can reasonably assume `Trust_in_Scientists`, `COVID_Risk`, and `Misinformation` are independent.
 
 ### Part j (Code: 2.5 pts; Computation: 1 pt)
 
