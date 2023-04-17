@@ -149,7 +149,7 @@ lambda = solve(S_overall, D)
 #Use Sepal Length as our reference level
 fisher_scaling = lambda * 1/lambda[1,1]
 ```
-$ Discriminant \space Function = Sepal.Length*1 + Sepal.Width * 5.9038 - Petal.Length*7.1299 -Petal.Width*10.1037  $
+$ Discriminant \space Function = x_1*1 + x_2 * 5.9038 - x_3*7.1299 -x_4*10.1037  $
 
 ### Part c (Code: 1 pt)
 
