@@ -93,12 +93,15 @@ Regression works by modeling the response, which is assumed to come from a distr
 ## Conceptual Problem 1 (2 pts) 
 
 Textbook Exercise 4.8.1.
+    
 
 ## Conceptual Problem 2 (4 pts)
 
 ### Part a (1 pt)
 
 Textbook Exercise 4.8.2.
+
+
 
 ### Part b (3 pts)
 
@@ -122,7 +125,28 @@ Specifically, he wants to project this four-dimensional predictor space into a s
 
 Fisher starts by computing a "sum of squares and products" matrix S in each group. The S matrices can be found more easily in R by obtaining the variance-covariance matrix for the numerical predictors (e.g., using the `cov` function) and multiplying the entries by (n-1). Finally, Fisher adds the S matrices for each group to get the overall within-class variation.
 
+
 Using R, create the `S_setosa`, `S_versicolor`, and `S_overall` matrices.
+
+```{r}
+head(iris_sv)
+S_setosa <-  (cov(iris_sv %>% 
+                         filter(Species == "setosa") %>% 
+                         select(-Species))*(50-1))
+
+S_versicolor <-  (cov(iris_sv %>% 
+                         filter(Species == "versicolor") %>% 
+                         select(-Species))*(50-1))
+
+S_overall <-  S_setosa + S_versicolor
+
+print(S_setosa)
+print(S_versicolor) 
+print(S_overall)
+
+
+```
+
 
 ### Part b (Code: 1 pt; Explanation: 0.5 pts)
 
@@ -132,13 +156,51 @@ The discriminant function is then the inner product of $\lambda$ and $x$. This s
 
 Using R, solve the matrix equation (`%*%` does matrix multiplication and `solve` does matrix inversion) and perform Fisher's suggested scaling, then write out the discriminant function as a linear function of $x_1$, $x_2$, $x_3$, $x_4$.
 
+$x_1$ be Sepal Length, $x_2$ be Sepal Width, $x_3$ be Petal Length, and $x_4$ be Petal Width.
+
+```{r}
+iris_s <- iris_sv %>% 
+  filter(Species == "setosa")
+
+iris_v <- iris_sv %>% 
+  filter(Species == "versicolor")
+
+D = matrix(data = c(mean(iris_s$Sepal.Length) - mean(iris_v$Sepal.Length),
+                    mean(iris_s$Sepal.Width) - mean(iris_v$Sepal.Width),
+                    mean(iris_s$Petal.Length) - mean(iris_v$Petal.Length),
+                    mean(iris_s$Petal.Width) - mean(iris_v$Petal.Width)))
+
+lambda = solve(S_overall, D)
+
+
+#Use Sepal Length as our reference level
+fisher_scaling = lambda * 1/lambda[1,1]
+```
+$ Discriminant \space Function = x_1*1 + x_2 * 5.9038 - x_3*7.1299 -x_4*10.1037  $
+
 ### Part c (Code: 1 pt)
 
 Add a new variable to the `iris_sv` data frame, `discrim`, containing the values of the discriminant function for each flower. Create a dot plot showing the Species (response) vs. the discriminant function value (predictor). You may also want to color-code by Species.
 
+```{r}
+iris_sv <- iris_sv %>% 
+  mutate(discrim = Sepal.Length*1 + Sepal.Width * 5.9038 - Petal.Length*7.1299 -Petal.Width*10.1037)
+```
+
+```{r}
+iris_sv %>% 
+  ggplot(aes(x = discrim, y = Species, color = Species)) +
+  geom_point() 
+```
+
+
+
 ### Part d (Code and/or Explanation: 2 pts)
 
 Explain how to use your results to classify a *new* iris flower to either *setosa* or *versicolor*. (Hint: think about where the decision boundary is...)
+
+In order to classify a new iris flower we would calculate its' discriminat and if that value is less than 0 
+we would predict it to be veriscolor and if that value were greater than 0 it would be classified as setosa. (I am assuming that the descision boundary is zero but I am not 100% positive)
 
 # Applied Problems
 
@@ -265,6 +327,8 @@ logit(Someone will get a Vaccine) = -3.12 + 0.92(`COVID_Risk`) + 0.43(`Trust_in_
 
 Write a sentence interpreting the coefficient corresponding to `Trust_in_Scientists` in the logistic regression model. It is easiest to exponentiate the coefficient and discuss a *multiplicative* increase in odds.
 
+When `Trust_in_Scientists` increases by one unit, holding all other predictors in the model constant, the multiplicative increase in odds of someone saying they will get a vaccine increases by 1.5.
+
 ### Part f (Code: 0.5 pt; Explanation: 2 pts)
 
 Using the `confint` function, obtain 95% confidence intervals for the parameters of the population logistic regression model. Based on the confidence intervals, which of the researchers' suspicions about the relationship between `Vaccine` and the three predictors can you conclude are true?
@@ -273,6 +337,7 @@ Using the `confint` function, obtain 95% confidence intervals for the parameters
 confint(logr_misinfo, level = 0.95)
 ```
 
+Based on the confidence intervals, we can conclude both of the scientists suspicions are true. People we thought that COVID-19 was a higher public risk and people who had higher trust in scientists would be more likely to say they would get a vaccine. Those who were more susceptible to believing misinformation about the vaccine would be less likely to say they would get the vaccine. 
 
 ### Part g (Code: 2 pts; Computation: 1 pt)
 
@@ -312,6 +377,7 @@ npv: TN/TN+FN = 21/31 = 0.68
 
 ```{r}
 logr_prediction$pred_class<-as.factor(logr_prediction$pred_class)
+logr_predictions <- logr_predictions %>% mutate(pred_No = 1-Prediction)
 logr_conf_mat <- conf_mat(logr_prediction, truth = Vaccine, estimate = pred_class)
 logr_conf_mat
 summary(logr_conf_mat, event_level = "second")
@@ -342,7 +408,7 @@ nb_wflow <- workflow() %>%
 nb_recipe <- recipe(
   Vaccine ~ Misinformation + Trust_in_Scientists + COVID_Risk, 
   data = misinfo_train
-)
+) %>% step_dummy(all_nominal_predictors())
 
 nb_wflow <- nb_wflow %>%
   add_recipe(nb_recipe)
@@ -385,7 +451,7 @@ library(car)
 vif(logr_misinfo)
 cor(misinformation2 %>% select(Misinformation,COVID_Risk,Trust_in_Scientists))
 ```
-
+Based on these results, within each group we can assume `Trust_in_Scientists`, `COVID_Risk`, and `Misinformation` are independent.
 
 ### Part j (Code: 2.5 pts; Computation: 1 pt)
 
@@ -529,7 +595,6 @@ roc_auc(predictions_knn_df, truth = Vaccine, .pred_No)
 
 ```{r ROC curve - logr}
 # Construct the ROC curve
-logr_predictions <- logr_predictions %>% mutate(pred_No = 1-Prediction)
 roc_tibble_logr <- roc_curve(logr_predictions, truth = Vaccine, pred_No)
 
 # Plot the ROC curve
