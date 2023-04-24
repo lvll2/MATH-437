@@ -235,3 +235,55 @@ vip(rfR_engine, scale = TRUE)
 Using tidymodels with the `xgboost` package, fit a gradient-boosted tree model on the training set. There are 8 different tuning parameters: we are just going to tune the 3 discussed in lecture: the number of trees to fit (`trees`), interaction depth (`tree_depth`), and learning rate (`learn_rate`). In your cross-validation, search over the following grid: 10, 25, 50 and 100 for `trees`, 1 and 2 for `tree_depth`, and a logarithmically spaced grid from 0.01 to 1 for `learn_rate`.
 
 Obtain predictions on the test set and compute the estimated test RMSE.
+
+```{r xgboost R}
+xgboostR_model <- boost_tree(mode = "regression", engine = "xgboost",
+                            trees = tune(), tree_depth = tune(),
+                            learn_rate = tune())
+
+xgboostR_recipe <- recipe(
+log_loss ~ ., # response ~ predictors
+  data = auto_train
+) %>%
+  step_dummy(all_nominal_predictors())
+
+xgboostR_wflow <- workflow() %>%
+  add_model(xgboostR_model) %>%
+  add_recipe(xgboostR_recipe)
+```
+
+```{r tune parameters xgboostR}
+set.seed(437)
+auto_kfold <- vfold_cv(auto_train, v = 5, repeats = 3) 
+
+param_grid <- expand.grid(trees = c(10,25,50,100), tree_depth = c(1,2),learn_rate = 10^seq(.01, 1))
+
+xgboostR_tune <- tune_grid(xgboostR_model, 
+                      xgboostR_recipe, 
+                      resamples = auto_kfold,
+                      metrics = metric_set(rmse),
+                      grid = param_grid) # search over 20 possible combinations of the three parameters
+```
+
+```{r select best}
+xgboostR_tune %>%
+  collect_metrics() %>%
+  filter(.metric == "rmse") %>%
+  arrange(mean)
+```
+
+```{r finalize xgboostR}
+xgboostR_best <- select_by_one_std_err(xgboostR_tune, 
+                             metric = "rmse", 
+                             tree_depth, trees, desc(learn_rate))
+xgboostR_wflow_final <- finalize_workflow(xgboostR_wflow, parameters = xgboostR_best) 
+```
+
+```{r fit and predict xgboostR}
+xgboostR_fit <- fit(xgboostR_wflow_final, data = auto_train)
+xgboostR_predict <- augment(xgboostR_fit, new_data = auto_test)
+xgboostR_predict %>% 
+  dplyr::select(log_loss, .pred) %>%
+  dplyr::slice(1:10) # must use dplyr::slice because there is also a slice function in xgboost
+rmse(xgboostR_predict, truth = log_loss, estimate = .pred)
+```
