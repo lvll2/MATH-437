@@ -109,9 +109,89 @@ We get this pattern because we only have 7 possible values of $y$ that correspon
 
 Run the code in ISLR Labs 8.3.3 and 8.3.4. Put each chunk from the textbook in its own chunk.
 
+```{r}
+boston.test <- Boston[-train, "medv"]
+```
+
+
+```{r}
+set.seed(1)
+bag.boston <- randomForest(medv ~ ., data = Boston, subset = train, mtry = 12, importance = TRUE)
+
+bag.boston
+```
+
+```{r}
+yhat.bag <- predict(bag.boston, newdata = Boston[-train, ])
+plot(yhat.bag, boston.test)
+abline(0, 1)
+mean((yhat.bag - boston.test)^2)
+```
+
+```{r}
+bag.boston <- randomForest(medv ~., data = Boston, subset = train, mtry = 12, ntree = 25)
+
+yhat.bag <- predict(bag.boston, newdata = Boston[-train, ])
+
+mean((y.hat - boston.test)^2)
+```
+
+
+```{r}
+set.seed(1)
+rf.boston <- randomForest(medv ~., data = Boston, subset = train, mtry = 6, importance = TRUE)
+
+yhat.rf <- predict(rf.boston, newdata = Boston[-train, ])
+
+mean((yhat.rf - boston.test)^2)
+```
+
+```{r}
+importance(rf.boston)
+```
+
+```{r}
+varImpPlot(rf.boston)
+```
+
+```{r}
+library(gbm)
+set.seed(1)
+boost.boston <- gbm(medv ~., data = Boston[train, ], distribution = "gaussian", n.trees = 5000, interaction.depth = 4)
+```
+
+
+```{r}
+summary(boost.boston)
+```
+
+
+```{r}
+plot(boost.boston, i = "rm")
+plot(boost.boston, i = "lstat")
+```
+
+
+```{r}
+yhat.boost <-  predict(boost.boston, newdata = Boston[-train, ], n.trees = 5000)
+
+mean((yhat.boost - boston.test)^2)
+```
+
+```{r}
+boost.boston <-  gbm(medv ~ ., data = Boston[train, ], distribution = "gaussian", n.trees = 5000, interaction.depth = 4, shrinkage = 0.2, verbose = F)
+
+yhat.boost <- predict(boost.boston, newdata = Boston[-train, ], n.trees = 5000)
+
+mean((yhat.boost - boston.test)^2)
+```
+
+
 ### Part c (Explanation: 1 pt)
 
-Consider the following statement: the second decision tree that is fit does not depend on the first decision tree that is fit. Is that statement TRUE or FALSE for the random forest algorithm? What about for bootsted trees? Explain your reasoning.
+Consider the following statement: the second decision tree that is fit does not depend on the first decision tree that is fit. Is that statement TRUE or FALSE for the random forest algorithm? What about for boosted trees? Explain your reasoning.
+
+
 
 ## Problem 2: Auto Insurance Claims
 
@@ -235,3 +315,55 @@ vip(rfR_engine, scale = TRUE)
 Using tidymodels with the `xgboost` package, fit a gradient-boosted tree model on the training set. There are 8 different tuning parameters: we are just going to tune the 3 discussed in lecture: the number of trees to fit (`trees`), interaction depth (`tree_depth`), and learning rate (`learn_rate`). In your cross-validation, search over the following grid: 10, 25, 50 and 100 for `trees`, 1 and 2 for `tree_depth`, and a logarithmically spaced grid from 0.01 to 1 for `learn_rate`.
 
 Obtain predictions on the test set and compute the estimated test RMSE.
+
+```{r xgboost R}
+xgboostR_model <- boost_tree(mode = "regression", engine = "xgboost",
+                            trees = tune(), tree_depth = tune(),
+                            learn_rate = tune())
+
+xgboostR_recipe <- recipe(
+log_loss ~ ., # response ~ predictors
+  data = auto_train
+) %>%
+  step_dummy(all_nominal_predictors())
+
+xgboostR_wflow <- workflow() %>%
+  add_model(xgboostR_model) %>%
+  add_recipe(xgboostR_recipe)
+```
+
+```{r tune parameters xgboostR}
+set.seed(437)
+auto_kfold <- vfold_cv(auto_train, v = 5, repeats = 3) 
+
+param_grid <- expand.grid(trees = c(10,25,50,100), tree_depth = c(1,2), learn_rate = 10^seq(-2, 0))
+
+xgboostR_tune <- tune_grid(xgboostR_model, 
+                      xgboostR_recipe, 
+                      resamples = auto_kfold,
+                      metrics = metric_set(rmse),
+                      grid = param_grid) # search over 20 possible combinations of the three parameters
+```
+
+```{r select best}
+xgboostR_tune %>%
+  collect_metrics() %>%
+  filter(.metric == "rmse") %>%
+  arrange(mean)
+```
+
+```{r finalize xgboostR}
+xgboostR_best <- select_by_one_std_err(xgboostR_tune, 
+                             metric = "rmse", 
+                             tree_depth, trees, desc(learn_rate))
+xgboostR_wflow_final <- finalize_workflow(xgboostR_wflow, parameters = xgboostR_best) 
+```
+
+```{r fit and predict xgboostR}
+xgboostR_fit <- fit(xgboostR_wflow_final, data = auto_train)
+xgboostR_predict <- augment(xgboostR_fit, new_data = auto_test)
+xgboostR_predict %>% 
+  dplyr::select(log_loss, .pred) %>%
+  dplyr::slice(1:10) # must use dplyr::slice because there is also a slice function in xgboost
+rmse(xgboostR_predict, truth = log_loss, estimate = .pred)
+```
