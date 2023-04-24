@@ -75,6 +75,11 @@ Find a function $f(\lambda)$ for which the ridge regression solution equals the 
 
 # Simulation Problems
 
+```{r}
+library(tidyverse)
+```
+
+
 ## Simulation Problem 1 (9 pts)
 
 ### Part a (Code: 0.5 pts)
@@ -115,13 +120,32 @@ library(ISLR2) # for college dataset
 
 Look up the documentation for the `College` dataset (i.e., `?College`). There is at least one variable, and perhaps as many as four variables, that *should not* be used when fitting a model to predict the number of applications received. Which variable(s) are you going to not even consider including in the model? Why?
 
+We are not going to consider `Accept`, number of application accepted, and `Enroll`, number of new students enrolled, since those both depend on the number of applications received. We should also probably not include `F.Undergrad` and `P.Undergrad` since they also depend on the number of applications received.
+
 ### Part b (Code: 1 pt)
 
 Subset the College dataset to remove the offending variable(s). Then, randomly split the new dataset into a training set (containing approximately 75-80% of the data, your choice exactly how many rows) and a validation set (containing the remaining 20-25%).
 
+```{r}
+subColl <- College %>% 
+  select(-Accept, -Enroll, -F.Undergrad, -P.Undergrad)
+
+set.seed(777)
+n <- nrow(subColl)
+test.rows <- sample(n, size = floor(0.20*n), replace = FALSE)
+coll_train <- subColl[-test.rows,]
+coll_test <- subColl[test.rows,]
+```
+
+
 ### Part c (Code: 2 pts; Explanation: 1 pt)
 
 Use best subset selection to obtain an optimal least-squares linear regression model on the training set. If you use the `regsubsets` function, make sure that you set `nvmax` to the number of remaining predictors in your dataset. Justify your choice of model, then fit that final model on the training set.
+
+```{r college model}
+
+```
+
 
 ### Part d (Code: 2 pts; Explanation: 1 pt)
 
