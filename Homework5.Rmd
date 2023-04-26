@@ -98,13 +98,42 @@ library(tidyverse)
 
 Textbook Exercise 6.6.8 part (a). When generating $X$, use `mean = 0` and `sd = 1` so that we don't need to worry about normalizing anything.
 
+```{r}
+n <- 100
+X <- rnorm(n, 0,1)
+
+eps <- rnorm(n, 0, 0.25)
+
+```
+
+
 ### Part b (Code: 0.5 pts)
 
 Textbook Exercise 6.6.8 part (b).
 
+```{r}
+b0 <- 1
+b1 <- 2
+b2 <- 3
+b3 <- 4
+
+Y = b0 + b1*X + b2*X^2 + b3*X^3 + eps
+
+
+```
+
+
 ### Part c (Code: 2 pts)
 
 Textbook Exercise 6.6.8 part (c).
+
+```{r}
+library(leaps)
+sim_data <- data.frame(Y, X, X^2, X^3)
+
+regsubsets(Y~. , data = sim_data)
+```
+
 
 ### Part d (Explanation: 2 pts)
 

@@ -336,7 +336,7 @@ xgboostR_wflow <- workflow() %>%
 set.seed(437)
 auto_kfold <- vfold_cv(auto_train, v = 5, repeats = 3) 
 
-param_grid <- expand.grid(trees = c(10,25,50,100), tree_depth = c(1,2),learn_rate = 10^seq(.01, 1))
+param_grid <- expand.grid(trees = c(10,25,50,100), tree_depth = c(1,2), learn_rate = 10^seq(-2, 0))
 
 xgboostR_tune <- tune_grid(xgboostR_model, 
                       xgboostR_recipe, 
