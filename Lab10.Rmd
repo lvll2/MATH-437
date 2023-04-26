@@ -302,13 +302,17 @@ rfR_engine <- rfR_fit %>% extract_fit_engine()
 rfR_fit %>% extract_fit_engine() %>% pluck("prediction.error")
 ```
 
+
 ### Part d (Code: 1 pt; Explanation: 1 pt)
 
 Obtain estimates of variable importance (use the `%IncMSE` column if you are using `randomForest`). Which predictor variables have the largest importance and are thus the most useful for making the predictions? Which predictor variables have negative importance, suggesting that randomly permuting that variable actually *decreases* MSE?
 
 ```{r vip rfR with extra stuff}
+rfR_engine %>% pluck("variable.importance")
+
 vip(rfR_engine, scale = TRUE)
 ```
+Attorney has the largest importance and age has the second largest importance. None of the predictors have negative importance. 
 
 ### Part e (Code: 2 pts)
 
