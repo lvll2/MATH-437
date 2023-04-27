@@ -133,7 +133,7 @@ bag.boston <- randomForest(medv ~., data = Boston, subset = train, mtry = 12, nt
 
 yhat.bag <- predict(bag.boston, newdata = Boston[-train, ])
 
-mean((y.hat - boston.test)^2)
+mean((yhat.bag - boston.test)^2)
 ```
 
 
