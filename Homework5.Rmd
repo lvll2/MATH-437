@@ -155,6 +155,7 @@ This exercise is *strongly* modeled on ISLR Exercise 6.6.9, in that we want to f
 
 ```{r load College, message = F, warning = F}
 library(ISLR2) # for college dataset
+library(leaps)
 ```
 
 ### Part a (Explanation: 1 pt)
@@ -184,8 +185,20 @@ coll_test <- subColl[test.rows,]
 Use best subset selection to obtain an optimal least-squares linear regression model on the training set. If you use the `regsubsets` function, make sure that you set `nvmax` to the number of remaining predictors in your dataset. Justify your choice of model, then fit that final model on the training set.
 
 ```{r college model}
-
+regfit.full <- regsubsets(Apps ~ ., data = coll_train, nvmax = 13)
+reg.summary <- summary(regfit.full)
 ```
+
+
+```{r}
+which.max(reg.summary$adjr2)
+```
+
+```{r}
+coef(regfit.full, 10)
+```
+Based on adjusted R^2 we will be using a model with the 10 predictors printed above.
+
 
 
 ### Part d (Code: 2 pts; Explanation: 1 pt)
