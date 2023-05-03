@@ -48,6 +48,19 @@ Answer: It is a bad idea to select the model with the lowest RSS on the training
 
 Textbook Exercise 6.6.2.
 
+  (iii) Less flexible and will give improved prediction accuracy when its increase in bias is less than its decrease in variance.
+  
+As lambda increases, the estimated coefficients decrease. This leads to a decrease in the overall variance in exchange for some bias (The decrease in variance is greater than our increase in bias).
+
+
+(b) 
+
+Lasso and Ridge both work similar in terms of theory so for the reasons that iii was chosen in part a is the same here in part b. The primary difference between the two methods is their shape with lasso using the absolute value and ridge using squares. 
+
+(c) Repeat (a) for non-linear methods relative to least squares.
+
+In this example, compared to ridge and lasso, non-linear methods are impacted differently. Here, ii, is correct as non linear methods are more flexible having less bias at the cost of higher variance. 
+
 ## Conceptual Problem 2 (8 pts total)
 
 In the textbook, it is claimed that if we define our prior distribution of the $\beta_j$ slopes to be $p(\beta) = \prod_{j=1}^p g(\beta_j)$, with $g(\beta_j)$ a Gaussian distribution with mean 0 and standard deviation a function of $\lambda$, then the ridge regression solution yields the posterior mode. 
