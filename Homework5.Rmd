@@ -35,12 +35,32 @@ $-2 L(\beta,\sigma^2)$
 Answer: It is a bad idea to select the model with the lowest RSS on the training set because 
 
 4. Does the AIC or BIC statistic tend to place a heavier penalty on bigger models? Why?
+
+Since log$n$ > 2 for any $n > 7$, the BIC statistic generally places a heavier penalty on models with many variables than the AIC statistic.
+
 5. In *ridge regression* and *LASSO*, what is the model when $\lambda = 0$? What about when $\lambda \rightarrow \infty$?
+
+In ridge regression and lasso, when $\lambda = 0$ the model is the least squares estimates. As $\lambda \rightarrow \infty$, the ridge regression and lasso coefficient estimates will approach zero leaving us with the penalty term. 
+
 6. Suppose that we have *centered* the predictors (i.e., set all predictors to have mean 0). What is the intercept estimate $\hat{\beta}_0$ in this case?
+
+
+
 7. Why should we also *scale* the predictors (i.e., set all predictors to have standard deviation 1) when doing penalized regression?
+
+
+
 8. When would we expect ridge regression to outperform the lasso? When would we expect the lasso to outperform ridge regression? In the real world, do we know which situation we are in?
+
+
+
 9. Explain why each of the following approaches to adjusting the training set RSS are *inappropriate* in high-dimensional ($p > n$ or $p \approx n$) settings: (a) traditional $R^2$ and adjusted $R^2$; (b) AIC, BIC, and Cp.
+
+
+
 10. Explain the *curse of dimensionality* in two ways: first, in terms of overfitting, and second, in terms of multicollinearity issues.
+
+
 
 # Conceptual Problems
 
