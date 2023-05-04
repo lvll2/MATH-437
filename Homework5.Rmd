@@ -156,6 +156,7 @@ b3 <- 4
 
 Y = b0 + b1*X + b2*X^2 + b3*X^3 + eps
 
+df = data.frame(X,X^2,X^3,X^4,X^5,X^6,X^7,X^8,X^9,X^10,Y)
 
 ```
 
@@ -165,24 +166,84 @@ Y = b0 + b1*X + b2*X^2 + b3*X^3 + eps
 Textbook Exercise 6.6.8 part (c).
 
 ```{r}
-library(leaps)
-sim_data <- data.frame(Y, X, X^2, X^3)
 
-regsubsets(Y~. , data = sim_data)
+library(leaps)
+
+regsubsets(Y~. , data = df)
+
+regfit = regsubsets(Y~.,data=df,nvmax=10)
+reg.summary = summary(regfit)
+reg.summary$cp
+reg.summary$bic
+reg.summary$adjr2
+
+plot(reg.summary$cp,xlab="Number of variables", ylab="Cp",type="l")
+plot(reg.summary$bic,xlab="Number of variables", ylab="BIC",type="l")
+plot(reg.summary$adjr2,xlab="Number of variables", ylab="R squared",type="l")
+
+
+
+
+
 ```
 
 
 ### Part d (Explanation: 2 pts)
 
+```{r}
+coef(regfit, id = 3)
+```
+
+
 Choose one model from part (c) as your final "best model" and justify your answer. Compare the coefficient estimates for that model to the known coefficients in the population model.
+
+The model that we are choosing is our model with four variables. Based on the three plots it is clear that we are optimized at that point. The coefficients of the model has an intercept of 0.9550098 and coefficients, 1.9701017, 3.0313854, and 4.0048057. All of which are not too far off from their respective 0,1,2 and 3. In total it is relatively clear that three variables is ideal.
 
 ### Part e (Code: 2 pts)
 
 Fit a LASSO model on the simulated data (again using $X, X^2, \ldots, X^{10}$ as predictors). Perform cross-validation using either `cv.glmnet` or `tune_grid` to determine the optimal value of $\lambda$, then fit the final model using that value of $\lambda$ on the entire dataset.
 
+```{r}
+library(glmnet)
+
+x = df %>% 
+  select(-Y)
+
+y = df$Y
+# Training and test sets.
+train = sample(1:nrow(x), nrow(x)/2)
+
+test = (-train)
+
+y.test = y[test]
+
+lasso_model <-  glmnet(x[train,], y[train], alpha=1)
+
+
+```
+
+```{r}
+x <- as.matrix(x)
+cv = cv.glmnet(x[train,],y[train], alpha=1)
+plot(cv)
+cv$lambda.min
+final = glmnet(x,y,alpha=1)
+```
+Our optimal value for lamda is 0.306283.
+
+
 ### Part f (Explanation: 2 pts)
 
 How does shrinkage affect the coefficient estimates? Compare the coefficient estimates for your final LASSO model to *both* the coefficient estimates from the "best" model using subset selection *and* the known coefficients in the population model.  
+
+```{r}
+lasso.coef = predict(final, type="coefficients",s=0.306283)[1:11,]
+```
+
+The lasso model has four variables. The coefficients for X, X^2 and X^3 closely match the ones chosen earlier implying the goodness of the model, however out intercept of the population is 0 but here it is 1.258984, an increase I am not entirely sure of.
+
+
+
 
 # Applied Problems
 
