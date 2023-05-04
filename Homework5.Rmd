@@ -32,7 +32,7 @@ $-2 L(\beta,\sigma^2)$
 
 3. Explain why it is a bad idea to select the model with the lowest RSS on the training set.
 
-Answer: It is a bad idea to select the model with the lowest RSS on the training set because 
+Answer: It is a bad idea to select the model with the lowest RSS on the training set because we could be overfitting the data and choosing lowest RSS does not take into account bias-variance trade-off. 
 
 4. Does the AIC or BIC statistic tend to place a heavier penalty on bigger models? Why?
 
@@ -58,11 +58,13 @@ Answer: We would expect lasso to outperform ridge regression when we want to per
 
 Answer: 
 
-(a) 
+(a) Problems arise in the application of adjusted $R^2$ and $R^2$ in the high-dimensional setting, since one can easily obtain a model with an adjusted $R^2$ and an $R^2$ value of 1.
+
+(b) The $C_p$, AIC, and BIC approaches are not appropriate in the high-dimensional setting, because estimating $\hat{\sigma}^2$ is problematic.
 
 10. Explain the *curse of dimensionality* in two ways: first, in terms of overfitting, and second, in terms of multicollinearity issues.
 
-
+Answer: With a large number of predictors $p$, the model becomes more complex and flexible which can result in overfitting the data. This means we are capturing a lot of noise rather than capturing the overall pattern within the data. In the high-dimensional setting, the multicollinearity problem is extreme: any variable in the model can be written as a linear combination of all of the other variables in the model. Essentially, this means that we can never know exactly which variables (if any) truly are predictive of the outcome, and we can never identify the best coefficients for use in the model.
 
 # Conceptual Problems
 
