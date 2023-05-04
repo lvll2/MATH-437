@@ -204,20 +204,30 @@ Fit a LASSO model on the simulated data (again using $X, X^2, \ldots, X^{10}$ as
 ```{r}
 library(glmnet)
 
-sample <- sample(c(TRUE, FALSE), nrow(df), replace=TRUE, prob=c(0.7,0.3))
-train  <- df[sample, ]
-test   <- df[!sample, ]
+x = df %>% 
+  select(-Y)
+
+y = df$Y
+# Training and test sets.
+train = sample(1:nrow(x), nrow(x)/2)
+
+test = (-train)
+
+y.test = y[test]
+
+lasso_model <-  glmnet(x[train,], y[train], alpha=1)
 
 
-lasso_model <- glmnet(train, test, alpha = 1)
 ```
 
 ```{r}
-cv = cv.glmnet(x,y, alpha=1)
+x <- as.matrix(x)
+cv = cv.glmnet(x[train,],y[train], alpha=1)
 plot(cv)
 cv$lambda.min
+final = glmnet(x,y,alpha=1)
 ```
-
+Our optimal value for lamda is 0.306283.
 
 
 ### Part f (Explanation: 2 pts)
@@ -225,12 +235,12 @@ cv$lambda.min
 How does shrinkage affect the coefficient estimates? Compare the coefficient estimates for your final LASSO model to *both* the coefficient estimates from the "best" model using subset selection *and* the known coefficients in the population model.  
 
 ```{r}
-x = df %>% 
-  select(-Y) 
-y = df$Y
-final = glmnet(x,y,alpha=1)
-lasso.coef = predict(final, type="coefficients",s=0.20)[1:11,]
+lasso.coef = predict(final, type="coefficients",s=0.306283)[1:11,]
 ```
+
+The lasso model has four variables. The coefficients for X, X^2 and X^3 closely match the ones chosen earlier implying the goodness of the model, however out intercept of the population is 0 but here it is 1.258984, an increase I am not entirely sure of.
+
+
 
 
 # Applied Problems
