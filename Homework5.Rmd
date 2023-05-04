@@ -199,15 +199,107 @@ coef(regfit.full, 10)
 ```
 Based on adjusted R^2 we will be using a model with the 10 predictors printed above.
 
+```{r}
+rgsb.fit <- lm(Apps ~ Private + Top10perc + Room.Board + Personal + Terminal + S.F.Ratio + perc.alumni + Expend + Grad.Rate, data = coll_train)
+```
 
 
 ### Part d (Code: 2 pts; Explanation: 1 pt)
 
 Use cross-validation on the training set to find an optimal value of $\lambda$ for a ridge regression model. Justify your choice of $\lambda$, then fit a ridge regression model on the training set using that value of $\lambda$.
 
+```{r warning=FALSE}
+library(glmnet)
+library(tidymodels)
+```
+
+```{r ridge-tidy model}
+ridge_model <- linear_reg(mode = "regression", engine = "glmnet",
+                          penalty = tune(),
+                          mixture = 0) 
+
+ridge_wflow <- workflow() %>%
+  add_model(ridge_model)
+```
+
+
+```{r ridge-tidy recipe}
+ridge_recipe <- recipe(Apps ~ ., data = coll_train) %>%
+  step_normalize(all_numeric_predictors()) %>% 
+  step_dummy(all_nominal_predictors())
+
+ridge_wflow <- ridge_wflow %>%
+  add_recipe(ridge_recipe)
+```
+
+```{r tune model kfold 1}
+set.seed(437)
+coll_kfold <- vfold_cv(coll_train, v = 5, repeats = 3) 
+
+ridge_tune1 <- tune_grid(ridge_model, 
+                      ridge_recipe, 
+                      resamples = coll_kfold, 
+                      grid = grid_regular(penalty(range = c(-3, 4)), levels = 50))
+```
+
+```{r select best ridge}
+ridge_best <- select_by_one_std_err(
+  ridge_tune1,
+  metric = "rmse",
+  desc(penalty)
+)
+
+best_lam_rr <- ridge_best$penalty
+```
+The best value of lambda is `r best_lam_rr` since it was associated with the lowest rmse.
+
+```{r fit ridge-tidy model}
+ridge_wflow_final <- finalize_workflow(ridge_wflow, parameters = ridge_best) 
+
+ridge_fit <- fit(ridge_wflow_final, data = coll_train)
+```
+
+
 ### Part e (Code: 2 pts; Explanation: 1 pt)
 
 Use cross-validation on the training set to find an optimal value of $\lambda$ for a LASSO model. Justify your choice of $\lambda$, then fit a LASSO model on the training set using that value of $\lambda$. 
+
+```{r Lasso-tidy model}
+lasso_model <- linear_reg(mode = "regression", engine = "glmnet",
+                          penalty = tune(),
+                          mixture = 1) 
+
+lasso_wflow <- workflow() %>%
+  add_model(lasso_model) %>%
+  add_recipe(ridge_recipe)
+```
+
+We do need to re-tune the model:
+
+```{r warning = FALSE, message = FALSE}
+lasso_tune1 <- tune_grid(lasso_model, 
+                      ridge_recipe, 
+                      resamples = coll_kfold, 
+                      grid = grid_regular(penalty(range = c(-3, 4)), levels = 50))
+```
+
+
+```{r select best lasso}
+lasso_best <- select_by_one_std_err(
+  lasso_tune1,
+  metric = "rmse",
+  desc(penalty)
+)
+
+best_lam_lass <- lasso_best$penalty
+```
+The best value of lambda is `r best_lam_lass` since it was associated with the lowest cross-validated RMSE.
+
+```{r fit lasso-tidy model}
+lasso_wflow_final <- finalize_workflow(lasso_wflow, parameters = lasso_best) 
+
+lasso_fit <- fit(lasso_wflow_final, data = coll_train)
+```
 
 ### Part f (Code: 2 pts)
 
@@ -215,6 +307,61 @@ Predict the number of applications received for colleges in the validation set, 
 
 For each model, create a plot of the model residuals (y-axis) against the predicted values (x-axis), and report the estimated test MSE or RMSE obtained for each model.
 
+```{r}
+rgsb.pred <- predict(rgsb.fit, newdata = coll_test)
+rgsb.resid <- coll_test$Apps - rgsb.pred
+plot(rgsb.pred, rgsb.resid)
+```
+
+```{r}
+(RMSE.rgsb <- sqrt(sum((rgsb.resid)^2)/length(rgsb.resid)))
+```
+
+```{r}
+rr.resid <- coll_test$Apps - predictions_ridge$.pred 
+
+plot(predictions_ridge$.pred, rr.resid)
+```
+
+
+```{r augment ridge fit}
+predictions_ridge <- broom::augment(ridge_fit, new_data = coll_test)
+
+rmse(predictions_ridge, truth = Apps, estimate = .pred)
+```
+
+
+
+```{r}
+lass.resid <- coll_test$Apps - predictions_lasso$.pred
+
+plot(predictions_lasso$.pred, lass.resid)
+```
+
+```{r augment lasso fit}
+predictions_lasso <- broom::augment(lasso_fit, new_data = coll_test)
+
+rmse(predictions_lasso, truth = Apps, estimate = .pred)
+```
+
+
 ### Part g (Explanation: 2 pts)
 
 How accurately can we predict the number of college applications received? Looking at the three residual plots you created in part (f), do you notice any differences in the pattern of errors made by the three models? Any "obviously wrong" predictions?  Explain your reasoning.
+
+```{r}
+summary(coll_test$Apps)
+sd(coll_test$Apps)
+```
+
+We are predicting the number of college applications with the lowest RMSE using the least-squares regression built after applying best subset selection. We are getting a better RMSE when predicting than indicated by our fitted models which indicates they are not overfit. When looking at the spread of our test response, that has a minimum of 81, a maximum of 20,192, and a standard deviation of 3418, an RMSE between 2600 - 2800 does not seem too extreme. 
+
+
+```{r}
+coll_test[which.max(rgsb.resid),]
+rgsb.pred[which.max(rgsb.resid)]
+
+coll_test[which.max(rr.resid),]
+coll_test[which.max(lass.resid),]
+```
+There doesn't seem to be any obvious difference between the residual plots, the best subset selection model seems to have more negative residuals, indicating that it was consistently predicting higher values of number of applications when compared to the ridge and LASSO regressions. There is also one obviously wrong prediction for all three models which is the Boston University, which was predicted to have much a much lower number of applications than it actually had.
