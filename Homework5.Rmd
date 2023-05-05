@@ -1,6 +1,6 @@
 ---
 title: 'Homework Assignment #5'
-author: "Math 437 - Modern Data Analysis"
+author: "Cadee Pikerton, Nicholas Noel, Lisette Villa"
 date: "Due April 28, 2023"
 output: pdf_document
 ---
