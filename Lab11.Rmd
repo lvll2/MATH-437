@@ -238,13 +238,19 @@ print (pred6)
 
 In Lab 10.9.2, it is claimed that their neural network with zero hidden layers is equivalent to a multinomial logistic regression model. Explain why this is the case.
 
+This is the case because neural networks output linear combinations of the inputs with coefficient estimates that are computed as class probabilities using the softmax activation function.
+
 ## Part c (Code and/or Explanation: 1 pt)
 
 Using the ideas in part (b), how would you revise the code creating `modellr` to perform *linear* regression instead? (HINT: look up the documentation for `layer_dense`)
 
+If we wanted to perform linear regression we would set activation = "linear" or not include an argument for activation and it will default to the linear function.
+
 ## Part d (Explanation: 1 pt)
 
 Briefly explain what the `to_categorical` function does, and the types of problems in which it would be useful.
+
+The to_cateogrical function converts vectors of integers that represent classes into a matrix with rows that use 0 1 coding (binary) to indicate the classes in the vector. This would be useful when you're modeling a qualitative response that is represented by values but those values don't actually indicate the order of the data.
 
 # Problem 2: Understanding the Math
 
