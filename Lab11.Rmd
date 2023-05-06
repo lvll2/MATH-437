@@ -260,6 +260,10 @@ Consider two predictors, $x_1$ and $x_2$, feeding into a two-unit hidden layer. 
 
 Find the activation functions $A_1(x_1, x_2)$ and $A_2(x_1, x_2)$. Then, find $f(x_1, x_2)$ explicitly in terms of $x_1$ and $x_2$. Note: $f(x_1, x_2)$ should be a piecewise function.
 
+```{r} 
+knitr::include_graphics("Prob2a.jpg") 
+```
+
 ## Part b (Computation and Explanation: 2 pts)
 
 Consider the following 5x5 matrix:
@@ -283,3 +287,24 @@ print(conv)
 ```
 
 followed by a $2 \times 2$ max pool.
+
+To find the output of convolving A with the 2x2 convolution filter, we apply the filter to every 2 × 2 submatrix of the original 5x5 matrix. The result will be a 4x4 matrix. We get the entries as follows:
+
+For the first submatrix, 5(1) + 5(0) + 0(0) + 4(1) = 9 which is our first entry in the convolved matrix. Similary, the (1,2) entry is 5(1) + 5(0) + 4(0) + 4(1) = 9. We repeat this for every 2x2 submatrix, giving us the final matrix below.
+```{r A 5x5}
+conv_A <- matrix(c(9, 9, 9, 9,
+              0, 7, 7, 7,
+              0, 0, 5, 5,
+              0, 0, 0, 3),
+            nrow = 4, byrow = T
+            )
+print(conv_A)
+```
+
+Using this matrix, we perform max pooling by choosing the maximum value in each non-overlapping 2x2 submatrix. For example, for the 2x2 submatrix [9 9;7 0] the maximum value is 9 which is the first entry in our final matrix. 
+
+Our final matrix is below.
+```{r conv}
+final_A <- matrix(c(9, 0, 9, 5), nrow = 2)
+print(final_A)
+```
