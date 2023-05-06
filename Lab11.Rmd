@@ -2,7 +2,10 @@
 title: 'Lab Assignment #11'
 author: "Math 437 - Modern Data Analysis"
 date: "Due Sometime After Midterm 2"
-output: pdf_document
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 ---
 
 # Instructions
@@ -238,13 +241,19 @@ print (pred6)
 
 In Lab 10.9.2, it is claimed that their neural network with zero hidden layers is equivalent to a multinomial logistic regression model. Explain why this is the case.
 
+This is the case because neural networks output linear combinations of the inputs with coefficient estimates that are computed as class probabilities using the softmax activation function.
+
 ## Part c (Code and/or Explanation: 1 pt)
 
 Using the ideas in part (b), how would you revise the code creating `modellr` to perform *linear* regression instead? (HINT: look up the documentation for `layer_dense`)
 
+If we wanted to perform linear regression we would set activation = "linear" or not include an argument for activation and it will default to the linear function.
+
 ## Part d (Explanation: 1 pt)
 
 Briefly explain what the `to_categorical` function does, and the types of problems in which it would be useful.
+
+The to_cateogrical function converts vectors of integers that represent classes into a matrix with rows that use 0 1 coding (binary) to indicate the classes in the vector. This would be useful when you're modeling a qualitative response that is represented by values but those values don't actually indicate the order of the data.
 
 # Problem 2: Understanding the Math
 
@@ -253,6 +262,10 @@ Briefly explain what the `to_categorical` function does, and the types of proble
 Consider two predictors, $x_1$ and $x_2$, feeding into a two-unit hidden layer. Suppose that the hidden layer uses ReLU activation functions with $w_{kj}$ given in Equation (10.6) of the book and the output layer uses a linear activation function with $\beta_j$ given in equation (10.6).
 
 Find the activation functions $A_1(x_1, x_2)$ and $A_2(x_1, x_2)$. Then, find $f(x_1, x_2)$ explicitly in terms of $x_1$ and $x_2$. Note: $f(x_1, x_2)$ should be a piecewise function.
+
+```{r} 
+knitr::include_graphics("Prob2a.jpg") 
+```
 
 ## Part b (Computation and Explanation: 2 pts)
 
@@ -277,3 +290,29 @@ print(conv)
 ```
 
 followed by a $2 \times 2$ max pool.
+
+To find the output of convolving A with the 2x2 convolution filter, we apply the filter to every 2 × 2 submatrix of the original 5x5 matrix. The result will be a 4x4 matrix. We get the entries as follows:
+
+For the first submatrix, 5(1) + 5(0) + 0(0) + 4(1) = 9 which is our first entry in the convolved matrix. Similary, the (1,2) entry is 5(1) + 5(0) + 4(0) + 4(1) = 9. We repeat this for every 2x2 submatrix, giving us the final matrix below.
+```{r}
+conv_A <- matrix(c(9, 9, 9, 9,
+              0, 7, 7, 7,
+              0, 0, 5, 5,
+              0, 0, 0, 3),
+            nrow = 4, byrow = T
+            )
+print(conv_A)
+```
+
+Using this matrix, we perform max pooling by choosing the maximum value in each non-overlapping 2x2 submatrix. For example, the first 2x2 submatrix 
+```{r}
+example <- matrix(c(9, 0, 9, 7), nrow = 2)
+print(example)
+```
+has maximum value 9 which is the first entry in our final matrix. 
+
+Our final matrix is below.
+```{r}
+final_A <- matrix(c(9, 0, 9, 5), nrow = 2)
+print(final_A)
+```
