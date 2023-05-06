@@ -3,6 +3,7 @@ title: 'Lab Assignment #11'
 author: "Math 437 - Modern Data Analysis"
 date: "Due Sometime After Midterm 2"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 ---
