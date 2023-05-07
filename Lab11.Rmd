@@ -212,8 +212,9 @@ summary (model)
 ```{r}
 model %>% compile (loss = "categorical_crossentropy", optimizer = optimizer_rmsprop(), metrics = c("accuracy"))
 history <- model %>% fit (x_train , y_train , epochs = 30, batch_size = 128, validation_split = 0.2)
-model %>% predict_classes(x_test) %>% accuracy (g_test)
+model %>% np.argmax(model.predict(x_test),axis=1) %>% accuracy (g_test)
 ```
+
 
 ```{r}
 img_dir <- "book_images"
