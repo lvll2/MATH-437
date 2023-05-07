@@ -1,6 +1,6 @@
 ---
 title: 'Lab Assignment #11'
-author: "Math 437 - Modern Data Analysis"
+author: "Nick Noel, Liz Villa, and Cadee Pinkerton"
 date: "Due Sometime After Midterm 2"
 output:
   pdf_document: default
