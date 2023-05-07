@@ -212,7 +212,9 @@ summary (model)
 ```{r}
 model %>% compile (loss = "categorical_crossentropy", optimizer = optimizer_rmsprop(), metrics = c("accuracy"))
 history <- model %>% fit (x_train , y_train , epochs = 30, batch_size = 128, validation_split = 0.2)
-model %>% np.argmax(model.predict(x_test),axis=1) %>% accuracy (g_test)
+model %>% predict(x_test) %>% k_argmax() %>% 
+  as.numeric() %>%
+  accuracy(g_test)
 ```
 
 
@@ -230,10 +232,15 @@ x <- imagenet_preprocess_input(x)
 ```
 
 ```{r}
-pred6 <- model %>% predict (x) %>%
-  imagenet_decode_predictions (top = 3)
-names (pred6) <- image_names
-print (pred6)
+model <- application_resnet50(weights = "imagenet")
+summary(model)
+```
+
+```{r}
+pred6 <- model %>% predict(x) %>%
+  imagenet_decode_predictions(top = 3)
+names(pred6) <- image_names
+print(pred6)
 ```
 
 
