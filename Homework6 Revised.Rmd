@@ -78,11 +78,22 @@ Using the `Default` dataset, we wish to predict whether a customer will default 
 
 ```{r load ISLR2, message = FALSE, warning = FALSE}
 library(ISLR2) # for Default dataset
+library(tidyverse)
+library(tidymodels)
+library(tidyclust)
+library(dendextend)
 ```
 
 ### Part a (Code: 1 pt)
 
 Divide the Default dataset into a training set of 8000 observations (80% of the data) and a test set containing the remaining 2000 observations.
+
+```{r}
+set.seed(437)
+default_split <- initial_split(Default, prop = 0.80)
+default_train <- training(default_split)
+default_test <- testing(default_split)
+```
 
 ### Part b (Code: 3 pts; Explanation: 2 pts)
 
@@ -90,9 +101,112 @@ Fit a k-means clustering model on the training set using the three predictors (`
 
 Describe the general characteristics of each of the clusters identified. Supplement your description by producing a scatterplot of income and balance showing each cluster in a different color.
 
+```{r set up kmeans}
+kmeans_model <- k_means(num_clusters = tune()) %>%
+  set_args(nstart = 20)
+
+kmeans_recipe_fv <- recipe(~ student + balance + income, data = default_train) %>%
+  step_normalize(all_numeric_predictors()) %>% 
+  step_dummy(all_nominal_predictors())# deal with different variances
+
+kmeans_wflow_fv <- workflow() %>%
+  add_model(kmeans_model) %>%
+  add_recipe(kmeans_recipe_fv)
+```
+
+```{r tune kmeans}
+set.seed(1002)
+fv_kfold_tidy <- vfold_cv(default_train, v = 5, repeats = 1) 
+
+# grid is now expected to be a tibble or data frame instead of a list of named parameters
+nclusters_grid <- data.frame(num_clusters = seq(1, 10))
+
+kmeans_tuned_fv <- tune_cluster(kmeans_wflow_fv,
+                                resamples = fv_kfold_tidy,
+                                metrics = cluster_metric_set(sse_total, 
+                                                             sse_within_total, 
+                                                             sse_ratio),
+                                grid = nclusters_grid)
+
+tuned_metrics <- collect_metrics(kmeans_tuned_fv)
+```
+
+```{r scree plots}
+tuned_metrics %>% filter(.metric == "sse_ratio") %>%
+  ggplot(aes(x = num_clusters, y = mean)) +
+  geom_point() + 
+  geom_line() +
+  labs(x = "Number of Clusters", y = "Mean WSS/TSS (5 folds)") +
+  scale_x_continuous(breaks = seq(1, 10))
+```
+
+```{r finalize kmeans workflow}
+kmeans_fv_3clusters <- kmeans_wflow_fv %>% 
+  finalize_workflow_tidyclust(parameters = list(num_clusters = 3))
+```
+
+```{r fit 3 cluster model}
+set.seed(437) 
+# always reset the seed before you re-fit, just in case something weird happens
+
+kmeans_fv_fit3 <- kmeans_fv_3clusters %>%
+  fit(data = default_train)
+```
+
+```{r cluster assignments3}
+assignments3 <- bind_cols(
+  default_train,
+  kmeans_fv_fit3 %>% extract_cluster_assignment())
+```
+
+```{r plot clusters3, message = F, warning = F}
+library(GGally)
+ggpairs(assignments3, columns = c("student", "balance", "income"),
+        aes(color = .cluster))
+```
+
 ### Part b (Code: 3 pts)
 
 Fit a random forest model (using either `randomForest` or `ranger`) on the training set. Use cross-validation to determine whether `mtry` should be set to 1, 2, or 3. 
+
+```{r bagging-tidy model}
+baggingR_model <- rand_forest(mode = "classification", engine = "ranger") %>%
+  set_args(seed = 437,
+           importance = "permutation",
+           mtry = tune())
+# you can use .cols() or .preds(); .preds() works before dummy variables are created
+# and .cols() works afterwards
+
+baggingR_recipe <- recipe(
+  default ~ student + balance + income, # response ~ predictors
+  data = default_train
+) %>% step_dummy(all_nominal_predictors())
+
+baggingR_wflow <- workflow() %>%
+  add_model(baggingR_model) %>%
+  add_recipe(baggingR_recipe)
+```
+
+```{r tune model kfold rfR}
+set.seed(437)
+default_kfold <- vfold_cv(default_train, v = 5, repeats = 3) 
+
+# I'm sure there's a better way, but this works
+n_predictors <- sum(baggingR_recipe$var_info$role == "predictor")
+manual_grid <- expand.grid(mtry = seq(1, n_predictors))
+# maybe don't search over the entire grid if you have a ton of predictors
+rfR_tune1 <- tune_grid(rfR_model, 
+                      baggingR_recipe, 
+                      resamples = default_kfold, 
+                      grid = manual_grid)
+```
+
+```{r tune model kfold rf2}
+rfR_tune1 %>%
+  collect_metrics() %>%
+  filter(.metric == "rmse") %>%
+  ggplot(mapping = aes(x = mtry, y = mean)) + geom_point() + geom_line()
+```
 
 ### Part c (Code: 3 pts)
 
