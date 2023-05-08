@@ -124,6 +124,11 @@ Find a function $f(\lambda)$ for which the ridge regression solution equals the 
 
 # Simulation Problems
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+```
+
 ```{r}
 library(tidyverse)
 ```
@@ -415,12 +420,6 @@ plot(rgsb.pred, rgsb.resid)
 (RMSE.rgsb <- sqrt(sum((rgsb.resid)^2)/length(rgsb.resid)))
 ```
 
-```{r}
-rr.resid <- coll_test$Apps - predictions_ridge$.pred 
-
-plot(predictions_ridge$.pred, rr.resid)
-```
-
 
 ```{r augment ridge fit}
 predictions_ridge <- broom::augment(ridge_fit, new_data = coll_test)
@@ -429,17 +428,24 @@ rmse(predictions_ridge, truth = Apps, estimate = .pred)
 ```
 
 
-
 ```{r}
-lass.resid <- coll_test$Apps - predictions_lasso$.pred
+rr.resid <- coll_test$Apps - predictions_ridge$.pred 
 
-plot(predictions_lasso$.pred, lass.resid)
+plot(predictions_ridge$.pred, rr.resid)
 ```
+
 
 ```{r augment lasso fit}
 predictions_lasso <- broom::augment(lasso_fit, new_data = coll_test)
 
 rmse(predictions_lasso, truth = Apps, estimate = .pred)
+```
+
+
+```{r}
+lass.resid <- coll_test$Apps - predictions_lasso$.pred
+
+plot(predictions_lasso$.pred, lass.resid)
 ```
 
 
