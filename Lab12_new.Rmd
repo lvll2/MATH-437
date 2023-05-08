@@ -32,11 +32,103 @@ This lab assignment is worth a total of **20 points**.
 
 Run the code in ISLR Lab 12.5.1. 
 
+```{r}
+states <- row.names(USArrests)
+states
+```
+
+```{r}
+names(USArrests)
+```
+
+```{r}
+apply(USArrests, 2, mean)
+```
+
+```{r}
+apply(USArrests, 2, var)
+```
+
+```{r}
+pr.out <- prcomp(USArrests, scale = TRUE )
+```
+
+```{r}
+names(pr.out)
+```
+
+```{r}
+pr.out$scale
+
+pr.out$center
+```
+
+```{r}
+pr.out$rotation
+```
+
+```{r}
+dim(pr.out$x)
+```
+
+```{r}
+biplot(pr.out, scale = 0)
+```
+
+```{r}
+pr.out$rotation = -pr.out$rotation
+
+pr.out$x = -pr.out$x
+
+biplot(pr.out, scale = 0)
+```
+
+```{r}
+pr.out$sdev
+```
+
+```{r}
+pr.var <- pr.out$sdev^2
+
+pr.var
+```
+
+```{r}
+pve <- pr.var / sum(pr.var)
+
+pve
+```
+
+```{r}
+par(mfrow = c(1,2))
+plot(pve, xlab = "Principal Component",
+     ylab = "Proportion of Variance Explained", ylim = c(0,1), 
+     type = "b")
+plot(cumsum(pve), xlab = "Principal Component", 
+     ylab = "Cumulative Proportion of Variance Explained", 
+     ylim = c(0,1), type = "b")
+```
+
+```{r}
+a <- c(1,2,8,-3)
+
+cumsum(a)
+```
+
+
+
+
 ## Part b (Code: 0.5 pts)
 
 The madden17_QB dataset contains the overall rating (`OVR`) and individual skill ratings for 112 quarterbacks in the Madden NFL 2017 video game. According to an article on fivethirtyeight.com, the overall rating for quarterbacks is a linear combination of the following skill ratings: `AWR`, `THP`, `SAC`, `MAC`, `DAC`, `PAC`, `SPD`, `AGI`, `RUN`, and `ACC`. The other 34 skill ratings are not relevant.
 
 Subset the dataset to contain only the 10 skill ratings used to create the overall rating. Call the new dataset `madden`.
+
+```{r}
+madden <- madden17_QB %>% 
+  select(AWR, THP, SAC, MAC, DAC, PAC, SPD, AGI, RUN, ACC)
+```
+
 
 ## Part c (Code: 1 pt)
 
