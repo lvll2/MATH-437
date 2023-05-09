@@ -170,19 +170,19 @@ ggpairs(assignments3, columns = c("student", "balance", "income"),
 Fit a random forest model (using either `randomForest` or `ranger`) on the training set. Use cross-validation to determine whether `mtry` should be set to 1, 2, or 3. 
 
 ```{r bagging-tidy model}
-rfR_model <- rand_forest(mode = "classification", engine = "ranger") %>%
+rfC_model <- rand_forest(mode = "classification", engine = "ranger") %>%
   set_args(seed = 437,
            importance = "permutation",
            mtry = tune())
 
-rfR_recipe <- recipe(
+rfC_recipe <- recipe(
   default ~ student + balance + income, # response ~ predictors
   data = default_train
 ) %>% step_dummy(all_nominal_predictors())
 
 baggingR_wflow <- workflow() %>%
-  add_model(rfR_model) %>%
-  add_recipe(rfR_recipe)
+  add_model(rfC_model) %>%
+  add_recipe(rfC_recipe)
 ```
 
 ```{r tune model kfold rfR}
@@ -190,34 +190,79 @@ set.seed(437)
 default_kfold <- vfold_cv(default_train, v = 5, repeats = 3) 
 
 
-n_predictors <- sum(rfR_recipe$var_info$role == "predictor")
+n_predictors <- sum(rfC_recipe$var_info$role == "predictor")
 manual_grid <- expand.grid(mtry = seq(1, n_predictors))
 
-rfR_tune1 <- tune_grid(rfR_model, 
-                      rfR_recipe, 
+rfC_tune1 <- tune_grid(rfC_model, 
+                      rfC_recipe, 
                       resamples = default_kfold,
                       metrics = metric_set(accuracy, mn_log_loss),
                       grid = manual_grid)
 ```
 
 ```{r tune model kfold rf2C}
-rfR_tune1 %>%
+rfC_tune1 %>%
   collect_metrics() %>%
   filter(.metric == "accuracy") %>%
   ggplot(mapping = aes(x = mtry, y = mean)) + geom_point() + geom_line()
 
-rfR_tune1 %>%
+rfC_tune1 %>%
   collect_metrics() %>%
   filter(.metric == "mn_log_loss") %>%
   ggplot(mapping = aes(x = mtry, y = mean)) + geom_point() + geom_line()
+```
+
+```{r select best rfC}
+rfC_best <- select_best(
+  rfC_tune1,
+  metric = "mn_log_loss",
+  mtry
+)
+```
+
+```{r fit rfC-tidy model}
+rfC_wflow_final <- finalize_workflow(rfC_wflow, parameters = rfC_best) 
+
+rfC_fit <- fit(rfC_wflow_final, data = default_train)
+rfC_fit
 ```
 
 ### Part c (Code: 3 pts)
 
 Fit a gradient-boosted trees model on the training set (using either `gbm` or `xgboost`). Use a learning rate of $\lambda = 0.01$ and an interaction depth of $d = 2$. You can either tune the number of trees or use a reasonably large number.
 
+```{r xgboost C}
+xgboostC_model <- boost_tree(mode = "classification", engine = "xgboost",
+                            trees = tune(), tree_depth = 2,
+                            learn_rate = 0.01)
 
+xgboostC_wflow <- workflow() %>%
+  add_model(xgboostC_model) %>%
+  add_recipe(rfC_recipe)
+```
 
+```{r tune parameters xgboostC}
+set.seed(1486)
+xgboostC_tune <- tune_grid(xgboostC_model, 
+                      rfC_recipe, 
+                      resamples = default_kfold,
+                      metrics = metric_set(accuracy, mn_log_loss),
+                      grid = grid_latin_hypercube(
+                        trees(), size = 20)) # search over 20 possible combinations of the three parameters
+```
+
+```{r select best xgboostC}
+xgboostC_best <- select_by_one_std_err(
+  xgboostC_tune,
+  metric = "mn_log_loss", trees)
+```
+
+```{r fit xgboostC-tidy model}
+xgboostC_wflow_final <- finalize_workflow(xgboostC_wflow, parameters = xgboostC_best) 
+
+xgboostC_fit <- fit(xgboostC_wflow_final, data = default_train)
+xgboostC_fit
+```
 
 ### Part d (Code: 3 pts)
 
