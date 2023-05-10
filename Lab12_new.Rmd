@@ -332,12 +332,46 @@ Looking at the nutritional values, these seem to be all over the place, I'm seei
 
 Use the scaled version of `x.matrix` to perform hierarchical clustering on the dataset. Use complete linkage (the default). Plot the dendogram using the arguments `labels = cereal$Cereal.Abb, cex = 0.7`. (You don't need to use the `dendextend` package to make things fancier, just get the plot out.)
 
+```{r hierarchical clustering}
+ck_hc_complete <- hier_clust()
+
+ck_hc <- workflow() %>%
+  add_model(ck_hc_complete) %>%
+  add_recipe(kmeans_recipe_ck2)
+```
+
+```{r fit the hc complete}
+hc_complete_fit <- fit(ck_hc, data = x.matrix)
+```
+
+
+```{r plot dendrogram}
+ck_dendrogram <- extract_fit_engine(hc_complete_fit) %>% as.dendrogram()
+#plot(ck_dendrogram, labels = cereal$Cereal.Abb, cex = 0.7)
+```
+
+
+```{r}
+library(dendextend)
+ck_dendrogram_4clusters <- ck_dendrogram %>% 
+  set("labels", cereal$Cereal.Abb[labels(ck_dendrogram)]) %>%
+  set("labels_cex", 0.7) %>% 
+  color_branches(k = 4, col = c("black","blue", "red", "darkgreen")) %>%
+  color_labels(k = 4, col = c("black", "blue", "red", "darkgreen"))
+
+plot(ck_dendrogram_4clusters)
+```
+
 ## Part f (Explanation: 1 pt)
 
 88 cereals is a bit too much to get a good look, so you may want to zoom in on the dendrogram to answer these questions.
 
 * Which cereal or cereals are most similar to Cheerios? 
+Total and Kix are the most similar to Cheerios. 
+
 * Which cereal or cereals are most similar to Honey Nut Cheerios (CheeriosHN)?
+Lucky Charms.
+
 
 ## Part g (Code: 1.5 pts; Explanation: 1 pt)
 
