@@ -15,10 +15,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r libraries and data, message = FALSE, warning = FALSE}
 library(tidyverse)
-library(recipes) # only main part of tidymodels you might need
+library(tidymodels) # only main part of tidymodels you might need
 library(broom)
 library(tidyclust)
 library(mclust)
+library(GGally)
 
 madden17_QB <- readr::read_csv("madden17_QB.csv")
 cereal3 <- readr::read_csv("cereal3.csv")
@@ -117,7 +118,6 @@ cumsum(a)
 
 
 
-
 ## Part b (Code: 0.5 pts)
 
 The madden17_QB dataset contains the overall rating (`OVR`) and individual skill ratings for 112 quarterbacks in the Madden NFL 2017 video game. According to an article on fivethirtyeight.com, the overall rating for quarterbacks is a linear combination of the following skill ratings: `AWR`, `THP`, `SAC`, `MAC`, `DAC`, `PAC`, `SPD`, `AGI`, `RUN`, and `ACC`. The other 34 skill ratings are not relevant.
@@ -148,6 +148,55 @@ Produce a biplot showing the first two principal components. Which of the ten va
 
 Run the code in ISLR Lab 12.5.3.
 
+```{r warning = FALSE}
+library(ISLR2)
+nci.labs <- NCI60$labs
+nci.data <- NCI60$data
+```
+
+```{r}
+dim(nci.data)
+```
+
+```{r}
+nci.labs[1:4]
+
+table(nci.labs)
+```
+
+```{r}
+pr.out <- prcomp(nci.data, scale = TRUE)
+```
+
+```{r}
+Cols <- function(vec){
+  cols <- rainbow(length(unique(vec)))
+  return(cols[as.numeric(as.factor(vec))])
+}
+```
+
+```{r}
+par(mfrow = c(1, 2))
+plot(pr.out$x[, 1:2], col = Cols(nci.labs), pch = 19, xlab = "Z1", ylab = "Z2")
+plot(pr.out$x[, 1:2], col = Cols(nci.labs), pch = 19, xlab = "Z1", ylab = "Z3")
+```
+
+```{r}
+summary(pr.out)
+```
+
+```{r}
+plot(pr.out)
+```
+
+```{r}
+pve <- 100 * pr.out$sdev^2 / sum(pr.out$sdev^2)
+par(mfrow = c(1, 2))
+plot(pve, type = "o", ylab = "PVE", xlab = "Principal Component", col = "blue")
+plot(cumsum(pve), type = "o", ylab = "CUmulative PVE", xlab = "Principal Component", col = "brown3")
+```
+
+
 # Part b (Code: 1 pt; Explanation: 1 pt)
 
 The `cereal3` dataset on Canvas contains information about 88 cereals being sold at an Albertson's in Irvine. This data was collected by Dr. Wynne in 2019.
@@ -167,9 +216,43 @@ x.matrix <- model.matrix(~ Total.Fat + Sodium +
 
 Perform k-means clustering on the nutritional variables (i.e., the `x.matrix`) *without* scaling the variables. Use 4 clusters and `nstart = 20`. 
 
+```{r set up kmeans}
+kmeans_model <- k_means(num_clusters = 4) %>%
+  set_args(nstart = 20)
+
+kmeans_recipe_ck <- recipe(~ Total.Fat + Sodium +
+                           Complex.Carbs + Dietary.Fiber + 
+                           Sugar + Protein, data = cereal)
+
+kmeans_wflow_ck <- workflow() %>%
+  add_model(kmeans_model) %>%
+  add_recipe(kmeans_recipe_ck)
+```
+
+```{r fit 3 cluster model}
+set.seed(437)
+
+kmeans_ck_fit <- fit(kmeans_wflow_ck, data = x.matrix)
+```
+
+```{r cluster assignments}
+assignments <- bind_cols(
+  cereal,
+  kmeans_ck_fit %>% extract_cluster_assignment())
+```
+
 Using the `pairs` function, produce a plot of the clusters, color-coded by the cluster number.
 
+```{r}
+ggpairs(assignments, columns = c("Total.Fat", "Sodium",
+                           "Complex.Carbs", "Dietary.Fiber", 
+                           "Sugar", "Protein"),
+        aes(color = .cluster))
+```
+
 Looking at the cluster `centers` or the plot, which variable appears to be the most important for distinguishing between the clusters? Why? Is this what you expected?
+
+Sodium appears to be the most important for distinguishing between the clusters since we can see our data has clear clusters that do not seem to overlap when grouped by this variable. I would not have expected such a clear distinction based on sodium, I figured all cereals would have roughly the same amount of all the nutritional variables possibly with the only distinction being the "healthy" cereals which would be lower in sugar, fats, and higher in fiber and complex carbs.
 
 ## Part c (Code: 1 pt; Explanation: 2 pts)
 
