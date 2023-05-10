@@ -15,10 +15,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r libraries and data, message = FALSE, warning = FALSE}
 library(tidyverse)
-library(recipes) # only main part of tidymodels you might need
+library(tidymodels) # only main part of tidymodels you might need
 library(broom)
 library(tidyclust)
 library(mclust)
+library(GGally)
 
 madden17_QB <- readr::read_csv("madden17_QB.csv")
 cereal3 <- readr::read_csv("cereal3.csv")
@@ -114,7 +115,6 @@ a <- c(1,2,8,-3)
 
 cumsum(a)
 ```
-
 
 
 
@@ -223,6 +223,55 @@ Produce a biplot showing the first two principal components. Which of the ten va
 
 Run the code in ISLR Lab 12.5.3.
 
+```{r warning = FALSE}
+library(ISLR2)
+nci.labs <- NCI60$labs
+nci.data <- NCI60$data
+```
+
+```{r}
+dim(nci.data)
+```
+
+```{r}
+nci.labs[1:4]
+
+table(nci.labs)
+```
+
+```{r}
+pr.out <- prcomp(nci.data, scale = TRUE)
+```
+
+```{r}
+Cols <- function(vec){
+  cols <- rainbow(length(unique(vec)))
+  return(cols[as.numeric(as.factor(vec))])
+}
+```
+
+```{r}
+par(mfrow = c(1, 2))
+plot(pr.out$x[, 1:2], col = Cols(nci.labs), pch = 19, xlab = "Z1", ylab = "Z2")
+plot(pr.out$x[, 1:2], col = Cols(nci.labs), pch = 19, xlab = "Z1", ylab = "Z3")
+```
+
+```{r}
+summary(pr.out)
+```
+
+```{r}
+plot(pr.out)
+```
+
+```{r}
+pve <- 100 * pr.out$sdev^2 / sum(pr.out$sdev^2)
+par(mfrow = c(1, 2))
+plot(pve, type = "o", ylab = "PVE", xlab = "Principal Component", col = "blue")
+plot(cumsum(pve), type = "o", ylab = "CUmulative PVE", xlab = "Principal Component", col = "brown3")
+```
+
+
 # Part b (Code: 1 pt; Explanation: 1 pt)
 
 The `cereal3` dataset on Canvas contains information about 88 cereals being sold at an Albertson's in Irvine. This data was collected by Dr. Wynne in 2019.
@@ -242,34 +291,162 @@ x.matrix <- model.matrix(~ Total.Fat + Sodium +
 
 Perform k-means clustering on the nutritional variables (i.e., the `x.matrix`) *without* scaling the variables. Use 4 clusters and `nstart = 20`. 
 
+```{r set up kmeans}
+kmeans_model <- k_means(num_clusters = 4) %>%
+  set_args(nstart = 20)
+
+kmeans_recipe_ck <- recipe(~ Total.Fat + Sodium +
+                           Complex.Carbs + Dietary.Fiber + 
+                           Sugar + Protein, data = cereal)
+
+kmeans_wflow_ck <- workflow() %>%
+  add_model(kmeans_model) %>%
+  add_recipe(kmeans_recipe_ck)
+```
+
+```{r fit cluster model}
+set.seed(437)
+
+kmeans_ck_fit <- fit(kmeans_wflow_ck, data = x.matrix)
+```
+
+```{r cluster assignments}
+assignments <- bind_cols(
+  cereal,
+  kmeans_ck_fit %>% extract_cluster_assignment())
+```
+
 Using the `pairs` function, produce a plot of the clusters, color-coded by the cluster number.
 
+```{r message = FALSE}
+ggpairs(assignments, columns = c("Total.Fat", "Sodium",
+                           "Complex.Carbs", "Dietary.Fiber", 
+                           "Sugar", "Protein"),
+        aes(color = .cluster))
+```
+
 Looking at the cluster `centers` or the plot, which variable appears to be the most important for distinguishing between the clusters? Why? Is this what you expected?
+
+Sodium appears to be the most important for distinguishing between the clusters since we can see our data has clear clusters that do not seem to overlap when grouped by this variable. I would not have expected such a clear distinction based on sodium, I figured all cereals would have roughly the same amount of all the nutritional variables possibly with the only distinction being the "healthy" cereals which would be lower in sugar, fats, and higher in fiber and complex carbs.
 
 ## Part c (Code: 1 pt; Explanation: 2 pts)
 
 Scale the nutritional variables and re-run k-means clustering with 4 clusters and `nstart = 20`. Using the `pairs` function, produce a plot of the clusters (on the original scale), color-coded by the new cluster number.
 
+
+```{r scaled recipe}
+kmeans_recipe_ck2 <- recipe(~ Total.Fat + Sodium +
+                           Complex.Carbs + Dietary.Fiber + 
+                           Sugar + Protein, data = cereal) %>%
+  step_normalize(all_numeric_predictors())
+
+kmeans_wflow_ck2 <- workflow() %>%
+   add_model(kmeans_model) %>%
+  add_recipe(kmeans_recipe_ck2)
+```
+
+```{r fit cluster 2 model}
+set.seed(437)
+
+kmeans_ck_fit2 <- fit(kmeans_wflow_ck2, data = x.matrix)
+```
+
+```{r cluster 2 assignments}
+assignments2 <- bind_cols(
+  cereal,
+  kmeans_ck_fit2 %>% extract_cluster_assignment())
+```
+
+
+```{r message = FALSE}
+ggpairs(assignments2, columns = c("Total.Fat", "Sodium",
+                           "Complex.Carbs", "Dietary.Fiber", 
+                           "Sugar", "Protein"),
+        aes(color = .cluster))
+```
+
 How does this plot compare to the plot you made in part (b)? What does this suggest about the importance of scaling the variables before running k-means clustering?
 
+The distinct clusters we saw for sodium in the previous plot now have more overlap, and it seems that the clusters for Total.Fat have become slightly more distinct. The clusters in all the other variables have also changed slightly. This shows that scaling variables when running k-means clustering is very important as without it, you could end up infering there are relationships that don't actually exist. 
+
 Looking at the cluster `centers` (remember, a mean of 0 is average after scaling) or the plot, try to assign a meaning to each cluster of cereals. For example, you should find that one of your clusters contains cereals that are high in fat.
+
+It seems that cluster 1 has cereals that are very high in sodium and above average in complex carbs, sugar, and protein, probably contains cereals that are marketed or perceived to be "healthier" but actually aren't (like Honey Nut Cheerios). Cluster 2 has cereals that are lower in fat, sugar, and sodium and higher in complex carbs and fiber so these cereals are probably the healthier ones (I'll bet shredded wheat is in this cluster). Cluster 3 seems to have more sugar and sodium than average and with not a lot of fiber, protein, or complex carbs. Lastly, cluster 4 seems to be the "good stuff", it's far above average for fat content, sodium, and sugar. 
+
+```{r the good stuff}
+assignments2 %>% 
+  filter(.cluster == "Cluster_4") %>% 
+  select(Cereal.Abb)
+```
+
+Oh, I didn't expect Cheerios (OC?) or Oat Bran (C?) to be in this but I KNOW Krave Chocolate$^{TM}$ is THE "good stuff". 
 
 ## Part d (Code and Explanation: 1.5 pts)
 
 Using the `augment` function from the broom package, augment the `cereal` or `cereal3` dataset with the information from the k-means clustering in part (b). 
 
+```{r augment}
+predictions <- augment(kmeans_ck_fit, new_data = cereal)
+```
+
 Obtain the size of each cluster. For one of the smaller clusters, filter the augmented dataset to look at only observations from that cluster. What cereals are in that cluster? Do they appear to have anything in common (think about the cereal names and anything you might know about them)?
+
+```{r}
+predictions %>% 
+  group_by(.pred_cluster) %>% 
+  summarize(size = n())
+```
+
+```{r}
+predictions %>% 
+  filter(.pred_cluster == "Cluster_2")
+```
+Looking at the nutritional values, these seem to be all over the place, I'm seeing some of the "good stuff" cereals from the last k-means clustering but also some cereals I expected to be grouped with healthier ones such as shredded wheat. If anything they seem to have similar protein content.
 
 ## Part e (Code: 1 pt)
 
 Use the scaled version of `x.matrix` to perform hierarchical clustering on the dataset. Use complete linkage (the default). Plot the dendogram using the arguments `labels = cereal$Cereal.Abb, cex = 0.7`. (You don't need to use the `dendextend` package to make things fancier, just get the plot out.)
+
+```{r hierarchical clustering}
+ck_hc_complete <- hier_clust()
+
+ck_hc <- workflow() %>%
+  add_model(ck_hc_complete) %>%
+  add_recipe(kmeans_recipe_ck2)
+```
+
+```{r fit the hc complete}
+hc_complete_fit <- fit(ck_hc, data = x.matrix)
+```
+
+
+```{r plot dendrogram}
+ck_dendrogram <- extract_fit_engine(hc_complete_fit) %>% as.dendrogram()
+#plot(ck_dendrogram, labels = cereal$Cereal.Abb, cex = 0.7)
+```
+
+
+```{r}
+library(dendextend)
+ck_dendrogram_4clusters <- ck_dendrogram %>% 
+  set("labels", cereal$Cereal.Abb[labels(ck_dendrogram)]) %>%
+  set("labels_cex", 0.7) %>% 
+  color_branches(k = 4, col = c("black","blue", "red", "darkgreen")) %>%
+  color_labels(k = 4, col = c("black", "blue", "red", "darkgreen"))
+
+plot(ck_dendrogram_4clusters)
+```
 
 ## Part f (Explanation: 1 pt)
 
 88 cereals is a bit too much to get a good look, so you may want to zoom in on the dendrogram to answer these questions.
 
 * Which cereal or cereals are most similar to Cheerios? 
+Total and Kix are the most similar to Cheerios. 
+
 * Which cereal or cereals are most similar to Honey Nut Cheerios (CheeriosHN)?
+Lucky Charms.
+
 
 ## Part g (Code: 1.5 pts; Explanation: 1 pt)
 
