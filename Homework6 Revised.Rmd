@@ -44,7 +44,7 @@ Answer: Decision trees perform better when there are highly nonlinear boundaries
 
 6. Describe the basic procedure in *bagging*. Could we use *bagging* with models that aren't trees (linear models, generative models, etc.)? Why or why not?
 
-The basic procedure of bagging is to take advantage of bootstrapping to create many trees that all have different values and then averaging them out in order to reduce the variance of the forest. Each tree has high variance and low bias but when combined a not terrible model can be produced. Bagging can be used in other modeling techniques but it is most effective on random trees since other models generally have lower variance and higher bias.
+Answer: The basic procedure of bagging is to take advantage of bootstrapping to create many trees that all have different values and then averaging them out in order to reduce the variance of the forest. Each tree has high variance and low bias but when combined a not terrible model can be produced. Bagging can be used in other modeling techniques but it is most effective on random trees since other models generally have lower variance and higher bias.
 
 7. Why might we use the *out-of-bag* prediction error to estimate the test error rate instead of using cross-validation? Describe how to compute it.
 
