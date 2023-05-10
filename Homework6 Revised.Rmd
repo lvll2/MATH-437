@@ -20,15 +20,48 @@ This homework assignment is worth a total of **35 points**.
 Read Chapters 8 (Sections 8.1-8.2.3), 10 (Sections 10.1-10.4, 10.6-10.7), and 12 (Sections 12.1-12.4) of Introduction to Statistical Learning, Second Edition. Based on your reading, answer the following questions.
 
 1. How do you determine whether a node in a tree is a *terminal node* or an *internal node*?
+
+Answer: A node in a tree is a terminal if it is the region at the end referred to as the leaf of the tree while the internal node is the point in which the decision is split referred to as the branch of the tree.
+
 2. Briefly explain what is meant by the term *recursive binary splitting*.
+
+Answer: Recursive binary splitting is the process of starting at the top of the tree with all data and splitting the data based on some condition into two groups (binary), into smaller and smaller subsets of the original data.
+
 3. Explain the similarity between *cost-complexity pruning* and the *lasso* model.
+
+Answer: The similarity between cost-complexity pruning and lasso model is how they control for complexity, in lasso models it was controlling the impact that a variable can have on the data, in lasso it pays attention to colinearity while in cost-complexity it pays attention to the number of terminal nodes, punishing models with larger numbers of splits on the data.
+
 4. Write out the equations for two different measures of *node purity* (or node impurity). Why are these measures preferred over simpler accuracy/inaccuracy measures?
+
+Answer:
+$$Gini\space Index:G = \sum_{k=1}^K\hat{p}_{mk}(1-\hat{p}_{mk})$$
+$$Entropy: D = -\sum_{k=1}^K\hat{p}_{mk}log(\hat{p}_{mk})$$
+These measures are preferred because classification error is not great when looking at growing trees and these methods look at total variance across classes as an alternative measure that provides a more substancial basis.
+
 5. Do decision trees perform better when there is a linear boundary or a highly nonlinear boundary? Why?
+
+Answer: Decision trees perform better when there are highly nonlinear boundaries based on the nature of how trees are split. The binary operator cuts into linear relationships making for worse overall classification. Overall, linear data is better suited for linear regression and nonlinear bounds make for more accurate decision trees.
+
 6. Describe the basic procedure in *bagging*. Could we use *bagging* with models that aren't trees (linear models, generative models, etc.)? Why or why not?
+
+The basic procedure of bagging is to take advantage of bootstrapping to create many trees that all have different values and then averaging them out in order to reduce the variance of the forest. Each tree has high variance and low bias but when combined a not terrible model can be produced. Bagging can be used in other modeling techniques but it is most effective on random trees since other models generally have lower variance and higher bias.
+
 7. Why might we use the *out-of-bag* prediction error to estimate the test error rate instead of using cross-validation? Describe how to compute it.
+
+Answer: In order to compute out-of-bag prediction error, since each bagged tree takes on average 2/3 of the data the remaining 1/3, out of bag data, will be estimated based on the trees resulting in B/3 predictions which can be averaged for linear estimates or use a majority vote for classification data. This is a valid estimate of the data and thus we can use it over cross validation.
+
 8. Explain how to read the bar graph in Figure 8.9.
+
+Answer: Figure 8.9 describes how important variables are based on splitting the data. The variable, Thai, is the most important which means that in almost every tree it was always the initial split, and the importance continues as you move up the graph. More important variables mean they are going to be seen in earlier splits. 
+
 9. When would we expect *random forests* to improve over a "regular" bagged trees model and why?
+
+Answer: Random Forests would be better than bagged tree models as it "decorrelates" the data. The issue with bagged trees is the fact that every single tree will look similar if there is a predictor vairable that is highly correlated resulting in every tree looking roughly similar. Random forest ensures that sometimes that variable is not available leading to findings about new variables being important.
+
 10. Briefly explain how *boosted trees* are grown.
+
+Answer: Boosted trees are grown sequentially meaning the next tree learns based on the previous one. This relies on residuals, the residuals of the first tree are applied to the second one and the residuals are updated once again. Overall, instead of fitting to the response, Y, we are fitting to reduce our residuals. 
+
 11. Briefly explain what is meant by the terms *hidden unit* and *hidden layer*.
 12. What is an *activation*? Give two examples of activation functions.
 13. The machine learning community refers to *weights* and *bias* terms in neural networks. In statistical language, what do these terms correspond to?
