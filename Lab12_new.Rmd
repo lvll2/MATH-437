@@ -304,13 +304,29 @@ assignments2 %>%
   select(Cereal.Abb)
 ```
 
-Oh, I didn't expect Cheerios or Oat Bran to be in this but I KNOW Krave Chocolate is THE "good stuff". 
+Oh, I didn't expect Cheerios (OC?) or Oat Bran (C?) to be in this but I KNOW Krave Chocolate$^{TM}$ is THE "good stuff". 
 
 ## Part d (Code and Explanation: 1.5 pts)
 
 Using the `augment` function from the broom package, augment the `cereal` or `cereal3` dataset with the information from the k-means clustering in part (b). 
 
+```{r augment}
+predictions <- augment(kmeans_ck_fit, new_data = cereal)
+```
+
 Obtain the size of each cluster. For one of the smaller clusters, filter the augmented dataset to look at only observations from that cluster. What cereals are in that cluster? Do they appear to have anything in common (think about the cereal names and anything you might know about them)?
+
+```{r}
+predictions %>% 
+  group_by(.pred_cluster) %>% 
+  summarize(size = n())
+```
+
+```{r}
+predictions %>% 
+  filter(.pred_cluster == "Cluster_2")
+```
+Looking at the nutritional values, these seem to be all over the place, I'm seeing some of the "good stuff" cereals from the last k-means clustering but also some cereals I expected to be grouped with healthier ones such as shredded wheat. If anything they seem to have similar protein content.
 
 ## Part e (Code: 1 pt)
 
