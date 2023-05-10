@@ -202,11 +202,7 @@ plot(cumsum(pve), xlab = "Principal Component",
      ylim = c(0,1), type = "b")
 ```
 
-```{r}
-a <- c(1,2,8,-3)
 
-cumsum(a)
-```
 
 
 ## Part d (Code: 2 pts; Explanation: 1 pt)
