@@ -180,7 +180,7 @@ rfC_recipe <- recipe(
   data = default_train
 ) %>% step_dummy(all_nominal_predictors())
 
-baggingR_wflow <- workflow() %>%
+rfC_wflow <- workflow() %>%
   add_model(rfC_model) %>%
   add_recipe(rfC_recipe)
 ```
@@ -268,6 +268,98 @@ xgboostC_fit
 
 Fit a neural network on the training set. Either follow the instructions in Textbook Exercise 10.10.7 or adapt the example code in the "Single Hidden Layer Neural Network" activity.
 
+```{r nnnC}
+neuralnetC_model <- mlp(mode = "classification", engine = "keras",
+                        hidden_units = tune(),
+                        dropout = tune(),
+                        epochs = 25,
+                        activation = "relu") %>%
+  set_args(seeds = c(1, 2, 3)) # we need to set 3 seeds 
+# let's tune the dropout parameter instead
+
+neuralnetC_recipe <- recipe(
+  default ~ student + balance + income,
+  data = default_train
+) %>%
+  step_YeoJohnson(all_numeric_predictors()) %>% 
+  step_normalize(all_numeric_predictors()) %>%
+  step_dummy(all_nominal_predictors())
+# no nominal predictors here so won't do anything
+
+neuralnetC_wflow <- workflow() %>%
+  add_model(neuralnetC_model) %>%
+  add_recipe(neuralnetC_recipe)
+```
+
+```{r check defaults nnC}
+extract_parameter_set_dials(neuralnetC_model) %>%
+  pull("object")
+```
+
+```{r tune parameters nnC}
+set.seed(437)
+defaultnn_kfold <- vfold_cv(default_train, v = 5, repeats = 1) 
+
+
+neuralnetC_tune <- tune_grid(neuralnetC_model, 
+                      neuralnetC_recipe, 
+                      resamples = defaultnn_kfold, 
+                      metrics = metric_set(mn_log_loss),
+                      grid = grid_regular(hidden_units(range = c(16, 32)),
+                                          dropout(range = c(0, 0.1)),
+                                          levels = 2)
+)
+```
+
+
+```{r select best nnC}
+collect_metrics(neuralnetC_tune)
+
+neuralnetC_best <- select_by_one_std_err(
+  neuralnetC_tune,
+  metric = "mn_log_loss",
+  hidden_units, desc(dropout)
+)
+neuralnetC_best
+
+neuralnetC_wflow_final <- finalize_workflow(neuralnetC_wflow, 
+                                            parameters = neuralnetC_best) 
+
+```
+
+```{r fit nnC}
+neuralnetC_fit <- fit(neuralnetC_wflow_final, data = default_train)
+neuralnetC_fit
+```
 ### Part e (Code: 2 pts; Explanation: 2 pts)
 
 For each of the models in parts (b)-(d), predict on the test set and obtain the confusion matrix. Which model is making the best predictions? Why?
+
+```{r fit and predict xgboostC}
+rfC_predict <- augment(rfC_fit, new_data = default_test)
+
+confusion_mat <- rfC_predict %>% conf_mat(default,.pred_class)
+confusion_mat
+
+summary(confusion_mat)
+```
+
+```{r fit and predict xgboostC}
+xgboostC_predict <- augment(xgboostC_fit, new_data = default_test)
+
+confusion_mat <- xgboostC_predict %>% conf_mat(default,.pred_class)
+confusion_mat
+
+summary(confusion_mat)
+```
+
+```{r augment neuralnetC fit}
+predictions_neuralnetC <- broom::augment(neuralnetC_fit, new_data = default_test)
+mn_log_loss(predictions_neuralnetC, truth = default, .pred_No, 
+            event_level = "first")
+
+confusion_mat <- predictions_neuralnetC %>% conf_mat(default,.pred_class)
+confusion_mat
+
+summary(confusion_mat)
+```
