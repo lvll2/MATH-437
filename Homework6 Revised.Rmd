@@ -63,8 +63,25 @@ Answer: Random Forests would be better than bagged tree models as it "decorrelat
 Answer: Boosted trees are grown sequentially meaning the next tree learns based on the previous one. This relies on residuals, the residuals of the first tree are applied to the second one and the residuals are updated once again. Overall, instead of fitting to the response, Y, we are fitting to reduce our residuals. 
 
 11. Briefly explain what is meant by the terms *hidden unit* and *hidden layer*.
+
+Answer: The hidden layer is the component of the neural network that is made up of multiple hidden units. Hidden units are what are used to apply functions and weighted sums to the data to produce outputs.
+
 12. What is an *activation*? Give two examples of activation functions.
+
+Answer: An activation is the function applied to the data to transform it. 
+Two examples are the sigmoid and ReLu functions which are respectively  
+
+$$g(z) = \frac{e^z}{1+e^z}$$
+
+$$g(z)=z_+=\begin{cases} 
+          0 & z< 0 \\
+          z & otherwise
+       \end{cases}$$
+
 13. The machine learning community refers to *weights* and *bias* terms in neural networks. In statistical language, what do these terms correspond to?
+
+Answer: Weights would refer to the coefficients of a variable while bias would be related to the intercept of a model. Generally nueral networks are a collection of these models to create better ones.
+
 14. In convolutional neural networks, what is the purpose of a *convolution layer*? What is the purpose of a *pooling layer*?
 15. Briefly explain how and why *data augmentation* is performed in image classification.
 16. Section 10.6 poses the question: "Should we discard all our older tools, and use deep learning on every problem with data?" Answer this question and explain your reasoning.
