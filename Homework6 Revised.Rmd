@@ -72,12 +72,24 @@ Answer: Boosted trees are grown sequentially meaning the next tree learns based 
 18. Briefly explain how *gradient descent* methods work. Why is estimating the gradient relatively straightforward when (scaled) MSE is used as the objective function $R(\theta)$?
 19. What is a principal component *score* vector? How are the associated *loadings* computed?
 20. The book mentions that eigen decomposition can be used to obtain the loadings (in practice most algorithms use a related technique, singular value decomposition, which is faster). What do the eigenvalues of the covariance matrix correspond to? What do the eigenvectors correspond to?
+
 21. What is a scree plot? Why is it useful?
+A scree plot is a plot that shows the proportion of variance explained by the principal components. 
+
 22. What is the difference between data *missing at random* and *missing not at random* (or "not missing at random")? Is it appropriate to impute data that is missing at random? What about data that is not missing at random?
+
 23. Give two application areas in which clustering techniques may be useful. You may use the ones identified in the book or describe your own.
+Clustering techniques may be useful in medical applications such as finding subtypes of cancers based on certain characteristics. It would also be useful for marketing applications to find groups of people who would be receptive to certain kinds of advertising or a type of product.
+
+
 24. Why is it important to run k-means clustering from many different random initializations?
+It is important to do so in order to increase our chances of finding the solution at convergence that is the global optimum.
+
 25. Briefly explain how to read a *dendrogram*.
+A dendrogram is read by referring to the y-axis which represents dissimilarity and seeing where observations or "leaves" merge in respects to the y-axis which indicates their similarity to one another and they become "branches" which then continue to merge with other leaves or branches.
+
 26. Many of the techniques we learned in this class have been rather "automatic" in the sense that there are fairly well-defined rules for selecting the "best" model and all we need "human judgment" for is determining which of several models "close enough to the best" we should actually use. This does not work for cluster analysis. Give at least two reasons why cluster analysis requires us to think a lot harder before settling on a "best" model.
+
 
 # Conceptual Problems
 
