@@ -157,7 +157,7 @@ kmeans_model <- k_means(num_clusters = tune()) %>%
 
 kmeans_recipe_fv <- recipe(~ student + balance + income, data = default_train) %>%
   step_normalize(all_numeric_predictors()) %>% 
-  step_dummy(all_nominal_predictors())# deal with different variances
+  step_dummy(all_nominal_predictors()) # deal with different variances
 
 kmeans_wflow_fv <- workflow() %>%
   add_model(kmeans_model) %>%
@@ -214,6 +214,10 @@ library(GGally)
 ggpairs(assignments3, columns = c("student", "balance", "income"),
         aes(color = .cluster))
 ```
+Red Cluster - Low income, evenly dispersed balance.
+Green Cluster - Higher balance, high income.
+Blue Cluster - Low balance, high income.
+
 
 ### Part b (Code: 3 pts)
 
