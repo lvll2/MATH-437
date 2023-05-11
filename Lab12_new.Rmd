@@ -134,13 +134,93 @@ madden <- madden17_QB %>%
 
 Perform principal component analysis on the `madden` dataset. Remember to scale the data (either beforehand or using the argument `scale = TRUE` in `prcomp`). You can use either the "Base R" or tidyverse version.
 
+```{r}
+apply(madden, 2, mean)
+```
+
+```{r}
+apply(madden, 2, var)
+```
+
+```{r}
+pr.out <- prcomp(madden, scale = TRUE )
+```
+
+```{r}
+names(pr.out)
+```
+
+```{r}
+pr.out$scale
+
+pr.out$center
+```
+
+```{r}
+pr.out$rotation
+```
+
+```{r}
+dim(pr.out$x)
+```
+
+
+
+```{r}
+pr.out$rotation = -pr.out$rotation
+
+pr.out$x = -pr.out$x
+
+biplot(pr.out, scale = 0)
+```
+
+```{r}
+pr.out$sdev
+```
+
+```{r}
+pr.var <- pr.out$sdev^2
+
+pr.var
+```
+
+```{r}
+pve <- pr.var / sum(pr.var)
+
+pve
+```
+
+
+
+
+
 ## Part d (Code: 2 pts; Explanation: 1 pt)
 
 Find the proportion of variance explained by each component and the cumulative proportion of variance explained. Produce a scree plot showing either the proportion of variance explained or the cumulative proportion of variance explained. Suggest an appropriate number of principal components to use to visualize or interpret the data and justify your decision based on the scree plot.
 
+
+```{r}
+par(mfrow = c(1,2))
+plot(pve, xlab = "Principal Component",
+     ylab = "Proportion of Variance Explained", ylim = c(0,1), 
+     type = "b")
+plot(cumsum(pve), xlab = "Principal Component", 
+     ylab = "Cumulative Proportion of Variance Explained", 
+     ylim = c(0,1), type = "b")
+```
+
+An appropriate amount of principal components to use would be 3 as after this our variance tends to level out.
+
 ## Part e (Code: 0.5 pts; Explanation: 1 pt)
 
 Produce a biplot showing the first two principal components. Which of the ten variables being investigated contribute mainly to PC1, which ones contribute mainly to PC2, and which contribute to both? Explain your reasoning based on the biplot and/or the loadings matrix `rotation`.
+
+```{r}
+biplot(pr.out, scale = 0)
+```
+
+ ACC, AGI, and SPD contribute to PC2. THP and RUN in between meaning they contribute to both, and The remaining variables: PAC, AWR, SAC, MAC, and DAC contribute mainly to PC1. (Note, I was not sure how to get the variable names from this plot but it would definitely be something nice to know)
+
 
 # Problem 2: Clustering
 
