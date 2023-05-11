@@ -326,7 +326,7 @@ predictions %>%
 predictions %>% 
   filter(.pred_cluster == "Cluster_2")
 ```
-Looking at the nutritional values, these seem to be all over the place, I'm seeing some of the "good stuff" cereals from the last k-means clustering but also some cereals I expected to be grouped with healthier ones such as shredded wheat. If anything they seem to have similar protein content.
+Looking at the nutritional values, these seem to be all over the place, I'm seeing some of the "good stuff" cereals from the last k-means clustering but also some cereals I expected to be grouped with healthier ones such as shredded wheat. They seem to have some similarity in complex carbs, protein, and dietary fiber, but protein seems to be the closest one.
 
 ## Part e (Code: 1 pt)
 
@@ -351,7 +351,7 @@ ck_dendrogram <- extract_fit_engine(hc_complete_fit) %>% as.dendrogram()
 ```
 
 
-```{r}
+```{r message = FALSE}
 library(dendextend)
 ck_dendrogram_4clusters <- ck_dendrogram %>% 
   set("labels", cereal$Cereal.Abb[labels(ck_dendrogram)]) %>%
@@ -377,6 +377,69 @@ Lucky Charms.
 
 Fit a Gaussian mixture model on `x.matrix` (scaled or unscaled, it doesn't matter, you should get basically the same results) using the `Mclust` function. Use 4 clusters (`G = 4`). Produce a "classification" plot of the resulting clusters. 
 
+```{r}
+ck_mclust <- mclust::Mclust(x.matrix, G = 4)
+plot(ck_mclust, "classification")
+```
+
+```{r}
+tidy.mclust <- broom::tidy(ck_mclust)
+print(tidy.mclust)
+```
+
+```{r}
+predictions %>% 
+  group_by(.pred_cluster) %>% 
+  summarize(mean.Total.Fat = mean(Total.Fat),
+            mean.Sodium = mean(Sodium),
+            mean.Complex.Carbs = mean(Complex.Carbs),
+            mean.Sugar = mean(Sugar),
+            mean.Protein = mean(Protein),
+            counts = n())
+
+table(ck_mclust$classification, predictions$.pred_cluster)
+```
+kclust 1 = mclust 4, kclust 2 = mclust 1, kCluster_3 = mclust 2, kclust 4 =  mclust 3
+
+
 Augment the dataset from part (d) with the information from the Gaussian mixture model. Produce a table showing the cluster assignments from the k-means vs. Gaussian mixture models.
 
+```{r}
+(k_vs_m <- predictions %>% cbind(mclust = ck_mclust$classification) %>%
+  mutate(kclust = case_when(.pred_cluster == "Cluster_1" ~ 4,
+                            .pred_cluster == "Cluster_2" ~ 1,
+                            .pred_cluster == "Cluster_3" ~ 2,
+                            TRUE ~ 3)) %>% 
+  select(Cereal.Abb, kclust, mclust))
+```
+
+
 Do the two models mostly agree on the clusters? If not, which types of cereals do they tend to agree about, and which do they not agree about?
+
+```{r}
+sum(k_vs_m$kclust == k_vs_m$mclust)
+```
+They agree on just over half of the cluster assignments when we compare clusters that are similar in size.
+
+```{r}
+k_vs_m[which(k_vs_m$kclust == k_vs_m$mclust),]
+
+
+k_vs_m[which(k_vs_m$kclust != k_vs_m$mclust),]
+```
+
+It's a bit hard to tell what they're agreeing on just from looking at what matches but it seems like they tend to agree on the moderately unhealthy cereals and tend not to agree on the very unhealthy and healthier cereals. 
+
+```{r include=FALSE}
+k_vs_m %>% 
+  group_by(kclust) %>% 
+  summarize(kcount = n()) %>% 
+  cbind(tidy.mclust$size)
+
+cereal[which(k_vs_m$kclust == k_vs_m$mclust),] %>% 
+  summary()
+
+cereal[which(k_vs_m$kclust != k_vs_m$mclust),] %>% 
+  summary()
+```
+
