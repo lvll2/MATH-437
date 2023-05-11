@@ -91,9 +91,11 @@ Answer: Weights would refer to the coefficients of a variable while bias would b
 20. The book mentions that eigen decomposition can be used to obtain the loadings (in practice most algorithms use a related technique, singular value decomposition, which is faster). What do the eigenvalues of the covariance matrix correspond to? What do the eigenvectors correspond to?
 
 21. What is a scree plot? Why is it useful?
-A scree plot is a plot that shows the proportion of variance explained by the principal components. 
+A scree plot is a plot that shows the proportion of variance explained by the principal components. It is useful because it allows us to see the point where additional principal components are no longer significantly contributing to the proportion of variance explained thereby helping us choose the appropriate number of principal components.
 
 22. What is the difference between data *missing at random* and *missing not at random* (or "not missing at random")? Is it appropriate to impute data that is missing at random? What about data that is not missing at random?
+Data missing at random is missing because of reasons not relating to the data or it's method of collection. Data missing not at random is missing because of some characteristic of the data or how it was collected. It is appropriate to impute data that is missing at random but it is not appropriate to impute data that is not missing at random. 
+
 
 23. Give two application areas in which clustering techniques may be useful. You may use the ones identified in the book or describe your own.
 Clustering techniques may be useful in medical applications such as finding subtypes of cancers based on certain characteristics. It would also be useful for marketing applications to find groups of people who would be receptive to certain kinds of advertising or a type of product.
