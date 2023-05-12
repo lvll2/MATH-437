@@ -80,13 +80,24 @@ $$g(z)=z_+=\begin{cases}
 
 13. The machine learning community refers to *weights* and *bias* terms in neural networks. In statistical language, what do these terms correspond to?
 
-Answer: Weights would refer to the coefficients of a variable while bias would be related to the intercept of a model. Generally nueral networks are a collection of these models to create better ones.
+Answer: Weights would refer to the coefficients of a variable while bias would be related to the intercept of a model. Generally neural networks are a collection of these models to create better ones.
 
 14. In convolutional neural networks, what is the purpose of a *convolution layer*? What is the purpose of a *pooling layer*?
+The purpose of a convolution layer is to determine which features are present in an image. The purpose of a pooling layer is to reduce the size of an image by summarizing it.
+
 15. Briefly explain how and why *data augmentation* is performed in image classification.
+Data augmentation is performed by distorting the images in the training set slightly so they are different but still recognizable to humans and it serves to increase the size of the training set and helps prevent overfitting.
+
 16. Section 10.6 poses the question: "Should we discard all our older tools, and use deep learning on every problem with data?" Answer this question and explain your reasoning.
+No, if a simpler technique gives similar results, which it can and does in the example, then we should choose that over deep learning since we are not really losing anything by not using deep learning techniques and instead gaining better interpretability, and reducing computational cost. 
+
 17. In the example in Section 10.6, the authors first used a lasso model to perform variable selection, then fit a linear model with the predictors selected. How did they use their final model to answer *inference* questions? Why did they do it that way?
+
+Their final model could be used to answer the inference questions about which variables affect salary with an estimate of how much. They did it this way in order to simplify their model as much as possible while still maintaining accuracy.
+
 18. Briefly explain how *gradient descent* methods work. Why is estimating the gradient relatively straightforward when (scaled) MSE is used as the objective function $R(\theta)$?
+
+
 19. What is a principal component *score* vector? How are the associated *loadings* computed?
 20. The book mentions that eigen decomposition can be used to obtain the loadings (in practice most algorithms use a related technique, singular value decomposition, which is faster). What do the eigenvalues of the covariance matrix correspond to? What do the eigenvectors correspond to?
 
@@ -133,6 +144,18 @@ $$
 where $y_im$ is an indicator variable taking the value 1 if $Y_i = m$ and 0 otherwise.
 
 Prove that maximizing the joint pmf is equivalent to minimizing the cross-entropy given in Equation (10.14). (HINT: take the logarithm and use properties of logs.)
+
+If we let $P(Y_1 = m_1, Y_2 = m_2, \ldots, Y_n = m_n) = L(m)$ when we take the log of $L(m)$ equation we get 
+
+$log(L(m)) = \sum_{i = 1}^{n}\sum_{m = 0}^{9}log((f_m(x_i))^{y_{im}})$
+
+then using the properties of log we get
+  
+$log(L(m)) = \sum_{i = 1}^{n}\sum_{m = 0}^{9}y_{im}log(f_m(x_i))$
+
+so when we maximize this equation, we are minimizing equation 10.14 for cross-entropy which is
+
+$-\sum_{i = 1}^{n}\sum_{m = 0}^{9}y_{im}log(f_m(x_i))$.
 
 # Applied Problems
 
