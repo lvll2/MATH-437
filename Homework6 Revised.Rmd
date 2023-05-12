@@ -97,8 +97,10 @@ Their final model could be used to answer the inference questions about which va
 
 18. Briefly explain how *gradient descent* methods work. Why is estimating the gradient relatively straightforward when (scaled) MSE is used as the objective function $R(\theta)$?
 
+Answer: Gradient descent is an algorithm used for finding a minimum. It works by applying some function, getting new values, and then running the function again, it is straightforward when using MSE since we are just looking at derivatives.
 
 19. What is a principal component *score* vector? How are the associated *loadings* computed?
+
 20. The book mentions that eigen decomposition can be used to obtain the loadings (in practice most algorithms use a related technique, singular value decomposition, which is faster). What do the eigenvalues of the covariance matrix correspond to? What do the eigenvectors correspond to?
 
 21. What is a scree plot? Why is it useful?
@@ -116,9 +118,12 @@ Clustering techniques may be useful in medical applications such as finding subt
 It is important to do so in order to increase our chances of finding the solution at convergence that is the global optimum.
 
 25. Briefly explain how to read a *dendrogram*.
+
 A dendrogram is read by referring to the y-axis which represents dissimilarity and seeing where observations or "leaves" merge in respects to the y-axis which indicates their similarity to one another and they become "branches" which then continue to merge with other leaves or branches.
 
 26. Many of the techniques we learned in this class have been rather "automatic" in the sense that there are fairly well-defined rules for selecting the "best" model and all we need "human judgment" for is determining which of several models "close enough to the best" we should actually use. This does not work for cluster analysis. Give at least two reasons why cluster analysis requires us to think a lot harder before settling on a "best" model.
+
+Two reasons why cluster analysis requires us to think harder before settling on a best model are because measuring the quality of a model is not spelled out in the sense we have no measures such as accuracy or MSE. Another reason is due to the assumptions we have to make when looking at clustering, some assumptions can lead to durastically different models making it more difficult to identify a "best" model.
 
 
 # Conceptual Problems
