@@ -155,7 +155,9 @@ $log(L(m)) = \sum_{i = 1}^{n}\sum_{m = 0}^{9}y_{im}log(f_m(x_i))$
 
 so when we maximize this equation, we are minimizing equation 10.14 for cross-entropy which is
 
-$-\sum_{i = 1}^{n}\sum_{m = 0}^{9}y_{im}log(f_m(x_i))$.
+$-\sum_{i = 1}^{n}\sum_{m = 0}^{9}y_{im}log(f_m(x_i))$,
+
+since the logarithmic function is a monotonically increasing function.
 
 # Applied Problems
 
