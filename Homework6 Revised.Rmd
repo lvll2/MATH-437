@@ -463,3 +463,5 @@ confusion_mat
 
 summary(confusion_mat)
 ```
+
+The neural net is making the best predictions because it has an accuracy of about 0.973. The gradient-boosted tree has a similar accuracy at 0.972.
