@@ -101,7 +101,11 @@ Answer: Gradient descent is an algorithm used for finding a minimum. It works by
 
 19. What is a principal component *score* vector? How are the associated *loadings* computed?
 
+Answer: The loadings are the eigenvectors of the covariance matrix. The principal component score vectors are linear combinations of the loadings multiplied by the predictors. The score vectors explain the variation in the predictors. $z_1$ is the direction in $p$-dimensional space that explains the most variation in the $x_j$'s. $z_2$ is the direction orthogonal to $z_1$ that explains the most remaining variation in the $x_j$'s. This pattern continues for the rest of the score vectors. 
+
 20. The book mentions that eigen decomposition can be used to obtain the loadings (in practice most algorithms use a related technique, singular value decomposition, which is faster). What do the eigenvalues of the covariance matrix correspond to? What do the eigenvectors correspond to?
+
+The eigenvalues correspond to the magnitude of the eigenvector. The eigenvectors correspond to the loadings of the principal components. The loading vector defines a direction in feature space along which the data vary the most. 
 
 21. What is a scree plot? Why is it useful?
 A scree plot is a plot that shows the proportion of variance explained by the principal components. It is useful because it allows us to see the point where additional principal components are no longer significantly contributing to the proportion of variance explained thereby helping us choose the appropriate number of principal components.
