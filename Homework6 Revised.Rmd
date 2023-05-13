@@ -180,6 +180,8 @@ library(tidyverse)
 library(tidymodels)
 library(tidyclust)
 library(dendextend)
+library(GGally)
+library(xgboost)
 ```
 
 ### Part a (Code: 1 pt)
@@ -258,7 +260,6 @@ assignments3 <- bind_cols(
 ```
 
 ```{r plot clusters3, message = F, warning = F}
-library(GGally)
 ggpairs(assignments3, columns = c("student", "balance", "income"),
         aes(color = .cluster))
 ```
@@ -437,7 +438,7 @@ neuralnetC_fit
 
 For each of the models in parts (b)-(d), predict on the test set and obtain the confusion matrix. Which model is making the best predictions? Why?
 
-```{r fit and predict xgboostC}
+```{r fit and predict rfc}
 rfC_predict <- augment(rfC_fit, new_data = default_test)
 
 confusion_mat <- rfC_predict %>% conf_mat(default,.pred_class)
